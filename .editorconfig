@@ -1,0 +1,54 @@
+# EditorConfig is awesome: https://EditorConfig.org
+
+# top-most EditorConfig file
+root = true
+
+[*]
+# Unix-style newlines with a newline ending every file
+end_of_line = lf
+# Always end file with a single new line.
+insert_final_newline = true
+charset = utf-8
+# Don't leave hanging whitespace at the end of the lines.
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 2
+
+# VSCode might not support this yet but many other editors (vim, Emacs, IntelliJ, etc) do.
+# https://developercommunity.visualstudio.com/t/support-max-line-length-in-editorconfig-for-visual/567214
+max_line_length = 120
+
+[*.go]
+indent_style = tab
+indent_size = 4
+
+[*.sh]
+indent_style = space
+indent_size = 4
+
+[*.py]
+indent_style = space
+indent_size = 4
+# Synchronise this with ruff configuration in pyproject.toml
+max_line_length = 100
+
+[*.proto]
+indent_size = 2
+
+[**/locales/**.json]
+indent_size = 4
+
+[**Makefile]
+indent_style = tab
+indent_size = 4
+
+[*.mk]
+indent_style = tab
+indent_size = 4
+
+[**Dockerfile*]
+indent_size = space
+indent_size = 4
+
+[*.mdx]
+quote_type = single

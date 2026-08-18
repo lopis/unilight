@@ -1,0 +1,4 @@
+allowBuilds:
+  ect-bin: false
+  esbuild: true
+minimumReleaseAge: 3
