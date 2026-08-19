@@ -4,9 +4,23 @@
     <title>JS13K TS</title>
     <link rel="stylesheet" href="style.css"/>
 </head>
-<html>
+<html lang="en">
 <body>
-    <canvas id="c2d" width="1920" height="1080"></canvas>
+    <div id="debug" style="
+        position: fixed;
+        top: 60px;
+        left: 0;
+        color: white;
+        padding: 1vh;
+        font-size: 10px;
+        z-index: 1;">
+        <!-- <span id="fps"></span> -->
+        <span id="coords"></span>
+    </div>
+    <canvas id="c1" width="960" height="540"></canvas>
+    <canvas id="c2" width="960" height="540"></canvas>
+    <canvas id="c3" width="960" height="540"></canvas>
+    <canvas id="c4" width="960" height="540"></canvas>
     <script type="module" src="/src/index.ts"></script>
 </body>
 </html>
