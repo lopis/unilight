@@ -9,8 +9,8 @@ export class Unicorn {
     this.pos = vec2(x, y);
   }
 
-  draw(cellSize: number) {
-    drawEngine.drawText('🦄', 40, this.pos.x * cellSize + cellSize / 2, this.pos.y * cellSize + cellSize * 0.75);
+  update(cellSize: number) {
+
   }
 }
 

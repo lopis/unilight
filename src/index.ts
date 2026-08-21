@@ -1,5 +1,4 @@
 import { createGameStateMachine, gameStateMachine } from './game-state-machine';
-import { controls } from '@/core/controls';
 import { drawEngine } from './core/draw-engine';
 import { updateTimeEvents } from './core/timer';
 import { menuState } from './game-states/menu.state';
@@ -41,7 +40,7 @@ function update(currentTime: number) {
   drawEngine.clear();
 
   const state = gameStateMachine.getState();
-  controls.queryController();
+  // controls.queryController();
   state.onUpdate(delta);
   updateTimeEvents(delta);
 };

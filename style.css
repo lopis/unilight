@@ -29,6 +29,7 @@ canvas {
   position: absolute;
   image-rendering: pixelated;
   object-fit: contain;
+  pointer-events: none;
 }
 
 html, body {
@@ -37,6 +38,7 @@ html, body {
   justify-content: center;
   align-items: center;
   height: 100%;
+  width: 100%;
   background: #13282b;
 }
 
@@ -45,7 +47,22 @@ body {
   position: relative;
 }
 
-#c1 {
-  position: relative;
-  background-size: 2px 2px;
+i {
+  position: absolute;
+  font-size: 3rem;
+}
+
+section {
+  height: 100%;
+  width: 100%;
+}
+
+section:not(.show) {
+  display: none !important;
+}
+
+#menu {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
