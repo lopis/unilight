@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <canvas id="c" height="200" width="200"></canvas>
+  <script>
+    function smoothNoise(x, t) {
+      return (
+        Math.sin(x * 0.15 + t) * 0.5 +
+        Math.sin(x * 0.37 + t * 1.618) * 0.3 +
+        Math.sin(x * 0.08 + t * 0.5) * 0.2
+      );
+    }
+
+    function drawParametricJitter(ctx, cx, cy, fx, fy, tMin, tMax, steps, fillStyle, jitterAmp, time) {
+      ctx.beginPath();
+      for (let i = 0; i <= steps; i++) {
+        const t = tMin + (i / steps) * (tMax - tMin);
+        const noise = smoothNoise(i, time);
+        const x = cx + fx(t) + noise * jitterAmp;
+        const y = cy + fy(t) + noise * jitterAmp;
+        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      }
+      ctx.closePath();
+      ctx.fillStyle = fillStyle;
+      ctx.fill();
+    }
+
+    function drawPolarJitter(ctx, cx, cy, rFn, thetaMin, thetaMax, steps, fillStyle, yScale, jitterAmp, time) {
+      ctx.beginPath();
+      for (let i = 0; i <= steps; i++) {
+        const theta = thetaMin + (i / steps) * (thetaMax - thetaMin);
+        const noise = smoothNoise(i, time);
+        const r = rFn(theta) + noise * jitterAmp;
+        const x = cx + r * Math.cos(theta);
+        const y = cy + r * Math.sin(theta) * yScale;
+        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      }
+      ctx.closePath();
+      ctx.fillStyle = fillStyle;
+      ctx.fill();
+    }
+
+    let frame = 0;
+
+    function animate() {
+      ctx.clearRect(0, 0, c.width, c.height);
+
+      // Strawberry red body
+      drawParametricJitter(
+        ctx, 100, 110,
+        t => 60 * Math.sin(t),
+        t => -60 * Math.cos(t) * (1 + 0.5 * Math.sin(t)),
+        0, Math.PI * 2, 100,
+        "#e0303f", 8, frame * 0.3
+      );
+
+      // Strawberry leaves
+      drawPolarJitter(
+        ctx, 100, 65,
+        theta => 10 + 14 * Math.cos(5 * theta),
+        0, Math.PI * 2, 200,
+        "#3f9142", 0.6, 1.5, frame * 0.3
+      );
+
+      frame++;
+      requestAnimationFrame(animate);
+    }
+
+    const ctx = c.getContext("2d");
+    animate();
+  </script>
+</body>
+</html>

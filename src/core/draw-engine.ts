@@ -1,4 +1,3 @@
-import { GameAssets } from '@/game/game-assets';
 import { drawText } from './font';
 import { colors } from './util/color';
 import { getCtx } from './util/canvas';
@@ -16,11 +15,11 @@ const makeCircle = (
     // Calculate the half-width at this y position using ellipse equation
     const normalizedY = y / radiusY;
     const halfWidth = Math.round(radiusX * Math.sqrt(1 - normalizedY * normalizedY));
-    
+
     if (halfWidth > 0) {
       const offset = Math.round(skew * Math.abs(y));
       const currentY = centerY + y;
-      
+
       if (y >= 0) {
         ctx.rect(centerX - halfWidth - offset, currentY, halfWidth * 2, 1);
       } else {
@@ -55,196 +54,43 @@ class DrawEngine {
     this.ctx2 = getCtx(c2);
     this.ctx3 = getCtx(c3);
     this.ctx4 = getCtx(c4);
-    GameAssets.initialize();
-    this.resizeCanvas();
     window.addEventListener('resize', () => this.resizeCanvas());
     window.addEventListener('orientationchange', () => this.resizeCanvas());
+    this.resizeCanvas();
   }
 
   resizeCanvas() {
-    const aspectRatio = 4 / 3;
-    const gameWidth = 1200;
-    const gameHeight = Math.round(gameWidth / aspectRatio);
-    this.canvasWidth = gameWidth;
-    this.canvasHeight = gameHeight;
+    // const aspectRatio = 4 / 3;
+    // const gameWidth = 1200;
+    // const gameHeight = Math.round(gameWidth / aspectRatio);
+    this.canvasWidth = document.body.clientWidth;
+    this.canvasHeight = document.body.clientHeight;
     const ctxs: CanvasRenderingContext2D[] = [this.ctx1, this.ctx2, this.ctx3, this.ctx4];
     for (const ctx of ctxs) {
       // eslint-disable-next-line id-denylist
-      ctx.canvas.width = gameWidth;
+      ctx.canvas.width = this.canvasWidth;
       // eslint-disable-next-line id-denylist
-      ctx.canvas.height = gameHeight;
+      ctx.canvas.height = this.canvasHeight;
       ctx.imageSmoothingEnabled = false;
     }
   }
 
-  
-  // eslint-disable-next-line class-methods-use-this
-  drawCircumference(
-    ctx: CanvasRenderingContext2D,
-    centerX: number,
-    centerY: number,
-    radiusX: number,
-    radiusY: number,
-    color: string,
-    strokeWidth: number,
-  ) {
-    ctx.save();
-    ctx.beginPath();
-    makeCircle(ctx, centerX, centerY, radiusX, radiusY);
-    makeCircle(ctx, centerX, centerY, radiusX - strokeWidth, radiusY - strokeWidth);
-    ctx.clip('evenodd');
-    ctx.beginPath();
-    ctx.fillStyle = color;
-    ctx.fillRect(centerX - radiusX, centerY - radiusY, radiusX*2, radiusY*2);
-    ctx.fill();
-    ctx.restore();
-  }
-
-  drawText(
-    text: string,
-    x: number,
-    y: number,
-    color?: string,
-    textAlign = 0,
-    textBaseline = 0,
-    size = 2,
-    space = 1,
-    context?: CanvasRenderingContext2D
-  ) {
-    drawText(context || this.ctx1, text, x, y, color, textAlign, textBaseline, size, space);
-  }
-
-  static drawImage(
-    ctx: CanvasRenderingContext2D,
-    img: HTMLImageElement,
-    x: number,
-    y: number,
-    mirrored?: boolean,
-    imgWidth?: number,
-    imgWeight?: number,
-  ) {
-    if (mirrored) {
-      ctx.save();
-      ctx.scale(-1, 1);
-      x = -x - (imgWidth ?? img.width);
-    }
-    ctx.drawImage(
-      img,
-      x,
-      y,
-      imgWidth ?? img.width,
-      imgWeight ?? img.height,
-    );
-    if (mirrored) {
-      ctx.restore();
-    }
-  }
-
-  drawBackgroundImage(
-    img: HTMLImageElement,
-    x: number,
-    y: number,
-    mirrored?: boolean,
-    imgWidth?: number,
-    imgHeight?: number,
-  ) {
-    DrawEngine.drawImage(this.ctx1, img, x, y, mirrored, imgWidth, imgHeight);
-  }
-
-  /**
-   * Sets the camera position and zoom level.
-   * @param x The x-coordinate of the object where the camera should focus
-   * @param y The y-coordinate of the object where the camera should focus
-   * @param zoom The zoom level of the camera
-   */
-  setCamera(x: number, y: number, zoom: number = 1, immediate = false) {
-    this.targetCameraX = x;
-    this.targetCameraY = y;
-    this.targetZoom = zoom;
-    const cx = this.canvasWidth / 2 - 32;
-    const cy = this.canvasHeight / 2 - 64;
-    if (immediate) {
-      this.cameraX = x;
-      this.cameraY = y;
-      this.zoom = zoom;
-    }
-    this.ctx1.setTransform(
-      this.zoom, 0, 0, this.zoom,
-      cx - this.cameraX * this.zoom,
-      cy - this.cameraY * this.zoom,
-    );
-  }
-
-  updateCamera() {
-    if (this.moveCameraLinearly) {
-      // Linear movement
-      const deltaX = this.targetCameraX - this.cameraX;
-      const deltaY = this.targetCameraY - this.cameraY;
-      const deltaZoom = this.targetZoom - this.zoom;
-      const step = this.cameraLerpSpeed * 10; // Scale up for linear speed
-      
-      if (Math.abs(deltaX) < 0.01) {
-        this.cameraX = this.targetCameraX;
-      } else {
-        this.cameraX += Math.sign(deltaX) * Math.min(Math.abs(deltaX), step);
-      }
-      
-      if (Math.abs(deltaY) < 0.01) {
-        this.cameraY = this.targetCameraY;
-      } else {
-        this.cameraY += Math.sign(deltaY) * Math.min(Math.abs(deltaY), step);
-      }
-      
-      if (Math.abs(deltaZoom) < 0.02) {
-        this.zoom = this.targetZoom;
-      } else {
-        this.zoom += Math.sign(deltaZoom) * Math.min(Math.abs(deltaZoom), step * 0.1);
-      }
-    } else {
-      // Eased movement
-      this.cameraX += (this.targetCameraX - this.cameraX) * this.cameraLerpSpeed;
-      if (Math.abs(this.targetCameraX - this.cameraX) < 0.01) {
-        this.cameraX = this.targetCameraX;
-      }
-      this.cameraY += (this.targetCameraY - this.cameraY) * this.cameraLerpSpeed;
-      if (Math.abs(this.targetCameraY - this.cameraY) < 0.01) {
-        this.cameraY = this.targetCameraY;
-      }
-      this.zoom += (this.targetZoom - this.zoom) * this.cameraLerpSpeed;
-      if (Math.abs(this.targetZoom - this.zoom) < 0.02) {
-        this.zoom = this.targetZoom;
-      }
-    }
-  }
-
-  resetCamera() {
-    this.ctx1.setTransform(1, 0, 0, 1, 0, 0);
-  }
-
   clear() {
-    this.resetCamera();
     this.ctx1.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
-    this.ctx1.fillStyle = colors.green3;
-    this.ctx1.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
+    this.ctx1.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
     this.ctx2.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
     this.ctx3.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
   }
 
-  /**
-   * Converts world coordinates to screen coordinates, accounting for camera transforms
-   * @param worldX World X coordinate
-   * @param worldY World Y coordinate
-   * @param zoom Current zoom level (defaults to 7, matching game state)
-   * @returns Screen coordinates { x, y }
-   */
-  worldToScreen(worldX: number, worldY: number, zoom: number = 7): { x: number; y: number } {
-    const cx = this.canvasWidth / 2 - 32;
-    const cy = this.canvasHeight / 2 - 64;
 
-    return {
-      x: cx + (worldX - this.cameraX) * zoom,
-      y: cy + (worldY - this.cameraY) * zoom
-    };
+  drawText(text: string, fontSize: number, x: number, y: number, color = 'white', textAlign: 'center' | 'left' | 'right' = 'center') {
+    this.ctx2.font = `${fontSize}px Impact, sans-serif-black`;
+    this.ctx2.textAlign = textAlign;
+    this.ctx2.strokeStyle = 'black';
+    this.ctx2.lineWidth = 4;
+    this.ctx2.strokeText(text, x, y);
+    this.ctx2.fillStyle = color;
+    this.ctx2.fillText(text, x, y);
   }
 }
 
