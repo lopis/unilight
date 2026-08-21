@@ -50,6 +50,11 @@ body {
 i {
   position: absolute;
   font-size: 3rem;
+  pointer-events: none;
+}
+
+#unicorn {
+  transition: all 100ms ease-out;
 }
 
 section {
@@ -65,4 +70,9 @@ section:not(.show) {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+#gameGrid {
+  width: 100%;
+  aspect-ratio: 1;
 }

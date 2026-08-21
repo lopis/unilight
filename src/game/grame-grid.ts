@@ -1,6 +1,7 @@
 import { drawEngine } from "@/core/draw-engine";
 import { gameItem, GameItem } from "./game-item";
 import { Unicorn } from "./unicorn";
+import { vec2 } from "@/core/util/vec2";
 
 const GRID_WIDTH = 10;
 const GRID_HEIGHT = 10;
@@ -47,19 +48,16 @@ export class GameGrid {
     this.$unicorn.style.top = (cellSize * this.unicorn.pos.y) + 'px';
     gameGrid.appendChild(this.$unicorn);
 
+    gameGrid.addEventListener('click', (event) => this.onClick(event.offsetX, event.offsetY))
+  }
 
+  onClick(x: number, y: number) {
+    const cellSize = game.clientWidth / GRID_WIDTH;
+    this.unicorn.pos = vec2((x - cellSize*0.5) / cellSize, (y - cellSize*0.5) / cellSize);
   }
 
   update() {
     const cellSize = game.clientWidth / GRID_WIDTH;
-
-    this.grid.forEach((row, y) => {
-      row.forEach((gridItem, x) => {
-        const $item = document.createElement('i');
-        $item.id = `i-${x}${y}`;
-        gameGrid.appendChild($item)
-      })
-    });
 
     this.unicorn.update(cellSize);
     this.$unicorn.style.left = (cellSize * this.unicorn.pos.x) + 'px';
