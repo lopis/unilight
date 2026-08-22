@@ -1,6 +1,6 @@
 import { State } from '@/core/state';
 import { initGameData, GameData } from '@/game/game-data';
-import { GameGrid } from '@/game/grame-grid';
+import { GameGrid } from '@/game/game-grid';
 
 class GameState implements State {
   grid!: GameGrid;
