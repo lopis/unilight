@@ -4,6 +4,7 @@ import { Unicorn } from "./unicorn";
 import { vec2, Vec2 } from "@/core/util/vec2";
 import { assets } from "./image-generator";
 import { addTimeEvent } from "@/core/timer";
+import { addToInventory } from "./game-data";
 
 const GRID_WIDTH = 10;
 const GRID_HEIGHT = 10;
@@ -12,6 +13,23 @@ type GridItem = GameItem | null
 
 const TRAIL_DURATION = 200; // ms a sprite stays visible
 const SPAWN_INTERVAL = 2;   // ms between trail sprite spawns
+const HIGHLIGHT_DURATION = 1000; // ms a cell highlight stays visible
+
+function bresenham(x0: number, y0: number, x1: number, y1: number): Vec2[] {
+  const cells: Vec2[] = [];
+  const dx = Math.abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
+  const dy = -Math.abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
+  let err = dx + dy;
+  let x = x0, y = y0;
+  while (true) {
+    cells.push(vec2(x, y));
+    if (x === x1 && y === y1) break;
+    const e2 = 2 * err;
+    if (e2 >= dy) { err += dy; x += sx; }
+    if (e2 <= dx) { err += dx; y += sy; }
+  }
+  return cells;
+}
 
 type TrailSprite = {
   pos: Vec2
@@ -25,16 +43,17 @@ export class GameGrid {
   unicorn: Unicorn
   $unicorn: HTMLElement
   trail: TrailSprite[] = []
+  gridPos: Vec2 = vec2(6, 6)
 
   constructor() {
     this.grid = Array.from({ length: GRID_HEIGHT }, () => Array(GRID_WIDTH).fill(null));
 
     this.grid[4][4] = gameItem( 4, 4, "🍇" );
-    this.grid[4][5] = gameItem( 5, 4, "🍓" );
+    this.grid[4][5] = gameItem( 5, 4, "🌽" );
     this.grid[3][3] = gameItem( 3, 3, "🥝" );
-    this.grid[1][2] = gameItem( 1, 2, "🌽" );
-    this.grid[7][2] = gameItem( 7, 2, "🥕" );
-    this.grid[8][7] = gameItem( 8, 7, "🫐" );
+    this.grid[1][2] = gameItem( 2, 1, "🍓" );
+    this.grid[7][2] = gameItem( 2, 7, "🥕" );
+    this.grid[8][7] = gameItem( 7, 8, "🫐" );
 
     this.unicorn = new Unicorn(6, 6);
 
@@ -65,9 +84,38 @@ export class GameGrid {
 
   onClick(x: number, y: number) {
     const cellSize = game.clientWidth / GRID_WIDTH;
-    const targetX = (x - cellSize * 0.5) / cellSize;
-    const targetY = (y - cellSize * 0.5) / cellSize;
-    this.unicorn.moveTo(targetX, targetY);
+    const targetGX = Math.round((x - cellSize * 0.5) / cellSize);
+    const targetGY = Math.round((y - cellSize * 0.5) / cellSize);
+    const clampedX = Math.max(0, Math.min(GRID_WIDTH - 1, targetGX));
+    const clampedY = Math.max(0, Math.min(GRID_HEIGHT - 1, targetGY));
+
+    const path = bresenham(this.gridPos.x, this.gridPos.y, clampedX, clampedY);
+    // skip first cell (already standing there)
+    const newCells = path.slice(1);
+
+    for (const cell of newCells) {
+      // highlight
+      const $highlight = document.createElement('div');
+      $highlight.className = 'highlight';
+      $highlight.style.left = (cellSize * cell.x) + 'px';
+      $highlight.style.top = (cellSize * cell.y) + 'px';
+      $highlight.style.width = cellSize + 'px';
+      $highlight.style.height = cellSize + 'px';
+      gameGrid.insertBefore($highlight, gameGrid.firstChild);
+      addTimeEvent(() => $highlight.remove(), 0, 0, HIGHLIGHT_DURATION);
+
+      // fruit collection
+      const item = this.grid[cell.y]?.[cell.x];
+      if (item && !item.taken) {
+        item.taken = true;
+        addToInventory(item.s);
+        const $item = document.getElementById(item.id);
+        if ($item) $item.innerText = '';
+      }
+    }
+
+    this.gridPos = vec2(clampedX, clampedY);
+    this.unicorn.moveTo(clampedX, clampedY);
 
     const spawnCount = Math.ceil(this.unicorn.moveDuration / SPAWN_INTERVAL);
     for (let i = 0; i < spawnCount; i++) {

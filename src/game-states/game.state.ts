@@ -1,4 +1,5 @@
 import { State } from '@/core/state';
+import { initGameData, GameData } from '@/game/game-data';
 import { GameGrid } from '@/game/grame-grid';
 
 class GameState implements State {
@@ -8,6 +9,7 @@ class GameState implements State {
   onEnter() {
     game.classList.toggle('show', true);
     this.grid = new GameGrid();
+    initGameData();
   }
 
   onLeave() {

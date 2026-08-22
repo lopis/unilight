@@ -15,3 +15,4 @@ let gameGrid: HTMLElement
 
 // Buttons
 let newGame: HTMLButtonElement
+let inventory: HTMLElement

@@ -51,6 +51,7 @@ i {
   position: absolute;
   font-size: 3rem;
   pointer-events: none;
+  font-style: normal;
 }
 
 #unicorn {
@@ -75,4 +76,26 @@ section:not(.show) {
 #gameGrid {
   width: 100%;
   aspect-ratio: 1;
+  position: relative;
+}
+
+.highlight {
+  position: absolute;
+  background: rgba(255, 220, 0, 0.4);
+  border-radius: 4px;
+  pointer-events: none;
+  animation: highlight-fade 1000ms forwards;
+}
+
+@keyframes highlight-fade {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+#inventory {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 8px;
+  font-size: 1.8rem;
 }
