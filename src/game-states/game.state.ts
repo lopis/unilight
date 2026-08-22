@@ -14,8 +14,8 @@ class GameState implements State {
     game.classList.toggle('show', false);
   }
 
-  onUpdate() {
-    this.grid.update();
+  onUpdate(timeElapsed: number) {
+    this.grid.update(timeElapsed);
   }
 }
 
