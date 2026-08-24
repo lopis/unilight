@@ -1,27 +1,21 @@
-/* :root {
-    --green0: #e3ecd7;
-    --green1: #6b9a71;
-    --green2: #457a5f;
-    --green3: #255056;
-    --blue0: #b4ecf3;
-    --blue1: #86bec6;
-    --blue2: #4e9ca6;
-    --blue3: #366c73;
-    --blue4: var(--green3);
-    --blue5: #1f4347;
-    --blue6: #13282b;
-    --purple0: #e3c5cf;
-    --purple1: #b79fbb;
-    --purple2: #8e8bb6;
-    --purple3: #5f6791;
-    --purple4: #8d5180;
-    --purple5: #b67388;
-    --yellow0: #fffef9;
-    --yellow1: #efdbb3;
-    --yellow2: #e1ae98;
-    --black: var(--blue6);
-    --white: var(--yellow0);
-} */
+:root {
+  --pink: #FFCAF2;
+  --pink2: hsl(315, 80%, 45%);
+  --red: #FFB2B1;
+  --red2: hsl(1, 80%, 45%);
+  --yellow: #FFF3AD;
+  --yellow2: hsl(51, 80%, 45%);
+  --green: hsl(120, 100%, 87%);
+  --green2: hsl(120, 50%, 45%);
+  --blue: #A2EDFF;
+  --blue2: hsl(192, 50%, 45%);
+  --indigo: hsl(225, 100%, 82%);
+  --indigo2: hsl(225, 50%, 45%);
+  --violet: #C9B1FF;
+  --violet2: hsl(258, 50%, 45%);
+  --black: #333333;
+  --white: #FFFFFF;
+}
 
 canvas {
   height: 100%;
@@ -39,7 +33,7 @@ html, body {
   align-items: center;
   height: 100%;
   width: 100%;
-  background: #13282b;
+  background: var();
 }
 
 body {
