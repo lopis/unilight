@@ -26,11 +26,39 @@ export const addToInventory = (fruit: Fruit) => {
 }
 
 const renderInventory = () => {
-  inventory.innerHTML = [...gameData.inventory.fruits]
-    .map((fruit) => {
-      const count = gameData.inventory.fruits.count(fruit);
-      const countAttribute = count > 1 ? ` data-count="${count}"` : '';
-      return `<span${countAttribute} class="${fruit}">${fruit}</span>`;
-    })
-    .join('');
+  let inventoryHtml = '';
+  const remainderItems: Fruit[] = [];
+
+  for (const fruit of gameData.inventory.fruits) {
+    const total = gameData.inventory.fruits.count(fruit);
+    const groups = Math.floor(total / 3);
+    const remainder = total % 3;
+
+    if (groups > 0) {
+      const countAttribute = groups > 1 ? ` data-count="${groups}"` : '';
+      inventoryHtml += `<span${countAttribute} class="${fruit}">${fruit}</span>`;
+    }
+
+    if (remainder > 0) {
+      for (let i = 0; i < remainder; i++) {
+        remainderItems.push(fruit);
+      }
+    }
+  }
+
+  inventory.innerHTML = inventoryHtml;
+
+  const unicornElement = document.getElementById('unicorn');
+  if (unicornElement) {
+    const remainderCount = remainderItems.length;
+    const orbitHtml = remainderItems
+      .map((fruit, index) => `
+        <span class="unicorn-orbiter" style="--index:${index};--count:${remainderCount};">
+          <span class="unicorn-orbiter-glyph">${fruit}</span>
+        </span>
+      `)
+      .join('');
+
+    unicornElement.innerHTML = `<span class="unicorn-core">🦄</span><span class="unicorn-orbit">${orbitHtml}</span>`;
+  }
 }

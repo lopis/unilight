@@ -51,6 +51,62 @@ i {
 
 #unicorn {
   transition: all 50ms ease-out;
+  display: grid;
+  place-items: center;
+  place-content: center;
+  width: 1em;
+  height: 1em;
+  line-height: 1;
+  overflow: visible;
+}
+
+#unicorn .unicorn-core {
+  display: block;
+}
+
+#unicorn .unicorn-orbit {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
+  animation: unicorn-orbit-spin 3s linear infinite;
+  transform-origin: center;
+}
+
+#unicorn .unicorn-orbiter {
+  display: inline-flex;
+  position: absolute;
+  transform:
+    translate(-50%, -50%)
+    rotate(calc((360deg / var(--count)) * var(--index)))
+    translateY(-0.9em)
+    rotate(calc((360deg / var(--count)) * var(--index) * -1));
+  transform-origin: center;
+}
+
+#unicorn .unicorn-orbiter-glyph {
+  display: inline-block;
+  font-size: 0.45em;
+  animation: unicorn-orbit-counter-spin 3s linear infinite;
+}
+
+@keyframes unicorn-orbit-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes unicorn-orbit-counter-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
 }
 
 section {
@@ -72,6 +128,8 @@ section:not(.show) {
   width: 100%;
   aspect-ratio: 1;
   position: relative;
+  border: 1px solid white;
+  margin: 0.5rem;
 }
 
 .highlight {
@@ -143,3 +201,23 @@ section:not(.show) {
 .🍇 {
   background: var(--violet);
 }
+
+#spells {
+  display: flex;
+  flex-direction: column;
+}
+
+label:has(input:checked) {
+  background-color: #FFB2B1;
+}
+
+label {
+	background: white;
+	padding: 0.5rem 1rem;
+}
+
+#spells input {
+  display: none;
+}
+
+
