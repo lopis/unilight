@@ -24,7 +24,8 @@ export class GameGrid {
     this.grid[4][5] = gameItem( 5, 4, "🌽" );
     this.grid[3][3] = gameItem( 3, 3, "🥝" );
     this.grid[1][2] = gameItem( 2, 1, "🍓" );
-    this.grid[7][2] = gameItem( 2, 7, "🥕" );
+    this.grid[7][2] = gameItem( 2, 7, "🌸" );
+    this.grid[8][2] = gameItem( 2, 8, "🌸" );
     this.grid[8][7] = gameItem( 7, 8, "🫐" );
 
     unicorn.moveTo(6, 6);

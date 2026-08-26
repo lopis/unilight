@@ -1,6 +1,6 @@
 import { vec2, Vec2 } from "@/core/util/vec2";
 
-export type Fruit = '🍓' | '🥕' | '🌽' | '🥝' | '💧' | '🫐' | '🍇';
+export type Fruit = '🍓' | '🌸' | '🌽' | '🥝' | '💧' | '🫐' | '🍇';
 
 export interface GameItem {
   s: Fruit;

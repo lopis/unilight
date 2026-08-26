@@ -39,6 +39,7 @@ html, body {
 body {
   max-width: 600px;
   position: relative;
+  font-family: sans-serif;
 }
 
 i {
@@ -89,7 +90,56 @@ section:not(.show) {
 #inventory {
   display: flex;
   flex-wrap: wrap;
-  gap: 4px;
-  padding: 8px;
+  gap: 1rem;
+  padding: 0.5rem;
   font-size: 1.8rem;
+}
+
+#inventory span {
+  border-radius: 0.3rem;
+  padding: 0.3rem;
+  position: relative;
+}
+
+#inventory span[data-count]::after {
+	content: attr(data-count);
+	position: absolute;
+  top: -0.5rem;
+  right: -0.5rem;
+	font-size: 1.1rem;
+	background: white;
+	display: inline-flex;
+	height: 1.3rem;
+	aspect-ratio: 1;
+	justify-content: center;
+	align-items: center;
+	border-radius: 99px;
+}
+
+.🌸 {
+  background: var(--pink);
+}
+
+.🍓 {
+  background: var(--red);
+}
+
+.🌽 {
+  background: var(--yellow);
+}
+
+.🥝 {
+  background: var(--green);
+}
+
+.💧 {
+  background: var(--blue);
+}
+
+.🫐 {
+  background: var(--indigo);
+}
+
+.🍇 {
+  background: var(--violet);
 }
