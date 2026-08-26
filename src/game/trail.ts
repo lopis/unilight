@@ -1,11 +1,10 @@
 import { drawEngine } from '@/core/draw-engine';
-import { addTimeEvent } from '@/core/timer';
 import { Vec2 } from '@/core/util/vec2';
 import { assets } from './image-generator';
-import { Unicorn } from './unicorn';
+import { unicorn } from './unicorn';
 
 const TRAIL_DURATION = 200;
-const SPAWN_INTERVAL = 2;
+const TRAIL_SPACING = 0.04;
 
 type TrailSprite = {
   pos: Vec2
@@ -15,23 +14,48 @@ type TrailSprite = {
 
 export class Trail {
   private sprites: TrailSprite[] = [];
-
-  scheduleSpawns(unicorn: Unicorn) {
-    const spawnCount = Math.ceil(unicorn.moveDuration / SPAWN_INTERVAL);
-    for (let i = 0; i < spawnCount; i++) {
-      addTimeEvent(() => {
-        this.sprites.push({ pos: { ...unicorn.pos }, angle: unicorn.angle, born: performance.now() });
-      }, 0, 0, i * SPAWN_INTERVAL);
-    }
-  }
+  private prevPos: Vec2 | null = null;
+  private distanceSinceLastSpawn = 0;
 
   draw(cellSize: number) {
+    if (!this.prevPos) {
+      this.prevPos = { ...unicorn.pos };
+    }
+
+    // Generate sprites
+    if (unicorn.moving) {
+      const dx = unicorn.pos.x - this.prevPos.x;
+      const dy = unicorn.pos.y - this.prevPos.y;
+      const segmentLength = Math.hypot(dx, dy);
+
+      if (segmentLength > 0) {
+        this.distanceSinceLastSpawn += segmentLength;
+
+        while (this.distanceSinceLastSpawn >= TRAIL_SPACING) {
+          const overshoot = this.distanceSinceLastSpawn - TRAIL_SPACING;
+          const traveledOnSegment = segmentLength - overshoot;
+          const alpha = traveledOnSegment / segmentLength;
+
+          this.sprites.push({
+            pos: {
+              x: this.prevPos.x + dx * alpha,
+              y: this.prevPos.y + dy * alpha,
+            },
+            angle: unicorn.angle,
+            born: performance.now(),
+          });
+
+          this.distanceSinceLastSpawn = overshoot;
+        }
+      }
+    }
+
+    this.prevPos = { ...unicorn.pos };
+
+    // Draw Sprites
     const now = performance.now();
     this.sprites = this.sprites.filter(s => now - s.born < TRAIL_DURATION);
-
     const sprite = assets['rainbowSprite'];
-    if (!sprite) return;
-
     const ctx = drawEngine.ctx4;
     for (const s of this.sprites) {
       const opacity = 1 - (now - s.born) / TRAIL_DURATION;

@@ -1,25 +1,24 @@
 import { gameItem, GameItem } from "./game-item";
-import { Unicorn } from "./unicorn";
+import { unicorn, Unicorn } from "./unicorn";
 import { vec2, Vec2, bresenham } from "@/core/util/vec2";
 import { addToInventory } from "./game-data";
 import { Trail } from "./trail";
 import { spawnHighlight } from "./highlight";
 
-const GRID_WIDTH = 10;
-const GRID_HEIGHT = 10;
+const gridCols = 10;
+const gridRows = 10;
 
 type GridItem = GameItem | null
 
 export class GameGrid {
   // First coord is Y, second is X
   grid: GridItem[][]
-  unicorn: Unicorn
   $unicorn: HTMLElement
   trail = new Trail()
   gridPos: Vec2 = vec2(6, 6)
 
   constructor() {
-    this.grid = Array.from({ length: GRID_HEIGHT }, () => Array(GRID_WIDTH).fill(null));
+    this.grid = Array.from({ length: gridRows }, () => Array(gridCols).fill(null));
 
     this.grid[4][4] = gameItem( 4, 4, "🍇" );
     this.grid[4][5] = gameItem( 5, 4, "🌽" );
@@ -28,9 +27,9 @@ export class GameGrid {
     this.grid[7][2] = gameItem( 2, 7, "🥕" );
     this.grid[8][7] = gameItem( 7, 8, "🫐" );
 
-    this.unicorn = new Unicorn(6, 6);
+    unicorn.moveTo(6, 6);
 
-    const cellSize = game.clientWidth / GRID_WIDTH;
+    const cellSize = game.clientWidth / gridCols;
 
     this.grid.forEach((row, y) => {
       row.forEach((gridItem, x) => {
@@ -48,19 +47,19 @@ export class GameGrid {
     this.$unicorn = document.createElement('i');
     this.$unicorn.id = 'unicorn';
     this.$unicorn.innerText = '🦄';
-    this.$unicorn.style.left = (cellSize * this.unicorn.pos.x) + 'px';
-    this.$unicorn.style.top = (cellSize * this.unicorn.pos.y) + 'px';
+    this.$unicorn.style.left = (cellSize * unicorn.pos.x) + 'px';
+    this.$unicorn.style.top = (cellSize * unicorn.pos.y) + 'px';
     gameGrid.appendChild(this.$unicorn);
 
     gameGrid.addEventListener('click', (event) => this.moveUnicorn(event.offsetX, event.offsetY))
   }
 
   moveUnicorn(x: number, y: number) {
-    const cellSize = game.clientWidth / GRID_WIDTH;
+    const cellSize = game.clientWidth / gridCols;
     const targetGX = Math.round((x - cellSize * 0.5) / cellSize);
     const targetGY = Math.round((y - cellSize * 0.5) / cellSize);
-    const clampedX = Math.max(0, Math.min(GRID_WIDTH - 1, targetGX));
-    const clampedY = Math.max(0, Math.min(GRID_HEIGHT - 1, targetGY));
+    const clampedX = Math.max(0, Math.min(gridCols - 1, targetGX));
+    const clampedY = Math.max(0, Math.min(gridRows - 1, targetGY));
 
     const path = bresenham(this.gridPos.x, this.gridPos.y, clampedX, clampedY);
     // skip first cell (already standing there)
@@ -80,16 +79,15 @@ export class GameGrid {
     }
 
     this.gridPos = vec2(clampedX, clampedY);
-    this.unicorn.moveTo(clampedX, clampedY);
-    this.trail.scheduleSpawns(this.unicorn);
+    unicorn.moveTo(clampedX, clampedY);
   }
 
   update(delta: number) {
-    const cellSize = game.clientWidth / GRID_WIDTH;
+    const cellSize = game.clientWidth / gridCols;
 
-    this.unicorn.update(delta);
-    this.$unicorn.style.left = (cellSize * this.unicorn.pos.x) + 'px';
-    this.$unicorn.style.top = (cellSize * this.unicorn.pos.y) + 'px';
+    unicorn.update(delta);
+    this.$unicorn.style.left = (cellSize * unicorn.pos.x) + 'px';
+    this.$unicorn.style.top = (cellSize * unicorn.pos.y) + 'px';
 
     this.trail.draw(cellSize);
   }

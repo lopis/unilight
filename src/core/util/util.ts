@@ -4,6 +4,8 @@ export const easeInOutSine = (x: number, min: number, max: number): number => {
   return min + ease * max;
 };
 
+export const easeOut = (t: number) => 1 - (1 - t) * (1 - t);
+
 /**
  * Converts a value from 0 to 1 to an exponential ease.
  * @param x value from 0 to 1
