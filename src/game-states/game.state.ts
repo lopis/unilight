@@ -1,4 +1,5 @@
 import { drawEngine } from '@/core/draw-engine';
+import { clearEvents } from '@/core/event';
 import { State } from '@/core/state';
 import { initGameData, GameData } from '@/game/game-data';
 import { GameGrid } from '@/game/game-grid';
@@ -16,6 +17,7 @@ class GameState implements State {
 
   onLeave() {
     game.classList.toggle('show', false);
+    clearEvents();
   }
 
   onUpdate(timeElapsed: number) {

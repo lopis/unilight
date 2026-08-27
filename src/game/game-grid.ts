@@ -4,6 +4,8 @@ import { vec2, Vec2, bresenham } from "@/core/util/vec2";
 import { addToInventory } from "./game-data";
 import { Trail } from "./trail";
 import { spawnHighlight } from "./highlight";
+import { on } from "@/core/event";
+import { GameEvent } from "./event-manifest";
 
 const gridCols = 10;
 const gridRows = 10;
@@ -42,7 +44,7 @@ export class GameGrid {
     this.placeAtGridCell(this.$unicorn, unicorn.pos.x, unicorn.pos.y);
     gameGrid.appendChild(this.$unicorn);
 
-    gameGrid.addEventListener('click', (event) => this.moveUnicorn(event))
+    on(GameEvent.GRID_CLICK, (pos) => this.moveUnicorn(pos))
   }
 
   private fillGridWithRandomFruit() {
@@ -59,12 +61,13 @@ export class GameGrid {
     element.style.gridRow = `${Math.round(y) + 1}`;
   }
 
-  moveUnicorn(event: MouseEvent) {
+  moveUnicorn(pos: {x: number, y: number}) {
+    console.log(pos);
     const rect = gameGrid.getBoundingClientRect();
     if (rect.width === 0 || rect.height === 0) return;
 
-    const relX = Math.max(0, Math.min(rect.width - 0.0001, event.clientX - rect.left));
-    const relY = Math.max(0, Math.min(rect.height - 0.0001, event.clientY - rect.top));
+    const relX = Math.max(0, Math.min(rect.width - 0.0001, pos.x - rect.left));
+    const relY = Math.max(0, Math.min(rect.height - 0.0001, pos.y - rect.top));
     const targetGX = Math.floor((relX / rect.width) * gridCols);
     const targetGY = Math.floor((relY / rect.height) * gridRows);
     const clampedX = Math.max(0, Math.min(gridCols - 1, targetGX));
