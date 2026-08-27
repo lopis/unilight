@@ -24,16 +24,13 @@ export class GameGrid {
 
     unicorn.moveTo(6, 6);
 
-    const cellSize = game.clientWidth / gridCols;
-
     this.grid.forEach((row, y) => {
       row.forEach((gridItem, x) => {
         const $item = document.createElement('i');
         $item.id = `i-${x}${y}`;
+        this.placeAtGridCell($item, x, y);
         if(gridItem) {
           $item.innerText = gridItem?.s;
-          $item.style.left = (cellSize * gridItem?.pos.x) + 'px';
-          $item.style.top = (cellSize * gridItem?.pos.y) + 'px';
         }
         gameGrid.appendChild($item)
       })
@@ -42,8 +39,7 @@ export class GameGrid {
     this.$unicorn = document.createElement('i');
     this.$unicorn.id = 'unicorn';
     this.$unicorn.innerText = '🦄';
-    this.$unicorn.style.left = (cellSize * unicorn.pos.x) + 'px';
-    this.$unicorn.style.top = (cellSize * unicorn.pos.y) + 'px';
+    this.placeAtGridCell(this.$unicorn, unicorn.pos.x, unicorn.pos.y);
     gameGrid.appendChild(this.$unicorn);
 
     gameGrid.addEventListener('click', (event) => this.moveUnicorn(event.offsetX, event.offsetY))
@@ -58,6 +54,11 @@ export class GameGrid {
     }
   }
 
+  private placeAtGridCell(element: HTMLElement, x: number, y: number) {
+    element.style.gridColumn = `${Math.round(x) + 1}`;
+    element.style.gridRow = `${Math.round(y) + 1}`;
+  }
+
   moveUnicorn(x: number, y: number) {
     const cellSize = game.clientWidth / gridCols;
     const targetGX = Math.round((x - cellSize * 0.5) / cellSize);
@@ -70,7 +71,7 @@ export class GameGrid {
     const newCells = path.slice(1);
 
     for (const cell of newCells) {
-      spawnHighlight(cell, cellSize);
+      spawnHighlight(cell);
 
       // fruit collection
       const item = this.grid[cell.y]?.[cell.x];
@@ -90,8 +91,7 @@ export class GameGrid {
     const cellSize = game.clientWidth / gridCols;
 
     unicorn.update(delta);
-    this.$unicorn.style.left = (cellSize * unicorn.pos.x) + 'px';
-    this.$unicorn.style.top = (cellSize * unicorn.pos.y) + 'px';
+    this.placeAtGridCell(this.$unicorn, unicorn.pos.x, unicorn.pos.y);
 
     this.trail.draw(cellSize);
   }

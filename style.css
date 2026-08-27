@@ -112,6 +112,7 @@ i {
 section {
   height: 100%;
   width: 100%;
+  padding: 1vw;
 }
 
 section:not(.show) {
@@ -125,15 +126,25 @@ section:not(.show) {
 }
 
 #gameGrid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(10, 1fr);
   width: 100%;
   aspect-ratio: 1;
   position: relative;
   border: 1px solid white;
-  margin: 0.5rem;
+}
+
+@media (max-width: 600px) {
+  #gameGrid > i {
+    font-size: 8vw;
+  }
 }
 
 .highlight {
-  position: absolute;
+  position: relative;
+  width: 100%;
+  height: 100%;
   background: rgba(255, 220, 0, 0.4);
   border-radius: 4px;
   pointer-events: none;
@@ -202,6 +213,9 @@ section:not(.show) {
   background: var(--violet);
 }
 
+
+/* TOOL AREA */
+
 #spells {
   display: flex;
   flex-direction: column;
@@ -219,8 +233,6 @@ label {
 #spells input {
   display: none;
 }
-
-
 #tools {
   display: flex;
 }
@@ -237,4 +249,14 @@ label {
   border-radius: 200px;
   background: #00000055;
   margin: 0 -50px;
+}
+
+@media (max-width: 600px) {
+  #tools {
+    flex-direction: column;
+  }
+
+  #spells {
+    flex-direction: row;
+  }
 }
