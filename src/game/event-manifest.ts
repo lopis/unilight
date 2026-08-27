@@ -3,4 +3,5 @@ export const enum GameEvent {
   UNPAUSE,
 
   GRID_CLICK,
+  INVENTORY_CLICK,
 }

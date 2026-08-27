@@ -1,5 +1,6 @@
 import { Fruit } from "./game-item"
 import { CountSet } from "@/core/util/count-set";
+import { fruits } from "./game-item";
 
 export interface GameData {
   inventory: Inventory
@@ -11,12 +12,15 @@ interface Inventory {
 
 export let gameData!: GameData
 
+const inventoryItems = new Map<Fruit, HTMLSpanElement>();
+
 export const initGameData = () => {
   gameData = {
     inventory: {
       fruits: new CountSet<Fruit>(),
     }
   }
+  initInventoryView();
   renderInventory();
 }
 
@@ -26,17 +30,29 @@ export const addToInventory = (fruit: Fruit) => {
 }
 
 const renderInventory = () => {
-  let inventoryHtml = '';
   const remainderItems: Fruit[] = [];
 
-  for (const fruit of gameData.inventory.fruits) {
+  for (const fruit of fruits) {
+    const el = inventoryItems.get(fruit);
+    if (!el) {
+      continue;
+    }
+
     const total = gameData.inventory.fruits.count(fruit);
     const groups = Math.floor(total / 3);
     const remainder = total % 3;
 
     if (groups > 0) {
-      const countAttribute = groups > 1 ? ` data-count="${groups}"` : '';
-      inventoryHtml += `<span${countAttribute} class="${fruit}">${fruit}</span>`;
+      el.classList.remove('hide');
+      if (groups > 1) {
+        el.dataset.count = String(groups);
+      } else {
+        delete el.dataset.count;
+      }
+    } else {
+      el.classList.add('hide');
+      el.classList.remove('selected');
+      delete el.dataset.count;
     }
 
     if (remainder > 0) {
@@ -45,8 +61,6 @@ const renderInventory = () => {
       }
     }
   }
-
-  inventory.innerHTML = inventoryHtml;
 
   const unicornElement = document.getElementById('unicorn');
   if (unicornElement) {
@@ -60,5 +74,18 @@ const renderInventory = () => {
       .join('');
 
     unicornElement.innerHTML = `<span class="unicorn-core">🦄</span><span class="unicorn-orbit">${orbitHtml}</span>`;
+  }
+}
+
+const initInventoryView = () => {
+  inventoryItems.clear();
+
+  for (const fruit of fruits) {
+    const el = document.getElementById(fruit) as HTMLSpanElement | null;
+    if (!el) {
+      continue;
+    }
+
+    inventoryItems.set(fruit, el);
   }
 }

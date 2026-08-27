@@ -217,7 +217,14 @@ section:not(.show) {
   display: flex;
   justify-content: center;
   align-items: center;
-  text-shadow: 0px 1px 2px;
+}
+
+#inventory span.hide {
+  display: none;
+}
+
+#inventory span.selected {
+  transform: scale(1.5);
 }
 
 #inventory span[data-count]::after {
@@ -235,31 +242,31 @@ section:not(.show) {
 	border-radius: 99px;
 }
 
-.🌸 {
+#🌸 {
   background: var(--pink);
 }
 
-.🍓 {
+#🍓 {
   background: var(--red);
 }
 
-.🌽 {
+#🌽 {
   background: var(--yellow);
 }
 
-.🥝 {
+#🥝 {
   background: var(--green);
 }
 
-.💧 {
+#💧 {
   background: var(--blue);
 }
 
-.🫐 {
+#🫐 {
   background: var(--indigo);
 }
 
-.🍇 {
+#🍇 {
   background: var(--violet);
 }
 

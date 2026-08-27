@@ -12,7 +12,14 @@ let c;
 let menu: HTMLElement
 let game: HTMLElement
 let gameGrid: HTMLElement
+let inventory: HTMLElement
+let tools: HTMLElement
+let spells: HTMLElement
+let workarea: HTMLElement
+let space1: HTMLElement
+let space2: HTMLElement
+let space3: HTMLElement
+let unicorn: HTMLElement
 
 // Buttons
 let newGame: HTMLButtonElement
-let inventory: HTMLElement

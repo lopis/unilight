@@ -2,6 +2,8 @@ import { vec2, Vec2 } from "@/core/util/vec2";
 
 export type Fruit = '🍓' | '🌸' | '🌽' | '🥝' | '💧' | '🫐' | '🍇';
 
+export const fruits: Fruit[] = ['🍓', '🌸', '🌽', '🥝', '💧', '🫐', '🍇'];
+
 export interface GameItem {
   s: Fruit;
   pos: Vec2,
