@@ -1,5 +1,5 @@
-import { gameItem, GameItem } from "./game-item";
-import { unicorn, Unicorn } from "./unicorn";
+import { gameItem, GameItem, Fruit } from "./game-item";
+import { unicorn } from "./unicorn";
 import { vec2, Vec2, bresenham } from "@/core/util/vec2";
 import { addToInventory } from "./game-data";
 import { Trail } from "./trail";
@@ -7,6 +7,7 @@ import { spawnHighlight } from "./highlight";
 
 const gridCols = 10;
 const gridRows = 10;
+const fruits: Fruit[] = ['🍓', '🌸', '🌽', '🥝', '💧', '🫐', '🍇'];
 
 type GridItem = GameItem | null
 
@@ -19,15 +20,7 @@ export class GameGrid {
 
   constructor() {
     this.grid = Array.from({ length: gridRows }, () => Array(gridCols).fill(null));
-
-    this.grid[4][4] = gameItem( 4, 4, "🍇" );
-    this.grid[4][5] = gameItem( 5, 4, "🌽" );
-    this.grid[3][3] = gameItem( 3, 3, "🥝" );
-    this.grid[1][2] = gameItem( 2, 1, "🍓" );
-    this.grid[7][2] = gameItem( 2, 7, "🌸" );
-    this.grid[8][2] = gameItem( 2, 8, "🌸" );
-    this.grid[2][2] = gameItem( 2, 2, "🌸" );
-    this.grid[8][7] = gameItem( 7, 8, "🫐" );
+    this.fillGridWithRandomFruit();
 
     unicorn.moveTo(6, 6);
 
@@ -54,6 +47,15 @@ export class GameGrid {
     gameGrid.appendChild(this.$unicorn);
 
     gameGrid.addEventListener('click', (event) => this.moveUnicorn(event.offsetX, event.offsetY))
+  }
+
+  private fillGridWithRandomFruit() {
+    for (let y = 0; y < gridRows; y++) {
+      for (let x = 0; x < gridCols; x++) {
+        const fruit = fruits[Math.floor(Math.random() * fruits.length)];
+        this.grid[y][x] = gameItem(x, y, fruit);
+      }
+    }
   }
 
   moveUnicorn(x: number, y: number) {

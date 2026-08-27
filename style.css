@@ -221,3 +221,20 @@ label {
 }
 
 
+#tools {
+  display: flex;
+}
+
+#workarea {
+  display: flex;
+  justify-content: center;
+  flex-grow: 1;
+}
+
+#space1, #space2 {
+  height: 200px;
+  width: 200px;
+  border-radius: 200px;
+  background: #00000055;
+  margin: 0 -50px;
+}
