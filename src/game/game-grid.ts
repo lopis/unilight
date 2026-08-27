@@ -42,7 +42,7 @@ export class GameGrid {
     this.placeAtGridCell(this.$unicorn, unicorn.pos.x, unicorn.pos.y);
     gameGrid.appendChild(this.$unicorn);
 
-    gameGrid.addEventListener('click', (event) => this.moveUnicorn(event.offsetX, event.offsetY))
+    gameGrid.addEventListener('click', (event) => this.moveUnicorn(event))
   }
 
   private fillGridWithRandomFruit() {
@@ -59,10 +59,14 @@ export class GameGrid {
     element.style.gridRow = `${Math.round(y) + 1}`;
   }
 
-  moveUnicorn(x: number, y: number) {
-    const cellSize = game.clientWidth / gridCols;
-    const targetGX = Math.round((x - cellSize * 0.5) / cellSize);
-    const targetGY = Math.round((y - cellSize * 0.5) / cellSize);
+  moveUnicorn(event: MouseEvent) {
+    const rect = gameGrid.getBoundingClientRect();
+    if (rect.width === 0 || rect.height === 0) return;
+
+    const relX = Math.max(0, Math.min(rect.width - 0.0001, event.clientX - rect.left));
+    const relY = Math.max(0, Math.min(rect.height - 0.0001, event.clientY - rect.top));
+    const targetGX = Math.floor((relX / rect.width) * gridCols);
+    const targetGY = Math.floor((relY / rect.height) * gridRows);
     const clampedX = Math.max(0, Math.min(gridCols - 1, targetGX));
     const clampedY = Math.max(0, Math.min(gridRows - 1, targetGY));
 
@@ -88,7 +92,7 @@ export class GameGrid {
   }
 
   update(delta: number) {
-    const cellSize = game.clientWidth / gridCols;
+    const cellSize = gameGrid.clientWidth / gridCols;
 
     unicorn.update(delta);
     this.placeAtGridCell(this.$unicorn, unicorn.pos.x, unicorn.pos.y);

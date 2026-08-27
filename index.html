@@ -18,27 +18,33 @@
         <!-- <span id="fps"></span> -->
         <span id="coords"></span>
     </div>
-    <section id="menu">
-      <button id="newGame">New Game</button>
-    </section>
-    <section id="game">
-      <canvas id="c4" width="960" height="540"></canvas>
-      <div id="gameGrid"></div>
-      <div id="inventory"></div>
-      <div id="tools">
-        <div id="spells">
-          <div>Spells</div>
-          <label><input type="radio" name="spell" id="add">Add</label>
-          <label><input type="radio" name="spell" id="sub">Sub</label>
-          <label><input type="radio" name="spell" id="com">Com</label>
+    <h1><span>Unilight</span> <em>DASH</em></h1>
+    <main>
+      <section id="menu">
+        <button id="newGame">New Game</button>
+      </section>
+      <section id="game">
+        <div class="grid-wrapper">
+          <div id="gameGrid">
+            <canvas id="c4" width="960" height="540"></canvas>
+          </div>
         </div>
-        <div id="workarea">
-          <div id="space1"></div>
-          <div id="space2"></div>
-          <div id="space3"></div>
+        <div id="inventory"></div>
+        <div id="tools">
+          <div id="spells">
+            <div>Spells</div>
+            <label><input type="radio" name="spell" id="add">Add</label>
+            <label><input type="radio" name="spell" id="sub">Sub</label>
+            <label><input type="radio" name="spell" id="com">Com</label>
+          </div>
+          <div id="workarea">
+            <div id="space1"></div>
+            <div id="space2"></div>
+            <div id="space3"></div>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </main>
     <script type="module" src="/src/index.ts"></script>
 </body>
 </html>

@@ -44,8 +44,8 @@ class DrawEngine {
   }
 
   resizeCanvas() {
-    this.canvasWidth = document.body.clientWidth;
-    this.canvasHeight = document.body.clientHeight;
+    this.canvasWidth = gameGrid.clientWidth;
+    this.canvasHeight = gameGrid.clientHeight;
     this.ctx4.canvas.width = this.canvasWidth;
     this.ctx4.canvas.height = this.canvasHeight;
     this.ctx4.imageSmoothingEnabled = false;

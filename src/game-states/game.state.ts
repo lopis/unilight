@@ -1,3 +1,4 @@
+import { drawEngine } from '@/core/draw-engine';
 import { State } from '@/core/state';
 import { initGameData, GameData } from '@/game/game-data';
 import { GameGrid } from '@/game/game-grid';
@@ -9,6 +10,7 @@ class GameState implements State {
   onEnter() {
     game.classList.toggle('show', true);
     this.grid = new GameGrid();
+    drawEngine.resizeCanvas();
     initGameData();
   }
 
