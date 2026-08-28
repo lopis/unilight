@@ -1,10 +1,10 @@
 :root {
   --pink: hsl(336, 64%, 68%);
   --pink2: hsl(336, 64%, 48%);
-  --red: #d24835;
-  --red2: hsl(7, 64%, 32%);
+  --red: hsl(7, 64%, 52%);
+  --red2: hsl(7, 95%, 37%);
   --yellow: #f6f13a;
-  --yellow2: hsl(49, 88%, 30%);
+  --yellow2: #f99628;
   --green: #58bd5b;
   --green2: hsl(122, 43%, 34%);
   --blue: #5dbfe8;
@@ -27,6 +27,7 @@ canvas {
   background: var(--green2);
   border: 2rem solid var(--green2);
   margin: -2rem;
+  z-index: 0;
 }
 
 html, body, main {
@@ -77,10 +78,13 @@ h1 em {
 }
 
 i {
-  position: absolute;
+  position: relative;
   font-size: 3rem;
   pointer-events: none;
   font-style: normal;
+  z-index: 1;
+  min-width: 0;
+  min-height: 0;
 }
 
 #unicorn {
@@ -245,31 +249,31 @@ section:not(.show) {
 }
 
 #🌸 {
-  background: var(--pink);
+  background: var(--pink2);
 }
 
 #🍓 {
-  background: var(--red);
+  background: var(--red2);
 }
 
 #🌽 {
-  background: var(--yellow);
+  background: var(--yellow2);
 }
 
 #🥝 {
-  background: var(--green);
+  background: var(--green2);
 }
 
 #💧 {
-  background: var(--blue);
+  background: var(--blue2);
 }
 
 #🫐 {
-  background: var(--indigo);
+  background: var(--indigo2);
 }
 
 #🍇 {
-  background: var(--violet);
+  background: var(--violet2);
 }
 
 
@@ -298,6 +302,11 @@ section:not(.show) {
   font-weight: bold;
   line-height: 0.8;
   color: #000000AA;
+}
+
+#spells button:active {
+	box-shadow: 0.1rem 0.1rem 0 0 var(--bg2);
+  transform: translate(0.2rem, 0.2rem);
 }
 
 #add {
@@ -339,7 +348,7 @@ section:not(.show) {
   width: clamp(120px, 28vw, 200px);
   border-radius: 200px;
   background: #00000055;
-  margin: 1vw;
+  margin: clamp(4px, 1vw, 8px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -348,10 +357,6 @@ section:not(.show) {
 }
 
 @media (max-width: 600px) {
-  #tools {
-    flex-direction: column;
-  }
-
   #spells {
     flex-direction: row;
   }
