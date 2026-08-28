@@ -4,13 +4,13 @@ import { Fruit, fruits } from "./game-item";
 import { addToInventory, removeFromInventory } from "./game-data";
 
 const fruitSpaceColors: Record<Fruit, string> = {
-  '🍓': 'var(--red2)',
-  '🌸': 'var(--pink2)',
-  '🌽': 'var(--yellow2)',
-  '🥝': 'var(--green2)',
-  '💧': 'var(--blue2)',
-  '🫐': 'var(--indigo2)',
-  '🍇': 'var(--violet2)',
+  '🍓': 'var(--red)',
+  '🌸': 'var(--pink)',
+  '🌽': 'var(--yellow)',
+  '🥝': 'var(--green)',
+  '💧': 'var(--blue)',
+  '🫐': 'var(--indigo)',
+  '🍇': 'var(--violet)',
 };
 
 export class Workspace {

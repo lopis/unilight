@@ -28,6 +28,7 @@ canvas {
   border: 2rem solid var(--green2);
   margin: -2rem;
   z-index: 0;
+  border-radius: 2rem;
 }
 
 html, body, main {
@@ -198,6 +199,7 @@ section:not(.show) {
   border-radius: 4px;
   pointer-events: none;
   animation: highlight-fade 1000ms forwards;
+  z-index: 1;
 }
 
 @keyframes highlight-fade {
@@ -337,13 +339,14 @@ section:not(.show) {
 }
 
 #workarea {
+  position: relative;
   display: flex;
   justify-content: center;
   min-width: 0;
   flex-shrink: 0;
 }
 
-#space1, #space2 {
+#space1, #space2, #space3 {
   height: clamp(120px, 28vw, 200px);
   width: clamp(120px, 28vw, 200px);
   border-radius: 200px;
@@ -354,6 +357,15 @@ section:not(.show) {
   justify-content: center;
   font-size: clamp(2rem, 8vw, 3.2rem);
   cursor: pointer;
+  z-index: 1;
+}
+
+#space3 {
+	position: absolute;
+	top: 0;
+	background: #FFFFFF55;
+	border-radius: 100px;
+  z-index: 0;
 }
 
 @media (max-width: 600px) {
