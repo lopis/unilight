@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unilight DASH - Map Maker</title>
+  <style>
+    :root {
+      --pink: hsl(336, 64%, 68%);
+      --pink2: hsl(336, 64%, 48%);
+      --red: hsl(7, 64%, 52%);
+      --red2: hsl(7, 95%, 37%);
+      --yellow: #f6f13a;
+      --yellow2: #f99628;
+      --green: #58bd5b;
+      --green2: hsl(122, 43%, 34%);
+      --blue: #5dbfe8;
+      --blue2: hsl(198, 75%, 44%);
+      --indigo: #3c76b6;
+      --indigo2: hsl(211, 50%, 27%);
+      --violet: #c9b1ff;
+      --violet2: hsl(258, 50%, 45%);
+      --black: #131217;
+      --white: #f9f9f9;
+
+      --ink: var(--white);
+      --line: #00000033;
+      --panel: #0000002f;
+      --cell: #ffffffec;
+      --cell-hover: #fffffff8;
+      --selected: var(--yellow);
+      --warn: #ffd0d0;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      width: 100%;
+      min-height: 100%;
+      color: var(--ink);
+      font-family: "Trebuchet MS", "Gill Sans", "Verdana", sans-serif;
+      background: var(--green);
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      max-width: 980px;
+      margin: auto;
+      position: relative;
+      padding: 1rem;
+      user-select: none;
+    }
+
+    main {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 1rem;
+      align-items: start;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 2px solid var(--line);
+      border-radius: 16px;
+      box-shadow:
+        inset 0 1px 0 #ffffff40,
+        0 0.4rem 0 0 #0000002b;
+    }
+
+    .board-wrap {
+      padding: 1rem;
+    }
+
+    h1 {
+      margin: 0 0 0.65rem;
+      font-size: 1.35rem;
+      line-height: 1.2;
+      letter-spacing: 0.02em;
+      text-align: center;
+      color: var(--white);
+      text-shadow: 0 2px 0 #00000040;
+    }
+
+    .sub {
+      margin: 0 0 1rem;
+      font-size: 0.92rem;
+      opacity: 0.92;
+      color: #e5f8e0;
+      text-align: center;
+    }
+
+    #grid {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      grid-template-rows: repeat(10, 1fr);
+      width: min(100%, 620px);
+      aspect-ratio: 1 / 1;
+      border: 2px solid var(--line);
+      border-radius: 10px;
+      overflow: clip;
+      background: var(--green2);
+      margin: 0 auto;
+    }
+
+    .cell {
+      border: 1px solid rgb(149 105 54 / 0.22);
+      padding: 0;
+      min-width: 0;
+      min-height: 0;
+      background: var(--cell);
+      display: grid;
+      place-items: center;
+      font-size: clamp(1rem, 2.6vw, 1.55rem);
+      line-height: 1;
+      cursor: pointer;
+      transition: background-color 120ms ease, transform 90ms ease;
+      user-select: none;
+    }
+
+    .cell:hover {
+      background: var(--cell-hover);
+      z-index: 1;
+    }
+
+    .controls {
+      padding: 0.9rem;
+      display: grid;
+      gap: 0.8rem;
+    }
+
+    .label {
+      font-size: 0.86rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      opacity: 0.95;
+      margin-bottom: 0.35rem;
+      color: #ebffe8;
+    }
+
+    .palette {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.45rem;
+    }
+
+    .tool {
+      border: none;
+      border-radius: 14px;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      padding: 0;
+      background: var(--blue);
+      box-shadow: 0 0.26rem 0 0 var(--blue2);
+      color: #000000;
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 1;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      transition: transform 90ms ease, box-shadow 90ms ease;
+    }
+
+    .tool.selected {
+      box-shadow: 0 0.12rem 0 0 var(--blue2);
+      transform: translateY(0.14rem);
+      outline: 2px solid var(--selected);
+    }
+
+    .row {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+    }
+
+    button.action {
+      border: none;
+      color: #ffffff;
+      background: var(--red);
+      box-shadow: 0 0.25rem 0 0 var(--red2);
+      border-radius: 12px;
+      padding: 0.45rem 0.65rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    button.action:active {
+      box-shadow: 0 0.08rem 0 0 var(--red2);
+      transform: translateY(0.17rem);
+    }
+
+    button.alt {
+      background: var(--yellow);
+      color: #00000099;
+      box-shadow: 0 0.25rem 0 0 var(--yellow2);
+    }
+
+    button.alt:active {
+      box-shadow: 0 0.08rem 0 0 var(--yellow2);
+      transform: translateY(0.17rem);
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 88px;
+      resize: vertical;
+      border: 1px solid #00000030;
+      border-radius: 8px;
+      padding: 0.55rem;
+      font-family: "Courier New", monospace;
+      font-size: 0.82rem;
+      background: #ffffffea;
+      color: #13261b;
+    }
+
+    .note {
+      font-size: 0.82rem;
+      opacity: 0.9;
+    }
+
+    .error {
+      color: var(--warn);
+      min-height: 1.2em;
+      font-size: 0.83rem;
+      font-weight: 700;
+    }
+
+    code {
+      background: #ffffff2e;
+      border: 1px solid #ffffff35;
+      border-radius: 6px;
+      padding: 0.06rem 0.3rem;
+      font-size: 0.8rem;
+    }
+
+    @media (max-width: 900px) {
+      main {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="panel board-wrap">
+      <h1>Unilight Map Maker</h1>
+      <p class="sub">10x10 editor. Click or drag on cells to paint.</p>
+      <div id="grid" role="grid" aria-label="10 by 10 map grid"></div>
+    </section>
+
+    <aside class="panel controls">
+      <div>
+        <div class="label">Palette</div>
+        <div id="palette" class="palette"></div>
+      </div>
+
+      <div>
+        <div class="label">Actions</div>
+        <div class="row">
+          <button id="clearBtn" class="action alt" type="button">Clear Map</button>
+          <button id="fillBtn" class="action alt" type="button">Fill Empty</button>
+        </div>
+      </div>
+
+      <div>
+        <div class="label">Compact String</div>
+        <textarea id="encoded" placeholder="Encoded map appears here"></textarea>
+        <div class="row" style="margin-top: 0.4rem;">
+          <button id="encodeBtn" class="action" type="button">Encode</button>
+          <button id="decodeBtn" class="action" type="button">Decode</button>
+          <button id="copyBtn" class="action alt" type="button">Copy</button>
+        </div>
+      </div>
+
+      <div id="error" class="error"></div>
+    </aside>
+  </main>
+
+  <script>
+    const WIDTH = 10;
+    const HEIGHT = 10;
+    const CELL_COUNT = WIDTH * HEIGHT;
+
+    const ITEMS = ["🍓", "🌸", "🌽", "🥝", "💧", "🫐", "🍇", "🌊", "🌳", "👈"];
+    const UNICORN = "🦄";
+    const ELEMENTS = [UNICORN, ...ITEMS];
+
+    const TOOL_EMPTY = { kind: "empty", label: "Empty", emoji: "·" };
+    const TOOL_ITEMS = ELEMENTS.map((emoji, i) => ({ kind: "item", itemCode: i + 1, emoji, label: emoji }));
+    const TOOLS = [TOOL_EMPTY, ...TOOL_ITEMS];
+
+    const gridEl = document.getElementById("grid");
+    const paletteEl = document.getElementById("palette");
+    const encodedEl = document.getElementById("encoded");
+    const errorEl = document.getElementById("error");
+
+    const encodeBtn = document.getElementById("encodeBtn");
+    const decodeBtn = document.getElementById("decodeBtn");
+    const copyBtn = document.getElementById("copyBtn");
+    const clearBtn = document.getElementById("clearBtn");
+    const fillBtn = document.getElementById("fillBtn");
+
+    const itemGrid = new Uint8Array(CELL_COUNT);
+    let selectedTool = TOOL_ITEMS[0];
+    let isMouseDown = false;
+    let activeMouseButton = -1;
+
+    function cellIndex(x, y) {
+      return y * WIDTH + x;
+    }
+
+    function cellAt(index) {
+      return gridEl.children[index];
+    }
+
+    function currentCellGlyph(index) {
+      const code = itemGrid[index];
+      return code === 0 ? "" : ELEMENTS[code - 1];
+    }
+
+    function renderCell(index) {
+      const cell = cellAt(index);
+      if (!cell) {
+        return;
+      }
+      cell.textContent = currentCellGlyph(index);
+    }
+
+    function renderAllCells() {
+      for (let i = 0; i < CELL_COUNT; i += 1) {
+        renderCell(i);
+      }
+    }
+
+    function setTool(tool) {
+      selectedTool = tool;
+      [...paletteEl.children].forEach((btn) => {
+        btn.classList.toggle("selected", btn.dataset.toolKey === toolKey(tool));
+      });
+    }
+
+    function toolKey(tool) {
+      if (tool.kind === "item") {
+        return `item:${tool.itemCode}`;
+      }
+      return tool.kind;
+    }
+
+    function applyTool(index) {
+      const tool = selectedTool;
+      if (tool.kind === "empty") {
+        itemGrid[index] = 0;
+      } else if (tool.kind === "item") {
+        if (tool.itemCode === 1) {
+          // Keep unicorn unique by clearing any previous unicorn cell.
+          for (let i = 0; i < CELL_COUNT; i += 1) {
+            if (itemGrid[i] === 1) {
+              itemGrid[i] = 0;
+            }
+          }
+        }
+        itemGrid[index] = tool.itemCode;
+      }
+      renderAllCells();
+      clearError();
+    }
+
+    function clearCell(index) {
+      itemGrid[index] = 0;
+      renderAllCells();
+      clearError();
+    }
+
+    function createGrid() {
+      for (let y = 0; y < HEIGHT; y += 1) {
+        for (let x = 0; x < WIDTH; x += 1) {
+          const idx = cellIndex(x, y);
+          const cell = document.createElement("button");
+          cell.type = "button";
+          cell.className = "cell";
+          cell.dataset.index = String(idx);
+          cell.addEventListener("mousedown", (event) => {
+            if (event.button !== 0 && event.button !== 2) {
+              return;
+            }
+            isMouseDown = true;
+            activeMouseButton = event.button;
+            if (event.button === 2) {
+              clearCell(idx);
+              return;
+            }
+            applyTool(idx);
+          });
+          cell.addEventListener("mouseenter", () => {
+            if (isMouseDown) {
+              if (activeMouseButton === 2) {
+                clearCell(idx);
+              } else {
+                applyTool(idx);
+              }
+            }
+          });
+          cell.addEventListener("contextmenu", (event) => {
+            event.preventDefault();
+          });
+          cell.addEventListener("click", () => applyTool(idx));
+          gridEl.appendChild(cell);
+        }
+      }
+      renderAllCells();
+    }
+
+    function createPalette() {
+      TOOLS.forEach((tool) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "tool";
+        btn.dataset.toolKey = toolKey(tool);
+        btn.title = tool.label;
+        btn.textContent = tool.emoji;
+        btn.addEventListener("click", () => setTool(tool));
+        paletteEl.appendChild(btn);
+      });
+      setTool(TOOL_ITEMS[0]);
+    }
+
+    document.addEventListener("mouseup", () => {
+      isMouseDown = false;
+      activeMouseButton = -1;
+    });
+
+    function clearError(msg = "") {
+      errorEl.textContent = msg;
+    }
+
+    function pushBits(bitArray, value, bitCount) {
+      for (let i = 0; i < bitCount; i += 1) {
+        bitArray.push((value >> i) & 1);
+      }
+    }
+
+    function bitsToBytes(bits) {
+      const byteCount = Math.ceil(bits.length / 8);
+      const bytes = new Uint8Array(byteCount);
+      for (let i = 0; i < bits.length; i += 1) {
+        if (bits[i]) {
+          bytes[i >> 3] |= 1 << (i & 7);
+        }
+      }
+      return bytes;
+    }
+
+    function bytesToBits(bytes) {
+      const bits = [];
+      for (let i = 0; i < bytes.length; i += 1) {
+        const byte = bytes[i];
+        for (let b = 0; b < 8; b += 1) {
+          bits.push((byte >> b) & 1);
+        }
+      }
+      return bits;
+    }
+
+    function readBits(bits, cursor, bitCount) {
+      let value = 0;
+      for (let i = 0; i < bitCount; i += 1) {
+        value |= (bits[cursor.pos + i] || 0) << i;
+      }
+      cursor.pos += bitCount;
+      return value;
+    }
+
+    function toBase64Url(bytes) {
+      let binary = "";
+      bytes.forEach((n) => {
+        binary += String.fromCharCode(n);
+      });
+      return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
+    }
+
+    function fromBase64Url(str) {
+      const padded = str.replace(/-/g, "+").replace(/_/g, "/") + "===".slice((str.length + 3) % 4);
+      const binary = atob(padded);
+      const bytes = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i += 1) {
+        bytes[i] = binary.charCodeAt(i);
+      }
+      return bytes;
+    }
+
+    function encodeMap() {
+      const bits = [];
+      for (let i = 0; i < CELL_COUNT; i += 1) {
+        pushBits(bits, itemGrid[i], 4);
+      }
+
+      const bytes = bitsToBytes(bits);
+      return toBase64Url(bytes);
+    }
+
+    function decodeMap(serialized) {
+      const bytes = fromBase64Url(serialized.trim());
+      const bits = bytesToBits(bytes);
+      const cursor = { pos: 0 };
+
+      for (let i = 0; i < CELL_COUNT; i += 1) {
+        itemGrid[i] = readBits(bits, cursor, 4);
+      }
+
+      renderAllCells();
+    }
+
+    encodeBtn.addEventListener("click", () => {
+      const compact = encodeMap();
+      encodedEl.value = compact;
+      clearError();
+    });
+
+    decodeBtn.addEventListener("click", () => {
+      try {
+        decodeMap(encodedEl.value);
+        clearError();
+      } catch (err) {
+        clearError(err instanceof Error ? err.message : "Decode failed");
+      }
+    });
+
+    clearBtn.addEventListener("click", () => {
+      itemGrid.fill(0);
+      renderAllCells();
+      clearError();
+    });
+
+    fillBtn.addEventListener("click", () => {
+      if (selectedTool.kind !== "item") {
+        clearError("Select a map element before Fill Empty");
+        return;
+      }
+      if (selectedTool.itemCode === 1) {
+        clearError("Fill Empty cannot use unicorn because only one unicorn is allowed");
+        return;
+      }
+      for (let i = 0; i < CELL_COUNT; i += 1) {
+        if (itemGrid[i] === 0) {
+          itemGrid[i] = selectedTool.itemCode;
+        }
+      }
+      renderAllCells();
+      clearError();
+    });
+
+    copyBtn.addEventListener("click", async () => {
+      const value = encodedEl.value.trim() || encodeMap();
+      encodedEl.value = value;
+      try {
+        await navigator.clipboard.writeText(value);
+        clearError("Copied");
+      } catch {
+        clearError("Clipboard unavailable in this browser context");
+      }
+    });
+
+    createGrid();
+    createPalette();
+    encodedEl.value = encodeMap();
+  </script>
+</body>
+</html>
