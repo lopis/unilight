@@ -8,71 +8,171 @@
 <body>
   <canvas id="c" height="200" width="200"></canvas>
   <script>
-    function smoothNoise(x, t) {
-      return (
-        Math.sin(x * 0.15 + t) * 0.5 +
-        Math.sin(x * 0.37 + t * 1.618) * 0.3 +
-        Math.sin(x * 0.08 + t * 0.5) * 0.2
-      );
-    }
+    const c = document.getElementById("c");
+    const ctx = c.getContext("2d");
 
-    function drawParametricJitter(ctx, cx, cy, fx, fy, tMin, tMax, steps, fillStyle, jitterAmp, time) {
-      ctx.beginPath();
-      for (let i = 0; i <= steps; i++) {
+    function sampleClosedCurve(fn, tMin, tMax, steps) {
+      const points = [];
+      for (let i = 0; i < steps; i++) {
         const t = tMin + (i / steps) * (tMax - tMin);
-        const noise = smoothNoise(i, time);
-        const x = cx + fx(t) + noise * jitterAmp;
-        const y = cy + fy(t) + noise * jitterAmp;
-        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+        points.push(fn(t));
       }
-      ctx.closePath();
+      return points;
+    }
+
+    function makeStrawberryBody(cx, cy) {
+      return sampleClosedCurve((t) => {
+        const r = 38 + 10 * Math.sin(t) - 6 * Math.sin(2 * t);
+        const x = cx + Math.sin(t) * r;
+        const y = cy - Math.cos(t) * r * (1 + 0.36 * Math.sin(t));
+        return { x, y };
+      }, 0, Math.PI * 2, 160);
+    }
+
+    function makeLeafCrown(cx, cy) {
+      return sampleClosedCurve((t) => {
+        const r = (9 + 11 * Math.max(0, Math.cos(5 * t))) * 2.25;
+        return {
+          x: cx + Math.cos(t) * r,
+          y: cy + Math.sin(t) * r * 0.68
+        };
+      }, 0, Math.PI * 2, 140);
+    }
+
+    function drawFill(points, fillStyle) {
+      tracePath(points);
       ctx.fillStyle = fillStyle;
       ctx.fill();
     }
 
-    function drawPolarJitter(ctx, cx, cy, rFn, thetaMin, thetaMax, steps, fillStyle, yScale, jitterAmp, time) {
+    function tracePath(points) {
       ctx.beginPath();
-      for (let i = 0; i <= steps; i++) {
-        const theta = thetaMin + (i / steps) * (thetaMax - thetaMin);
-        const noise = smoothNoise(i, time);
-        const r = rFn(theta) + noise * jitterAmp;
-        const x = cx + r * Math.cos(theta);
-        const y = cy + r * Math.sin(theta) * yScale;
-        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      for (let i = 0; i < points.length; i++) {
+        const p = points[i];
+        if (i === 0) ctx.moveTo(p.x, p.y);
+        else ctx.lineTo(p.x, p.y);
       }
       ctx.closePath();
-      ctx.fillStyle = fillStyle;
-      ctx.fill();
     }
 
-    let frame = 0;
+    function hash(i, pass, frame) {
+      const n = Math.sin(i * 127.1 + pass * 311.7 + frame * 74.7) * 43758.5453;
+      return (n - Math.floor(n)) * 2 - 1;
+    }
 
-    function animate() {
+    function strokeNoise(i, pass, t) {
+      // Use a stepped frame index so the contour hops subtly instead of waving.
+      const frame = Math.floor(t);
+      const r1 = hash(i, pass, frame);
+      const r2 = hash(i + 17, pass + 5, frame + 1);
+      return r1 * 0.72 + r2 * 0.28;
+    }
+
+    function drawSketchStroke(points, options) {
+      const {
+        color = "#202020",
+        amp = 1.2,
+        width = 1,
+        pass = 0,
+        t = 0,
+        alpha = 0.8,
+        closed = true
+      } = options;
+
+      ctx.beginPath();
+
+      for (let i = 0; i < points.length; i++) {
+        const prev = points[(i - 1 + points.length) % points.length];
+        const curr = points[i];
+        const next = points[(i + 1) % points.length];
+
+        const tx = next.x - prev.x;
+        const ty = next.y - prev.y;
+        const len = Math.hypot(tx, ty) || 1;
+
+        // Offset along the local normal so the line wiggles like graphite, not jelly.
+        const nx = -ty / len;
+        const ny = tx / len;
+
+        const n = (
+          strokeNoise(i - 1, pass, t) +
+          strokeNoise(i, pass, t) * 2 +
+          strokeNoise(i + 1, pass, t)
+        ) / 4;
+        const tangentN = strokeNoise(i + 37, pass + 9, t) * 0.38;
+
+        const x = curr.x + nx * n * amp + (tx / len) * tangentN * amp;
+        const y = curr.y + ny * n * amp + (ty / len) * tangentN * amp;
+
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+
+      if (closed) ctx.closePath();
+      ctx.lineWidth = width;
+      ctx.strokeStyle = color;
+      ctx.globalAlpha = alpha;
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+    }
+
+    function drawSeedPattern(clipPoints, t) {
+      const sx = 11;
+      const sy = 12;
+      let idx = 0;
+
+      ctx.save();
+      tracePath(clipPoints);
+      ctx.clip();
+
+      for (let y = -sy; y < c.height + sy; y += sy) {
+        const row = Math.floor(y / sy);
+        const rowOffset = (row % 2) * (sx * 0.45);
+
+        for (let x = -sx; x < c.width + sx; x += sx) {
+          const jx = strokeNoise(idx, 3, t) * 0.55;
+          const jy = strokeNoise(idx + 77, 6, t) * 0.45;
+          const px = x + rowOffset + jx;
+          const py = y + jy;
+
+          ctx.beginPath();
+          ctx.ellipse(px, py, 1.25, 1.9, 0.22, 0, Math.PI * 2);
+          ctx.fillStyle = "#ffd57a";
+          ctx.fill();
+          ctx.strokeStyle = "#b37d28";
+          ctx.lineWidth = 0.45;
+          ctx.stroke();
+
+          idx++;
+        }
+      }
+
+      ctx.restore();
+    }
+
+    const strawberry = makeStrawberryBody(100, 114);
+    const leaves = makeLeafCrown(100, 74);
+
+    function animate(nowMs) {
+      // Shared tick at 1 Hz so every jittered element updates together.
+      const t = Math.floor(nowMs / 1000);
+
       ctx.clearRect(0, 0, c.width, c.height);
 
-      // Strawberry red body
-      drawParametricJitter(
-        ctx, 100, 110,
-        t => 60 * Math.sin(t),
-        t => -60 * Math.cos(t) * (1 + 0.5 * Math.sin(t)),
-        0, Math.PI * 2, 100,
-        "#e0303f", 8, frame * 0.3
-      );
+      drawFill(strawberry, "#df2f4a");
+      drawSeedPattern(strawberry, t);
 
-      // Strawberry leaves
-      drawPolarJitter(
-        ctx, 100, 65,
-        theta => 10 + 14 * Math.cos(5 * theta),
-        0, Math.PI * 2, 200,
-        "#3f9142", 0.6, 1.5, frame * 0.3
-      );
+      // Multi-pass stroke for the hand-drawn animated contour effect.
+      drawSketchStroke(strawberry, { color: "#1f1115", amp: 2.05, width: 2.2, pass: 0, t, alpha: 0.9 });
 
-      frame++;
+      // Keep leaves visually above the berry contour.
+      drawFill(leaves, "#3d954a");
+      drawSketchStroke(leaves, { color: "#111111", amp: 1.45, width: 2, pass: 2, t, alpha: 0.82 });
+
       requestAnimationFrame(animate);
     }
 
-    const ctx = c.getContext("2d");
-    animate();
+    animate(0);
   </script>
 </body>
 </html>
