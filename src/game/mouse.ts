@@ -7,6 +7,14 @@ export const initMouse = () => {
     GameEvent.GRID_CLICK, { x: event.clientX, y: event.clientY}
   ));
 
+  space1.addEventListener('click', () => emit(
+    GameEvent.WORKSPACE_SPACE_CLICK, { el: space1 }
+  ));
+
+  space2.addEventListener('click', () => emit(
+    GameEvent.WORKSPACE_SPACE_CLICK, { el: space2 }
+  ));
+
   inventory.addEventListener('click', (event) => {
     const id = (event.target as HTMLElement).id
     const fruit = id as (typeof fruits)[number]

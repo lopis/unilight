@@ -1,20 +1,20 @@
 :root {
-  --pink: #FFCAF2;
-  --pink2: hsl(315, 80%, 45%);
-  --red: #FFB2B1;
-  --red2: hsl(1, 80%, 45%);
-  --yellow: #FFF3AD;
-  --yellow2: hsl(51, 80%, 45%);
-  --green: hsl(120, 100%, 87%);
-  --green2: hsl(120, 50%, 45%);
-  --blue: #A2EDFF;
-  --blue2: hsl(192, 50%, 45%);
-  --indigo: hsl(225, 100%, 82%);
-  --indigo2: hsl(225, 50%, 45%);
+  --pink: hsl(336, 64%, 68%);
+  --pink2: hsl(336, 64%, 48%);
+  --red: #d24835;
+  --red2: hsl(7, 64%, 32%);
+  --yellow: #f6f13a;
+  --yellow2: hsl(49, 88%, 30%);
+  --green: #58bd5b;
+  --green2: hsl(122, 43%, 34%);
+  --blue: #5dbfe8;
+  --blue2: hsl(198, 75%, 44%);
+  --indigo: #3c76b6;
+  --indigo2: hsl(211, 50%, 27%);
   --violet: #C9B1FF;
   --violet2: hsl(258, 50%, 45%);
-  --black: #333333;
-  --white: #FFFFFF;
+  --black: #131217;
+  --white: #f9f9f9;
 }
 
 canvas {
@@ -24,12 +24,15 @@ canvas {
   image-rendering: pixelated;
   object-fit: contain;
   pointer-events: none;
+  background: var(--green2);
+  border: 2rem solid var(--green2);
+  margin: -2rem;
 }
 
 html, body, main {
   margin: 0;
   width: 100%;
-  background: var(--black);
+  background: var(--green);
 }
 
 body {
@@ -173,7 +176,6 @@ section:not(.show) {
   height: 100%;
   aspect-ratio: 1;
   position: relative;
-  border: 1px solid white;
   box-sizing: border-box;
   margin: auto;
 }
@@ -274,18 +276,45 @@ section:not(.show) {
 /* TOOL AREA */
 
 #spells {
-  display: flex;
-  flex-direction: column;
+	display: flex;
+	flex-direction: row;
+	width: 170px;
+	flex-wrap: wrap;
+	justify-content: center;
+  gap: 0 0.4rem;
 }
 
-label:has(input:checked) {
-  background-color: #FFB2B1;
+#spells button {
+	background: var(--bg);
+	width: 80px;
+	aspect-ratio: 1;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border-radius: 50px;
+	box-shadow: 0.3rem 0.3rem 0 0 var(--bg2);
+	border: none;
+  font-size: 1.5rem;
+  font-weight: bold;
+  line-height: 0.8;
+  color: #000000AA;
 }
 
-label {
-	background: white;
-	padding: 0.5rem 1rem;
+#add {
+  --bg: var(--red);
+  --bg2: var(--red2);
 }
+
+#sub {
+  --bg: var(--blue);
+  --bg2: var(--blue2);
+}
+
+#com {
+  --bg: var(--yellow);
+  --bg2: var(--yellow2);
+}
+
 
 #spells input {
   display: none;
@@ -294,12 +323,13 @@ label {
   display: flex;
   flex: 0 0 auto;
   min-width: 0;
+  align-items: center;
+  justify-content: space-evenly;
 }
 
 #workarea {
   display: flex;
   justify-content: center;
-  flex-grow: 1;
   min-width: 0;
   flex-shrink: 0;
 }
@@ -309,7 +339,12 @@ label {
   width: clamp(120px, 28vw, 200px);
   border-radius: 200px;
   background: #00000055;
-  margin: 0 clamp(-34px, -5vw, -50px);
+  margin: 1vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(2rem, 8vw, 3.2rem);
+  cursor: pointer;
 }
 
 @media (max-width: 600px) {

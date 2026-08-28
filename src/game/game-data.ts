@@ -29,6 +29,14 @@ export const addToInventory = (fruit: Fruit) => {
   renderInventory();
 }
 
+export const removeFromInventory = (fruit: Fruit) => {
+  const removed = gameData.inventory.fruits.remove(fruit);
+  if (removed) {
+    renderInventory();
+  }
+  return removed;
+}
+
 const renderInventory = () => {
   const remainderItems: Fruit[] = [];
 
