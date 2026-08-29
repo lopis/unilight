@@ -29,5 +29,8 @@
     "vite": "vite serve",
     "tsc": "tsc --watch --noEmit"
   },
-  "author": "Rob Louie"
+  "author": "Rob Louie",
+  "dependencies": {
+    "@types/html-minifier": "^4.0.6"
+  }
 }
