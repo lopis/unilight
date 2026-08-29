@@ -9,7 +9,6 @@ class GameState implements State {
   grid!: GameGrid;
   workplace!: Workspace;
 
-  // Make sure ball starts at the same spot when game is entered
   onEnter() {
     game.classList.toggle('show', true);
     this.grid = new GameGrid();
