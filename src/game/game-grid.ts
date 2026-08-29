@@ -60,7 +60,6 @@ export class GameGrid {
   }
 
   moveUnicorn(pos: {x: number, y: number}) {
-    console.log(pos);
     const rect = gameGrid.getBoundingClientRect();
     if (rect.width === 0 || rect.height === 0) return;
 
