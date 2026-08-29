@@ -270,6 +270,7 @@ section:not(.show) {
 	background-color: var(--bgc);
 	border: 4px solid var(--bgc);
   box-shadow: 0 0 0 5px var(--green3);
+  transition: all 100ms ease-in-out;
 }
 
 #inventory i.hide {
@@ -277,7 +278,8 @@ section:not(.show) {
 }
 
 #inventory i.selected {
-  transform: scale(1.5);
+	box-shadow: 0 0 0 5px var(--white);
+	transform: translateY(-0.8rem);
 }
 
 #inventory i[data-count]::after {
@@ -344,40 +346,28 @@ section:not(.show) {
   gap: 0 0.4rem;
 }
 
+#spells #com {
+	background: radial-gradient(var(--indigo) 49%, var(--yellow2) 50%);
+	background-size: 250% 250%;
+	background-position: center 3px;
+}
+
 #spells button {
-	background: var(--bg);
 	width: 80px;
 	aspect-ratio: 1;
-	display: flex;
-	justify-content: center;
-	align-items: center;
 	border-radius: 50px;
-	box-shadow: 0.3rem 0.3rem 0 0 var(--bg2);
+	box-shadow: 0.3rem 0.3rem 0 0 var(--black);
 	border: none;
-  font-size: 1.5rem;
-  font-weight: bold;
-  line-height: 0.8;
   color: #000000AA;
+  background: var(--white);
+  background-repeat: no-repeat;
+  background-position: center -36px;
+  border: 4px solid var(--black);
 }
 
 #spells button:active {
 	box-shadow: 0.1rem 0.1rem 0 0 var(--bg2);
   transform: translate(0.2rem, 0.2rem);
-}
-
-#add {
-  --bg: var(--red);
-  --bg2: var(--red2);
-}
-
-#sub {
-  --bg: var(--blue);
-  --bg2: var(--blue2);
-}
-
-#com {
-  --bg: var(--yellow);
-  --bg2: var(--yellow2);
 }
 
 
@@ -422,7 +412,7 @@ section:not(.show) {
 #space3 {
 	position: absolute;
 	top: 0;
-	background: #FFFFFF55;
+	background: transparent;
 	border-radius: 100px;
   z-index: 0;
 }

@@ -16,3 +16,5 @@ export const colors = {
   black: '#131217',
   white: '#f9f9f9',
 }
+
+export type Color = (typeof colors)[keyof typeof colors];

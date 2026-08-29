@@ -1,13 +1,13 @@
 import { createCanvasWithCtx } from '../core/util/canvas';
-import { colors } from './colors';
+import { Color, colors } from './colors';
 
 export const assets: Record<string, HTMLCanvasElement> = {};
 
-function generateAsset(draw: (ctx: CanvasRenderingContext2D) => void): HTMLCanvasElement {
+const generateAsset = (draw: (ctx: CanvasRenderingContext2D) => void): HTMLCanvasElement => {
   const [canvas, ctx] = createCanvasWithCtx(128, 128);
   draw(ctx);
   return canvas;
-}
+};
 
 const rainbowSprite = (ctx: CanvasRenderingContext2D) => {
   const rainbow = [colors.yellow, colors.green, colors.blue, colors.pink];
@@ -34,6 +34,39 @@ const rainbowSprite = (ctx: CanvasRenderingContext2D) => {
   ctx.restore();
 }
 
-export function init(): void {
+export const init = (): void => {
   assets['rainbowSprite'] = generateAsset(rainbowSprite);
-}
+};
+
+const createSpellIcon = (colors1: Color[], colors2: GlobalCompositeOperation, size = 160) => {
+  const canvas = document.createElement('canvas');
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext('2d')!;
+
+  const radius = size * 0.28;
+  const positions = [
+    { x: size * 0.35, y: size * 0.35 },
+    { x: size * 0.65, y: size * 0.35 },
+    { x: size * 0.5,  y: size * 0.65 }
+  ];
+
+  ctx.globalCompositeOperation = 'source-over';
+  positions.forEach((pos, i) => {
+    ctx.beginPath();
+    ctx.arc(pos.x, pos.y, radius, 0, Math.PI * 2);
+    ctx.fillStyle = colors1[i];
+    ctx.globalCompositeOperation = i === 0 ? 'source-over' : colors2;
+    ctx.fill();
+  });
+
+  return canvas.toDataURL();
+};
+
+export const applySpellIcons = () => {
+  const additiveIcon = createSpellIcon([colors.red, colors.green, colors.indigo], 'lighter');
+  const subtractiveIcon = createSpellIcon([colors.blue, colors.pink, colors.yellow], 'multiply');
+
+  add.style.backgroundImage = `url(${additiveIcon})`;
+  sub.style.backgroundImage = `url(${subtractiveIcon})`;
+};

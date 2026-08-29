@@ -4,7 +4,7 @@ import { updateTimeEvents } from './core/timer';
 import { menuState } from './game-states/menu.state';
 import { emit } from './core/event';
 import { GameEvent } from './game/event-manifest';
-import { init as initAssets } from './game/image-generator';
+import { applySpellIcons, init as initAssets } from './game/image-generator';
 import { initMouse } from './game/mouse';
 import { initSprites } from './game/sprites';
 
@@ -53,4 +53,5 @@ createGameStateMachine(menuState);
 initAssets();
 initSprites();
 initMouse();
+applySpellIcons();
 setInterval(update, 16);
