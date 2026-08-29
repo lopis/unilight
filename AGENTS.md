@@ -37,3 +37,4 @@
 
 - Code size matters, so it's ok to forgo certain code best practices
 - Public properties are preferred to getters and setters whenever possible
+- Don't over complicate things. Don't do things I didn't ask.

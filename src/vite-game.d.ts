@@ -21,5 +21,9 @@ let space2: HTMLElement
 let space3: HTMLElement
 let unicorn: HTMLElement
 
+// SVG
+let ms: SVGElement
+let mp: SVGPathElement
+
 // Buttons
 let newGame: HTMLButtonElement

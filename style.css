@@ -1,20 +1,30 @@
 :root {
-  --pink: hsl(336, 64%, 68%);
-  --pink2: hsl(336, 64%, 48%);
-  --red: hsl(7, 64%, 52%);
-  --red2: hsl(7, 95%, 37%);
+  --pink: #e279a3;
+  --pink2: #c92c6b;
+  --red: #d34936;
+  --red2: #b81a05;
   --yellow: #f6f13a;
   --yellow2: #f99628;
   --green: #58bd5b;
-  --green2: hsl(122, 43%, 34%);
+  --green2: #317c34;
   --blue: #5dbfe8;
-  --blue2: hsl(198, 75%, 44%);
+  --blue2: #1c92c4;
   --indigo: #3c76b6;
-  --indigo2: hsl(211, 50%, 27%);
+  --indigo2: #224467;
   --violet: #C9B1FF;
-  --violet2: hsl(258, 50%, 45%);
+  --violet2: #5c39ac;
   --black: #131217;
   --white: #f9f9f9;
+}
+
+svg {
+  position: absolute;
+  left: -9999px;
+  top: -9999px;
+  overflow: hidden;
+  width: 0;
+  height: 0;
+  pointer-events: none;
 }
 
 canvas {
