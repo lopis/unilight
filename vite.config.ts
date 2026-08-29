@@ -5,7 +5,7 @@ import typescriptPlugin from '@rollup/plugin-typescript';
 import { OutputAsset, OutputChunk } from 'rollup';
 import { Input, InputAction, InputType, Packer } from 'roadroller';
 import CleanCSS from 'clean-css';
-import { statSync } from 'fs';
+import { chmodSync, existsSync, statSync } from 'fs';
 import ect from 'ect-bin';
 import {defaultTerserOptions} from "./terser.config";
 import {execFileSync} from "child_process";
@@ -159,8 +159,18 @@ function ectPlugin(): Plugin {
         const assetFiles = files.filter(file => {
           return !file.includes('.js') && !file.includes('.css') && !file.includes('.html') && !file.includes('.zip') && file !== 'assets';
         }).map(file => 'dist/' + file);
+        const platformBin = process.platform === 'win32' ? 'win32/ect.exe' : process.platform === 'darwin' ? 'macos/ect' : 'linux/ect';
+        const ectBinPath = existsSync(ect) ? ect : path.join(path.dirname(ect), platformBin);
+        if (!existsSync(ectBinPath)) {
+          console.warn(`ECT binary missing, skipping zip generation: ${ectBinPath}`);
+          return;
+        }
+        if (process.platform !== 'win32') {
+          chmodSync(ectBinPath, 0o755);
+        }
+
         const args = ['-strip', '-zip', '-10009', 'dist/index.html', ...assetFiles];
-        const result = execFileSync(ect, args);
+        const result = execFileSync(ectBinPath, args);
         console.log('ECT result', result.toString().trim());
         const stats = statSync('dist/index.zip');
         console.log('ZIP size', stats.size);
