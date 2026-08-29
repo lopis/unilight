@@ -49,7 +49,8 @@ export class Workspace {
         addToInventory(previous);
       }
 
-      el.className = `${fruit} ${el.className}`.trim();
+      const $i: HTMLElement = el.querySelector('i')!;
+      $i.className = `${fruit} ${el.className}`.trim();
       el.style.background = fruitSpaceColors[fruit];
 
       for (const item of inventory.querySelectorAll('span.selected')) {

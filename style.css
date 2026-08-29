@@ -258,6 +258,7 @@ section:not(.show) {
 }
 
 #inventory i {
+  pointer-events: all;
 	border-radius: 0.3rem;
 	padding: 0.3rem;
 	position: relative;
@@ -411,6 +412,11 @@ section:not(.show) {
   font-size: clamp(2rem, 8vw, 3.2rem);
   cursor: pointer;
   z-index: 1;
+}
+
+#workarea i {
+  height: 4rem;
+  aspect-ratio: 1;
 }
 
 #space3 {
