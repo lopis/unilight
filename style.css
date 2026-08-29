@@ -96,6 +96,22 @@ i {
   z-index: 1;
   min-width: 0;
   min-height: 0;
+
+  background-image: var(--bgi);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 500% 100%;
+  image-rendering: pixelated;
+  animation: spriteCycle 1s steps(4) infinite;
+}
+
+@keyframes spriteCycle {
+  from {
+    background-position: 0% 0;
+  }
+  to {
+    background-position: 100% 0;
+  }
 }
 
 #unicorn {
@@ -260,32 +276,39 @@ section:not(.show) {
 	border-radius: 99px;
 }
 
-#🌸 {
-  background: var(--pink2);
+.🍑 {
+  --bgc: var(--pink2);
+  --bgi: var(--b-peach)
 }
 
-#🍓 {
-  background: var(--red2);
+.🍓 {
+  --bgc: var(--red2);
+  --bgi: var(--b-strawberry)
 }
 
-#🌽 {
-  background: var(--yellow2);
+.🍌 {
+  --bgc: var(--yellow2);
+  --bgi: var(--b-banana)
 }
 
-#🥝 {
-  background: var(--green2);
+.🥝 {
+  --bgc: var(--green2);
+  --bgi: var(--b-kiwi)
 }
 
-#💧 {
-  background: var(--blue2);
+.💧 {
+  --bgc: var(--blue2);
+  --bgi: var(--b-water)
 }
 
-#🫐 {
-  background: var(--indigo2);
+.🫐 {
+  --bgc: var(--indigo2);
+  --bgi: var(--b-blueberry)
 }
 
-#🍇 {
-  background: var(--violet2);
+.🍇 {
+  --bgc: var(--violet2);
+  --bgi: var(--b-grape)
 }
 
 

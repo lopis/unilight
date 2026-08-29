@@ -30,7 +30,7 @@ export class GameGrid {
         $item.id = `i-${x}${y}`;
         this.placeAtGridCell($item, x, y);
         if(gridItem) {
-          $item.innerText = gridItem?.s;
+          $item.classList.add(gridItem?.s);
         }
         gameGrid.appendChild($item)
       })

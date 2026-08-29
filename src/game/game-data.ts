@@ -89,7 +89,7 @@ const initInventoryView = () => {
   inventoryItems.clear();
 
   for (const fruit of fruits) {
-    const el = document.getElementById(fruit) as HTMLSpanElement | null;
+    const el = document.querySelector(`.${CSS.escape(fruit)}`) as HTMLSpanElement | null;
     if (!el) {
       continue;
     }

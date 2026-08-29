@@ -5,8 +5,8 @@ import { addToInventory, removeFromInventory } from "./game-data";
 
 const fruitSpaceColors: Record<Fruit, string> = {
   '🍓': 'var(--red)',
-  '🌸': 'var(--pink)',
-  '🌽': 'var(--yellow)',
+  '🍑': 'var(--pink)',
+  '🍌': 'var(--yellow)',
   '🥝': 'var(--green)',
   '💧': 'var(--blue)',
   '🫐': 'var(--indigo)',
