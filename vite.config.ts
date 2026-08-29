@@ -188,9 +188,23 @@ function ectPlugin(): Plugin {
         }
 
         const colorBar = '█'.repeat(Math.round(progress * 20));
-        const grayBar = progress >= 0.95 ? '' : '█'.repeat(Math.round((1 - progress) * 20));
+        const grayBar = progress >= 0.95 ? '' : '░'.repeat(Math.round((1 - progress) * 20));
         const progressBar = `${colorCode}${colorBar}\x1b\x1b[37m${grayBar}\x1b`;
+        const now = new Date();
+        const date = now.toISOString().slice(0, 10);
+        const time = now.toTimeString().slice(0, 8);
+        let lastCommitHash = 'unknown';
+        try {
+          lastCommitHash = execFileSync('git', ['rev-parse', '--short', 'HEAD'], { encoding: 'utf-8' }).trim();
+        } catch {
+          // ignore hash errors
+        }
+        await fs.appendFile(
+          'stats.txt',
+          `${date} ${time} [${lastCommitHash}] ${sizeInKB}kb (${percentage}%) ${colorBar}${grayBar}\n`
+        );
         console.log(`\n\nSize: ${colorCode}${sizeInKB}B / 13312B (${percentage}%)\x1b[0m  ${progressBar}\n`);
+
 
       } catch (err) {
         console.log('ECT error', err);
