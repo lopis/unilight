@@ -5,8 +5,9 @@
   --red2: #b81a05;
   --yellow: #f6f13a;
   --yellow2: #f99628;
-  --green: #58bd5b;
-  --green2: #317c34;
+  --green: hsl(122, 43%, 54%);
+  --green2: hsl(122, 43%, 34%);
+  --green3: hsl(122, 43%, 24%);
   --blue: #5dbfe8;
   --blue2: #1c92c4;
   --indigo: #3c76b6;
@@ -39,12 +40,13 @@ canvas {
   margin: -2rem;
   z-index: 0;
   border-radius: 2rem;
+  box-shadow: 0 0 0 0.5rem var(--green3);
 }
 
 html, body, main {
   margin: 0;
   width: 100%;
-  background: var(--green);
+  background: var(--green2);
 }
 
 body {
@@ -69,9 +71,10 @@ main {
 
 h1 {
   position: relative;
-  margin: 1rem 0;
+  margin: 0rem 0 2rem;
   text-align: center;
-  color: white;
+  color: var(--indigo2);
+  z-index: 1;
 }
 
 h1 span {
@@ -82,7 +85,7 @@ h1 span {
 h1 em {
   display: inline-block;
   transform: scaleX(1.5);
-  color: var(--blue2);
+  color: var(--pink2);
   z-index: 0;
   position: relative;
   margin-left: 0.5rem;
@@ -223,7 +226,7 @@ section:not(.show) {
   position: relative;
   width: 100%;
   height: 100%;
-  background: rgb(255, 221, 0);
+  background: var(--yellow);
   border-radius: 4px;
   pointer-events: none;
   animation: highlight-fade 1000ms forwards;
@@ -238,8 +241,8 @@ section:not(.show) {
 #inventory {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
-  margin: 0.5rem 1rem;
+  gap: 0.8rem;
+  margin: 2rem 2.5rem 0.7rem;
   font-size: 1.8rem;
   height: 1rem;
   flex: 0 0 auto;
@@ -256,6 +259,7 @@ section:not(.show) {
 	aspect-ratio: 1;
 	background-color: var(--bgc);
 	border: 4px solid var(--bgc);
+  box-shadow: 0 0 0 5px var(--green3);
 }
 
 #inventory i.hide {
@@ -272,7 +276,7 @@ section:not(.show) {
   top: 1rem;
   right: -0.7rem;
 	font-size: 1.1rem;
-	background: white;
+	background: var(--white);
 	display: inline-flex;
 	height: 1.3rem;
 	aspect-ratio: 1;
