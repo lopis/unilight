@@ -4,13 +4,13 @@ import { Fruit, fruits } from "./game-item";
 import { addToInventory, removeFromInventory } from "./game-data";
 
 const fruitSpaceColors: Record<Fruit, string> = {
-  '🍓': 'var(--red)',
-  '🍑': 'var(--pink)',
-  '🍌': 'var(--yellow)',
-  '🥝': 'var(--green)',
-  '💧': 'var(--blue)',
-  '🫐': 'var(--indigo)',
-  '🍇': 'var(--violet)',
+  strawberry: 'var(--red)',
+  peach: 'var(--pink)',
+  banana: 'var(--yellow)',
+  hand: 'var(--green)',
+  water: 'var(--blue)',
+  blueberry: 'var(--indigo)',
+  grape: 'var(--violet)',
 };
 
 export class Workspace {
@@ -44,12 +44,12 @@ export class Workspace {
         return;
       }
 
-      const previous = (el.textContent ?? '').trim() as Fruit;
-      if (fruits.includes(previous)) {
+      const previous = Array.from(el.classList).find((name) => fruits.includes(name as Fruit)) as Fruit | undefined;
+      if (previous) {
         addToInventory(previous);
       }
 
-      el.textContent = fruit;
+      el.className = `${fruit} ${el.className}`.trim();
       el.style.background = fruitSpaceColors[fruit];
 
       for (const item of inventory.querySelectorAll('span.selected')) {

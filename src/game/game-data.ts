@@ -76,7 +76,7 @@ const renderInventory = () => {
     const orbitHtml = remainderItems
       .map((fruit, index) => `
         <span class="unicorn-orbiter" style="--index:${index};--count:${remainderCount};">
-          <span class="unicorn-orbiter-glyph">${fruit}</span>
+          <i class="${fruit} unicorn-orbiter-glyph"></i>
         </span>
       `)
       .join('');
@@ -89,7 +89,7 @@ const initInventoryView = () => {
   inventoryItems.clear();
 
   for (const fruit of fruits) {
-    const el = document.querySelector(`.${CSS.escape(fruit)}`) as HTMLSpanElement | null;
+    const el = inventory.querySelector(`.${CSS.escape(fruit)}`) as HTMLSpanElement | null;
     if (!el) {
       continue;
     }

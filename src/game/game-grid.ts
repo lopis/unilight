@@ -29,8 +29,8 @@ export class GameGrid {
         const $item = document.createElement('i');
         $item.id = `i-${x}${y}`;
         this.placeAtGridCell($item, x, y);
-        if(gridItem) {
-          $item.classList.add(gridItem?.s);
+        if (gridItem) {
+          $item.classList.add(gridItem.s);
         }
         gameGrid.appendChild($item)
       })
@@ -84,7 +84,10 @@ export class GameGrid {
         item.taken = true;
         addToInventory(item.s);
         const $item = document.getElementById(item.id);
-        if ($item) $item.innerText = '';
+        if ($item) {
+          $item.textContent = '';
+          $item.classList.remove(item.s);
+        }
       }
     }
 

@@ -16,12 +16,12 @@ export const initMouse = () => {
   ));
 
   inventory.addEventListener('click', (event) => {
-    const id = (event.target as HTMLElement).id
-    const fruit = id as (typeof fruits)[number]
+    const target = event.target as HTMLElement;
+    const fruit = Array.from(target.classList).find((name) => fruits.includes(name as (typeof fruits)[number])) as (typeof fruits)[number] | undefined;
 
-    if (fruits.includes(fruit)) {
+    if (fruit) {
       emit(
-        GameEvent.INVENTORY_CLICK, { fruit, el: event.target }
+        GameEvent.INVENTORY_CLICK, { fruit, el: target }
       )
     }
   })
