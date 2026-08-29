@@ -391,17 +391,18 @@ section:not(.show) {
 }
 
 #space1, #space2, #space3 {
-  height: clamp(120px, 28vw, 200px);
-  width: clamp(120px, 28vw, 200px);
-  border-radius: 200px;
-  background: #00000055;
-  margin: clamp(4px, 1vw, 8px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: clamp(2rem, 8vw, 3.2rem);
-  cursor: pointer;
-  z-index: 1;
+	height: clamp(120px, 28vw, 180px);
+	width: clamp(120px, 28vw, 180px);
+	border-radius: 200px;
+	background: #00000055;
+	margin: clamp(4px, 1vw, 8px);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: clamp(2rem, 8vw, 3.2rem);
+	cursor: pointer;
+	z-index: 1;
+	border: 7px solid var(--green3);
 }
 
 #workarea i {
@@ -413,7 +414,7 @@ section:not(.show) {
 	position: absolute;
 	top: 0;
 	background: transparent;
-	border-radius: 100px;
+	border: none;
   z-index: 0;
 }
 

@@ -12,7 +12,7 @@ interface Inventory {
 
 export let gameData!: GameData
 
-const inventoryItems = new Map<Fruit, HTMLSpanElement>();
+const inventoryItems = new Map<Fruit, HTMLElement>();
 
 export const initGameData = () => {
   gameData = {
@@ -89,7 +89,7 @@ const initInventoryView = () => {
   inventoryItems.clear();
 
   for (const fruit of fruits) {
-    const el = inventory.querySelector(`.${CSS.escape(fruit)}`) as HTMLSpanElement | null;
+    const el = inventory.querySelector(`.${CSS.escape(fruit)}`) as HTMLElement | null;
     if (!el) {
       continue;
     }

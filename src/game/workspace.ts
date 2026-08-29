@@ -20,7 +20,7 @@ export class Workspace {
     on(GameEvent.INVENTORY_CLICK, ({ fruit, el }: { fruit: Fruit, el: HTMLElement }) => {
       const isSelected = el.classList.contains('selected');
 
-      for (const item of inventory.querySelectorAll('span.selected')) {
+      for (const item of inventory.querySelectorAll('.selected')) {
         item.classList.remove('selected');
       }
 
@@ -39,17 +39,22 @@ export class Workspace {
       }
 
       const fruit = this.selectedFruit;
+      const $i: HTMLElement | null = el.querySelector('i');
+      if (!$i) {
+        return;
+      }
+
+      const previous = Array.from($i.classList).find((name) => fruits.includes(name as Fruit)) as Fruit | undefined;
+
       const removed = removeFromInventory(fruit);
       if (!removed) {
         return;
       }
 
-      const previous = Array.from(el.classList).find((name) => fruits.includes(name as Fruit)) as Fruit | undefined;
       if (previous) {
         addToInventory(previous);
       }
 
-      const $i: HTMLElement = el.querySelector('i')!;
       $i.className = `${fruit} ${el.className}`.trim();
       el.style.background = fruitSpaceColors[fruit];
 
