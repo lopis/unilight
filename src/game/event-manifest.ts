@@ -5,4 +5,5 @@ export const enum GameEvent {
   GRID_CLICK,
   INVENTORY_CLICK,
   WORKSPACE_SPACE_CLICK,
+  SPELL_CLICK,
 }

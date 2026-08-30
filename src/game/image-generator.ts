@@ -65,7 +65,7 @@ const createSpellIcon = (colors1: Color[], colors2: GlobalCompositeOperation, si
 
 export const applySpellIcons = () => {
   const additiveIcon = createSpellIcon([colors.red2, colors.green2, colors.blue2], 'lighter');
-  const subtractiveIcon = createSpellIcon([colors.cyan, colors.pink2, colors.yellow], 'multiply');
+  const subtractiveIcon = createSpellIcon([colors.cyan, colors.pink, colors.yellow2], 'multiply');
 
   add.style.backgroundImage = `url(${additiveIcon})`;
   sub.style.backgroundImage = `url(${subtractiveIcon})`;

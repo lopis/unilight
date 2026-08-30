@@ -29,3 +29,23 @@
  * blue + yellow = black
  * green + magenta = black
  */
+import { GameItem } from "./game-item";
+import { on } from "@/core/event";
+import { GameEvent } from "./event-manifest";
+
+export type RainbowItem =
+	| 'strawberry'
+	| 'orange'
+	| 'banana'
+	| 'peach'
+	| 'water'
+	| 'blueberry'
+	| 'grape';
+
+export type SpellKind = 'add' | 'sub' | 'com';
+
+export const initSpellListener = (): void => {
+
+};
+
+

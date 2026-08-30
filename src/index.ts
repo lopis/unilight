@@ -6,6 +6,7 @@ import { emit } from './core/event';
 import { GameEvent } from './game/event-manifest';
 import { applySpellIcons, init as initAssets } from './game/image-generator';
 import { initMouse } from './game/mouse';
+import { initSpellListener } from './game/spells';
 import { initSprites } from './game/sprites';
 
 // @ts-ignore -- is not undefined for sure
@@ -53,5 +54,6 @@ createGameStateMachine(menuState);
 initAssets();
 initSprites();
 initMouse();
+initSpellListener();
 applySpellIcons();
 setInterval(update, 16);

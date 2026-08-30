@@ -305,6 +305,11 @@ section:not(.show) {
   --bgi: var(--b-peach)
 }
 
+.orange {
+  --bgc: var(--yellow2);
+  --bgi: var(--b-orange)
+}
+
 .strawberry {
   --bgc: var(--red2);
   --bgi: var(--b-strawberry)
@@ -313,11 +318,6 @@ section:not(.show) {
 .banana {
   --bgc: var(--yellow2);
   --bgi: var(--b-banana)
-}
-
-.kiwi {
-  --bgc: var(--green2);
-  --bgi: var(--b-kiwi)
 }
 
 .water {
@@ -331,7 +331,7 @@ section:not(.show) {
 }
 
 .grape {
-  --bgc: var(--violet2);
+  --bgc: var(--green2);
   --bgi: var(--b-grape)
 }
 
