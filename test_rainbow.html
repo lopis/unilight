@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rainbow Rules Table</title>
+    <style>
+      :root {
+        --paper: #f6f3eb;
+        --ink: #1b1f23;
+        --panel: #ffffffd9;
+        --grid: #d7d2c8;
+        --muted: #736c62;
+        --accent: #0f4c5c;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Avenir Next", "Segoe UI", sans-serif;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at 15% 10%, #fff7db 0%, transparent 48%),
+          radial-gradient(circle at 85% 90%, #d9f5ff 0%, transparent 50%),
+          linear-gradient(170deg, #f5f0e4 0%, #ebe7df 100%);
+      }
+
+      main {
+        max-width: 1200px;
+        margin: 24px auto 40px;
+        padding: 0 16px;
+      }
+
+      h1 {
+        margin: 0 0 10px;
+        font-size: clamp(1.5rem, 3vw, 2.3rem);
+        letter-spacing: 0.02em;
+      }
+
+      p {
+        margin: 0 0 16px;
+        color: var(--muted);
+      }
+
+      .grid {
+        display: grid;
+        gap: 16px;
+      }
+
+      @media (min-width: 980px) {
+        .grid {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--grid);
+        border-radius: 14px;
+        box-shadow: 0 8px 30px #0000000d;
+        overflow: hidden;
+      }
+
+      .panel h2 {
+        margin: 0;
+        padding: 12px 14px;
+        font-size: 1rem;
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+        background: #ece7dc;
+        border-bottom: 1px solid var(--grid);
+      }
+
+      .table-wrap {
+        overflow: hidden;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+      }
+
+      th,
+      td {
+        border: 1px solid var(--grid);
+        text-align: center;
+        font-size: clamp(0.56rem, 1.35vw, 0.84rem);
+        padding: clamp(3px, 0.7vw, 7px) clamp(2px, 0.5vw, 5px);
+      }
+
+      th {
+        font-weight: 650;
+      }
+
+      .corner {
+        background: #efeade;
+      }
+
+      .cell {
+        font-weight: 700;
+        text-transform: lowercase;
+      }
+
+      .unknown {
+        color: #8f8677;
+        background: #f8f5ee;
+        font-weight: 500;
+      }
+
+      .notes {
+        margin-top: 16px;
+        display: grid;
+        gap: 12px;
+      }
+
+      .note {
+        background: var(--panel);
+        border: 1px solid var(--grid);
+        border-radius: 12px;
+        padding: 10px 12px;
+      }
+
+      .note h3 {
+        margin: 0 0 6px;
+        font-size: 0.92rem;
+        text-transform: uppercase;
+        color: var(--accent);
+      }
+
+      .note ul {
+        margin: 0;
+        padding-left: 18px;
+      }
+
+      .chips {
+        margin-top: 10px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .chip {
+        border: 1px solid #00000022;
+        border-radius: 999px;
+        padding: 3px 9px;
+        font-size: 0.76rem;
+        font-weight: 650;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Rainbow Spell Tables</h1>
+      <p>
+        Inputs include the 7 rainbow colors. Add uses commutative pair equations, while Sub uses
+        directional rules as row - column.
+      </p>
+
+      <section class="grid" id="tables"></section>
+
+      <section class="notes" id="notes">
+        <div class="note">
+          <h3>Fundamental Rules</h3>
+          <ul>
+            <li>add(A, A) = A</li>
+            <li>sub(A, A) = black</li>
+          </ul>
+        </div>
+        <div class="note">
+          <h3>Rules That Do Not Fit 2-Input Tables</h3>
+          <ul>
+            <li>Sub: red - green - violet = black</li>
+          </ul>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const inputs = ["red", "orange", "yellow", "green", "cyan", "blue", "violet"];
+      const palette = {
+        red: "#e63946",
+        orange: "#f4a261",
+        yellow: "#f6d743",
+        green: "#4caf50",
+        cyan: "#00bcd4",
+        blue: "#3f51b5",
+        violet: "#8e44ad",
+        white: "#ffffff",
+        black: "#121212",
+        "?": "#f4efe6"
+      };
+
+      const textOn = {
+        red: "#fff",
+        orange: "#1f1f1f",
+        yellow: "#1f1f1f",
+        green: "#fff",
+        cyan: "#1f1f1f",
+        blue: "#fff",
+        violet: "#fff",
+        white: "#1f1f1f",
+        black: "#fff"
+      };
+
+      function keyCommutative(a, b) {
+        return [a, b].sort().join("|");
+      }
+
+      function keyDirectional(a, b) {
+        return `${a}|${b}`;
+      }
+
+      function makeRuleMap(pairs, isDirectional = false) {
+        const map = new Map();
+        for (const [a, b, out] of pairs) {
+          const k = isDirectional ? keyDirectional(a, b) : keyCommutative(a, b);
+          map.set(k, out);
+        }
+        return map;
+      }
+
+      const addMap = makeRuleMap([
+        ["red", "yellow", "orange"],
+        ["red", "blue", "violet"],
+        ["red", "orange", "orange"],
+        ["red", "violet", "violet"],
+        ["blue", "yellow", "green"],
+        ["blue", "green", "cyan"],
+        ["green", "red", "yellow"],
+        ["green", "orange", "yellow"],
+        ["yellow", "orange", "orange"],
+        ["yellow", "green", "green"],
+        ["cyan", "yellow", "green"],
+        ["cyan", "green", "cyan"],
+        ["cyan", "orange", "green"],
+        ["blue", "orange", "violet"],
+        ["blue", "violet", "violet"],
+        ["violet", "orange", "red"],
+        ["violet", "yellow", "red"],
+        ["violet", "green", "cyan"],
+        ["violet", "cyan", "blue"],
+        ["blue", "cyan", "cyan"],
+        ["red", "cyan", "violet"]
+      ]);
+
+      const subMap = makeRuleMap([
+        ["orange", "yellow", "red"],
+        ["red", "orange", "black"],
+        ["yellow", "orange", "yellow"],
+        ["orange", "red", "yellow"],
+        ["red", "yellow", "orange"],
+        ["yellow", "red", "black"],
+        ["cyan", "red", "cyan"],
+        ["blue", "orange", "blue"],
+        ["blue", "yellow", "blue"],
+        ["blue", "cyan", "green"],
+        ["blue", "violet", "red"],
+        ["yellow", "cyan", "yellow"],
+        ["yellow", "blue", "yellow"],
+        ["yellow", "violet", "yellow"],
+        ["red", "violet", "blue"],
+        ["orange", "violet", "blue"],
+        ["orange", "green", "red"],
+        ["orange", "cyan", "red"],
+        ["orange", "blue", "orange"],
+        ["violet", "blue", "red"],
+        ["violet", "red", "blue"],
+        ["violet", "orange", "blue"],
+        ["violet", "yellow", "red"],
+        ["green", "yellow", "blue"],
+        ["cyan", "green", "blue"],
+        ["cyan", "blue", "green"],
+        ["red", "cyan", "violet"],
+        ["green", "red", "green"],
+        ["blue", "red", "blue"],
+        ["red", "green", "red"],
+        ["red", "blue", "red"],
+        ["green", "blue", "yellow"],
+        ["green", "violet", "yellow"],
+        ["violet", "green", "cyan"],
+        ["violet", "cyan", "blue"],
+        ["blue", "green", "black"],
+        ["green", "orange", "black"],
+        ["yellow", "green", "black"],
+        ["green", "cyan", "black"],
+        ["cyan", "orange", "cyan"],
+        ["cyan", "yellow", "cyan"],
+        ["cyan", "violet", "blue"]
+      ], true);
+
+      function paint(el, token) {
+        const bg = palette[token];
+        if (!bg) {
+          el.className = "unknown";
+          el.textContent = token || "-";
+          return;
+        }
+        el.className = "cell";
+        el.style.background = bg;
+        el.style.color = textOn[token] || "#111";
+        el.textContent = token;
+      }
+
+      function getResult(op, a, b, map) {
+        if (a === b) {
+          return op === "add" ? a : "black";
+        }
+        if (op === "sub") {
+          const value = map.get(keyDirectional(a, b));
+          return value || "?";
+        }
+        return map.get(keyCommutative(a, b));
+      }
+
+      function createTable(title, op, map) {
+        const panel = document.createElement("article");
+        panel.className = "panel";
+        panel.innerHTML = `<h2>${title}</h2><div class="table-wrap"></div>`;
+
+        const table = document.createElement("table");
+        const thead = document.createElement("thead");
+        const hRow = document.createElement("tr");
+
+        const corner = document.createElement("th");
+        corner.className = "corner";
+        corner.textContent = "-";
+        hRow.appendChild(corner);
+
+        for (const col of inputs) {
+          const th = document.createElement("th");
+          paint(th, col);
+          hRow.appendChild(th);
+        }
+
+        thead.appendChild(hRow);
+        table.appendChild(thead);
+
+        const tbody = document.createElement("tbody");
+
+        for (const rowToken of inputs) {
+          const tr = document.createElement("tr");
+          const rowHead = document.createElement("th");
+          paint(rowHead, rowToken);
+          tr.appendChild(rowHead);
+
+          for (const colToken of inputs) {
+            const td = document.createElement("td");
+            const out = getResult(op, rowToken, colToken, map);
+            paint(td, out);
+            tr.appendChild(td);
+          }
+
+          tbody.appendChild(tr);
+        }
+
+        table.appendChild(tbody);
+        panel.querySelector(".table-wrap").appendChild(table);
+        return panel;
+      }
+
+      const tables = document.getElementById("tables");
+      tables.appendChild(createTable("Add", "add", addMap));
+      tables.appendChild(createTable("Sub (row - column)", "sub", subMap));
+
+      const note = document.getElementById("notes");
+      const chips = document.createElement("div");
+      chips.className = "chips";
+      for (const name of [...inputs, "white", "black"]) {
+        const chip = document.createElement("span");
+        chip.className = "chip";
+        chip.style.background = palette[name];
+        chip.style.color = textOn[name] || "#111";
+        chip.textContent = name;
+        chips.appendChild(chip);
+      }
+      note.appendChild(chips);
+    </script>
+  </body>
+</html>
