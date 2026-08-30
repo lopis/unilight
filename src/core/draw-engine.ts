@@ -1,5 +1,3 @@
-import { drawText } from './font';
-import { colors } from './util/color';
 import { getCtx } from './util/canvas';
 
 const makeCircle = (

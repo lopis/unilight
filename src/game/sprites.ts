@@ -1,11 +1,12 @@
 import { colors } from "./colors";
+import { GameItem } from "./game-item";
 
 export type SpriteLayer = {
   fill: string;
   d: string;
 };
 
-export type SpriteRegistry = Record<string, SpriteLayer[]>;
+export type SpriteRegistry = Record<GameItem, SpriteLayer[]>;
 
 // Using ['strawberry'] is important to avoid minification!
 export const sprites: SpriteRegistry = {
@@ -18,9 +19,9 @@ export const sprites: SpriteRegistry = {
     { fill: colors.yellow2, d: "M 53 1 C 50 0 45 2 48 6 C 50 8 49 12 52 10 C 56 11 56 7 55 5 C 54 3 56 1 53 1 Z M 58 12 c 1 5 -1 9 -2 14 C 53 36 46 45 36 49 C 25 54 13 55 2 52 C 1 54 5 58 7 59 C 14 64 24 65 32 62 C 46 58 59 47 63 33 c 2 -6 1 -14 -3 -19 c 0 -1 -1 -1 -1 -2 z" },
   ],
   ['blueberry']: [
-    { fill: colors.indigo, d: "m48 17a16 14 29 0 0 -13 7 16 14 29 0 0 7 20 16 14 29 0 0 21 -5 16 14 29 0 0 -6 -20 16 14 29 0 0 -8 -2z" },
-    { fill: colors.indigo, d: "m22 17a18 19 51 0 0 -14 5 18 19 51 0 0 -4 26 18 19 51 0 0 26 2 18 19 51 0 0 4 -26 18 19 51 0 0 -12 -6z" },
-    { fill: colors.indigo2, d: "m18 24c-3 1 -6 2 -8 3 0 3 1 6 1 9 3 1 6 1 8 2 2 -3 3 -5 5 -8 -2 -2 -4 -4 -6 -6l0z" }
+    { fill: colors.blue, d: "m48 17a16 14 29 0 0 -13 7 16 14 29 0 0 7 20 16 14 29 0 0 21 -5 16 14 29 0 0 -6 -20 16 14 29 0 0 -8 -2z" },
+    { fill: colors.blue, d: "m22 17a18 19 51 0 0 -14 5 18 19 51 0 0 -4 26 18 19 51 0 0 26 2 18 19 51 0 0 4 -26 18 19 51 0 0 -12 -6z" },
+    { fill: colors.blue2, d: "m18 24c-3 1 -6 2 -8 3 0 3 1 6 1 9 3 1 6 1 8 2 2 -3 3 -5 5 -8 -2 -2 -4 -4 -6 -6l0z" }
   ],
   ['peach']: [
     { fill: colors.green, d: "m34 29c-3 -1 -2 -1 -5 -7 -2 -5 -7 -6 -3 -11 4 -3 7 4 8 7 0 0 -1 -6 5 -12 6 -6 17 -6 17 -6s-2 10 -8 16c-6 6 -13 4 -13 4 2 5 2 9 -2 8z" },
@@ -32,7 +33,19 @@ export const sprites: SpriteRegistry = {
   ],
   ['hand']: [
     { fill: colors.yellow, d: "m5 8c4 8 12 24 12 24 -6 -5 -13 -3 -13 1 -1 4 4 4 6 5 4 3 7 7 10 11 11 14 13 1 16 11s28 -1 26 -11c-2 -8 -6 -3 -7 -16 -4 -20 -16 -14 -30 -10 -3 -7 -7 -13 -11 -19 -5 -6 -10 0 -8 5z" }
-  ]
+  ],
+  ['hedge']: [
+    {
+      fill: colors.green,
+      d: 'm0 45v19h64v-19z',
+    },
+    {
+      fill: colors.green2,
+      d: 'm0 0v45h64v-45z',
+    },
+  ],
+  ['kiwi']: [],
+  ['water']: [],
 };
 
 export type SpriteName = keyof typeof sprites;

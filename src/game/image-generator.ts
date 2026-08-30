@@ -10,7 +10,7 @@ const generateAsset = (draw: (ctx: CanvasRenderingContext2D) => void): HTMLCanva
 };
 
 const rainbowSprite = (ctx: CanvasRenderingContext2D) => {
-  const rainbow = [colors.yellow, colors.green, colors.blue, colors.pink];
+  const rainbow = [colors.yellow, colors.green, colors.cyan, colors.pink];
   const r = 22;
   const overlap = 14;
   const step = r * 2 - overlap;
@@ -64,8 +64,8 @@ const createSpellIcon = (colors1: Color[], colors2: GlobalCompositeOperation, si
 };
 
 export const applySpellIcons = () => {
-  const additiveIcon = createSpellIcon([colors.red, colors.green, colors.indigo], 'lighter');
-  const subtractiveIcon = createSpellIcon([colors.blue, colors.pink, colors.yellow], 'multiply');
+  const additiveIcon = createSpellIcon([colors.red2, colors.green2, colors.blue2], 'lighter');
+  const subtractiveIcon = createSpellIcon([colors.cyan, colors.pink2, colors.yellow], 'multiply');
 
   add.style.backgroundImage = `url(${additiveIcon})`;
   sub.style.backgroundImage = `url(${subtractiveIcon})`;

@@ -7,10 +7,10 @@
   --yellow2: #f99628;
   --green: #57bc5b;
   --green2: #317c34;
-  --blue: #5dbfe8;
-  --blue2: #1c92c4;
-  --indigo: #3c76b6;
-  --indigo2: #224467;
+  --cyan: #3dd6d1;
+  --cyan2: #1e8f8b;
+  --blue: #3c76b6;
+  --blue2: #224467;
   --violet: #C9B1FF;
   --violet2: #5c39ac;
   --violet3: #332060;
@@ -233,12 +233,13 @@ section:not(.show) {
 
 .highlight {
   position: relative;
-  width: 100%;
-  height: 100%;
-  background: var(--yellow);
-  border-radius: 4px;
+  width: 50%;
+  height: 50%;
+  place-self: center;
+  background: var(--white);
+  border-radius: 50%;
   pointer-events: none;
-  animation: highlight-fade 1000ms forwards;
+  animation: highlight-fade 500ms forwards 500ms;
   z-index: 1;
 }
 
@@ -314,24 +315,29 @@ section:not(.show) {
   --bgi: var(--b-banana)
 }
 
-.hand {
+.kiwi {
   --bgc: var(--green2);
-  --bgi: var(--b-hand)
+  --bgi: var(--b-kiwi)
 }
 
 .water {
-  --bgc: var(--blue2);
+  --bgc: var(--cyan2);
   --bgi: var(--b-water)
 }
 
 .blueberry {
-  --bgc: var(--indigo2);
+  --bgc: var(--blue2);
   --bgi: var(--b-blueberry)
 }
 
 .grape {
   --bgc: var(--violet2);
   --bgi: var(--b-grape)
+}
+
+.hedge {
+  --bgc: var(--green);
+  --bgi: var(--b-hedge)
 }
 
 
@@ -347,7 +353,7 @@ section:not(.show) {
 }
 
 #spells #com {
-	background: radial-gradient(var(--indigo) 49%, var(--yellow2) 50%);
+  background: radial-gradient(var(--blue) 49%, var(--yellow2) 50%);
 	background-size: 250% 250%;
 	background-position: center 3px;
 }

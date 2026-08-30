@@ -49,7 +49,7 @@ export const emojiToPixelArt = (
     const [r, g, b, a] = quantizeToPalette(
       data[i],      // red
       data[i + 1],  // green
-      data[i + 2],  // blue
+      data[i + 2],  // cyan
       data[i + 3],  // alpha
     );
     outData[i] = r;

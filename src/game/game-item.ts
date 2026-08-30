@@ -1,21 +1,33 @@
 import { vec2, Vec2 } from "@/core/util/vec2";
 
-export type Fruit =
+export type GameItem =
   | 'strawberry'
   | 'peach'
   | 'banana'
-  | 'hand'
+  | 'kiwi'
   | 'water'
   | 'blueberry'
-  | 'grape';
+  | 'grape'
+  | 'hand'
+  | 'hedge'
+;
 
-export const fruits: Fruit[] = ['strawberry', 'peach', 'banana', 'hand', 'water', 'blueberry', 'grape'];
+export const fruits: GameItem[] = [
+  'strawberry',
+  'peach',
+  'banana',
+  'kiwi',
+  'water',
+  'blueberry',
+  'grape',
+  'hedge',
+];
 
-export interface GameItem {
-  s: Fruit;
+export interface GridItem {
+  s: GameItem;
   pos: Vec2,
   id: string,
   taken?: boolean,
 }
 
-export const gameItem = (x: number, y: number, s: Fruit): GameItem => ({ pos: vec2(x, y), s, id: `i-${x}${y}` });
+export const gameItem = (x: number, y: number, s: GameItem): GridItem => ({ pos: vec2(x, y), s, id: `i-${x}${y}` });

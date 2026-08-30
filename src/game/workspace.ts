@@ -1,23 +1,25 @@
 import { on } from "@/core/event";
 import { GameEvent } from "./event-manifest";
-import { Fruit, fruits } from "./game-item";
+import { GameItem, fruits } from "./game-item";
 import { addToInventory, removeFromInventory } from "./game-data";
 
-const fruitSpaceColors: Record<Fruit, string> = {
+const fruitSpaceColors: Record<GameItem, string> = {
   strawberry: 'var(--red)',
   peach: 'var(--pink)',
   banana: 'var(--yellow)',
-  hand: 'var(--green)',
-  water: 'var(--blue)',
-  blueberry: 'var(--indigo)',
+  kiwi: 'var(--green)',
+  water: 'var(--cyan)',
+  blueberry: 'var(--blue)',
   grape: 'var(--violet)',
+  hedge: 'var(--green)',
+  hand: 'var(--white)',
 };
 
 export class Workspace {
-  selectedFruit: Fruit | null = null;
+  selectedFruit: GameItem | null = null;
 
   constructor() {
-    on(GameEvent.INVENTORY_CLICK, ({ fruit, el }: { fruit: Fruit, el: HTMLElement }) => {
+    on(GameEvent.INVENTORY_CLICK, ({ fruit, el }: { fruit: GameItem, el: HTMLElement }) => {
       const isSelected = el.classList.contains('selected');
 
       for (const item of inventory.querySelectorAll('.selected')) {
@@ -44,7 +46,7 @@ export class Workspace {
         return;
       }
 
-      const previous = Array.from($i.classList).find((name) => fruits.includes(name as Fruit)) as Fruit | undefined;
+      const previous = Array.from($i.classList).find((name) => fruits.includes(name as GameItem)) as GameItem | undefined;
 
       const removed = removeFromInventory(fruit);
       if (!removed) {

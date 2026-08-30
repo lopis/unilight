@@ -1,4 +1,4 @@
-import { fruits, gameItem, GameItem } from "./game-item";
+import { fruits, gameItem, GridItem } from "./game-item";
 import { unicorn } from "./unicorn";
 import { vec2, Vec2, bresenham } from "@/core/util/vec2";
 import { addToInventory } from "./game-data";
@@ -9,7 +9,6 @@ import { GameEvent } from "./event-manifest";
 
 const gridCols = 10;
 const gridRows = 10;
-type GridItem = GameItem | null
 
 export class GameGrid {
   // First coord is Y, second is X

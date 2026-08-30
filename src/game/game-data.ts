@@ -1,4 +1,4 @@
-import { Fruit } from "./game-item"
+import { GameItem } from "./game-item"
 import { CountSet } from "@/core/util/count-set";
 import { fruits } from "./game-item";
 
@@ -7,29 +7,29 @@ export interface GameData {
 }
 
 interface Inventory {
-  fruits: CountSet<Fruit>
+  fruits: CountSet<GameItem>
 }
 
 export let gameData!: GameData
 
-const inventoryItems = new Map<Fruit, HTMLElement>();
+const inventoryItems = new Map<GameItem, HTMLElement>();
 
 export const initGameData = () => {
   gameData = {
     inventory: {
-      fruits: new CountSet<Fruit>(),
+      fruits: new CountSet<GameItem>(),
     }
   }
   initInventoryView();
   renderInventory();
 }
 
-export const addToInventory = (fruit: Fruit) => {
+export const addToInventory = (fruit: GameItem) => {
   gameData.inventory.fruits.add(fruit);
   renderInventory();
 }
 
-export const removeFromInventory = (fruit: Fruit) => {
+export const removeFromInventory = (fruit: GameItem) => {
   const removed = gameData.inventory.fruits.remove(fruit);
   if (removed) {
     renderInventory();
@@ -38,7 +38,7 @@ export const removeFromInventory = (fruit: Fruit) => {
 }
 
 const renderInventory = () => {
-  const remainderItems: Fruit[] = [];
+  const remainderItems: GameItem[] = [];
 
   for (const fruit of fruits) {
     const el = inventoryItems.get(fruit);
