@@ -58,6 +58,16 @@ export const sprites: SpriteRegistry = {
       d: 'm0 0v45h64v-45z',
     },
   ],
+  ['gem']: [
+    {
+      fill: colors.cyan,
+      d: 'm13 9-12 15 31 35 31-35-12-15z',
+    },
+    {
+      fill: colors.white,
+      d: 'm13 9-12 15h15l16 35 16-35h15l-12-15h-15l11 15h-31l11-15h-15z',
+    },
+  ],
   ['water']: [],
 };
 

@@ -8,6 +8,7 @@ export type GameItem =
   | 'water'
   | 'blueberry'
   | 'grape'
+  | 'gem'
   | 'hand'
   | 'hedge'
 ;
@@ -20,7 +21,7 @@ export const fruits: GameItem[] = [
   'water',
   'blueberry',
   'grape',
-  'hedge',
+  'gem',
 ];
 
 export interface GridItem {

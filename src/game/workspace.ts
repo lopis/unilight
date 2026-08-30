@@ -11,6 +11,7 @@ const fruitSpaceColors: Record<GameItem, string> = {
   water: 'var(--cyan)',
   blueberry: 'var(--blue)',
   grape: 'var(--magenta)',
+  gem: 'var(--white)',
 
   hedge: 'var(--green)',
   hand: 'var(--white)',
