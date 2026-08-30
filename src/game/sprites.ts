@@ -100,6 +100,8 @@ const SPRITE_PADDING = 4;
 const STROKE_COLOR = colors.black;
 const RENDER_SCALE = 2;
 const SPRITE_FRAME_COUNT = 5;
+const SHADE_TOP_ALPHA = 0;
+const SHADE_BOTTOM_ALPHA = 0.18;
 
 const hash = (i: number, pass: number, frame: number): number => {
   const n = Math.sin(i * 127.1 + pass * 311.7 + frame * 74.7) * 43758.5453;
@@ -198,10 +200,21 @@ const drawSpriteToContext = (
   targetCtx.translate(offsetX + SPRITE_PADDING * RENDER_SCALE, SPRITE_PADDING * RENDER_SCALE);
   targetCtx.scale(RENDER_SCALE, RENDER_SCALE);
 
+  const fillShade = targetCtx.createLinearGradient(0, 0, 0, SPRITE_SIZE);
+  fillShade.addColorStop(0.5, `rgba(0, 0, 0, ${SHADE_TOP_ALPHA})`);
+  fillShade.addColorStop(1, `rgba(0, 0, 0, ${SHADE_BOTTOM_ALPHA})`);
+
   for (let i = 0; i < sprite.layers.length; i++) {
     const layer = sprite.layers[i];
     targetCtx.fillStyle = layer.fill;
     targetCtx.fill(layer.path);
+
+    targetCtx.save();
+    targetCtx.clip(layer.path);
+    targetCtx.fillStyle = fillShade;
+    targetCtx.fillRect(0, 0, SPRITE_SIZE, SPRITE_SIZE);
+    targetCtx.restore();
+
     drawSketchStroke(targetCtx, layer.samples, frame, i, STROKE_COLOR, settings.strokeWidth, settings.strokeAmp);
   }
 
