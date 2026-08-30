@@ -1,21 +1,20 @@
 :root {
-  --pink: #e279a3;
-  --pink2: #c92c6b;
-  --red: #d34936;
-  --red2: #b81a05;
-  --yellow: #f6f13a;
-  --yellow2: #f99628;
-  --green: #57bc5b;
-  --green2: #317c34;
-  --cyan: #3dd6d1;
-  --cyan2: #1e8f8b;
-  --blue: #3c76b6;
-  --blue2: #224467;
-  --violet: #C9B1FF;
-  --violet2: #5c39ac;
-  --violet3: #332060;
+  --red: hsl(0, 64%, 52%);
+  --red2: hsl(0, 95%, 37%);
+  --yellow: hsl(46, 85%, 58%);
+  --yellow2: hsl(36, 80%, 57%);
+  --yellow3: hsl(31, 82%, 47%);
+  --green: hsl(103, 43%, 54%);
+  --green2: hsl(103, 43%, 34%);
+  --cyan: hsl(154, 72%, 74%);
+  --cyan2: hsl(154, 72%, 54%);
+  --blue: hsl(206, 72%, 48%);
+  --blue2: hsl(206, 72%, 27%);
+  --magenta: hsl(309, 79%, 78%);
+  --magenta2: hsl(309, 63%, 61%);
+  --magenta3: hsl(309, 57%, 41%);
   --black: #131217;
-  --white: #f4cddc;
+  --white: #f9f9f9;
 }
 
 svg {
@@ -35,18 +34,21 @@ canvas {
   image-rendering: pixelated;
   object-fit: contain;
   pointer-events: none;
-  background: var(--violet);
-  border: 2rem solid var(--violet);
+  background: var(--magenta);
+  border: 2rem solid var(--magenta);
   margin: -2rem;
   z-index: 0;
   border-radius: 2rem;
-  box-shadow: 0 0 0 0.1rem var(--black);
+  box-shadow: 0 0 0 0.3rem var(--black);
+  /* Color is magenta3 with low alpha */
+  background-image: radial-gradient(#a42d9226 50%, transparent 50%);
+  background-size: 10% 10%;
 }
 
 html, body, main {
   margin: 0;
   width: 100%;
-  background: var(--violet2);
+  background: var(--magenta3);
 }
 
 body {
@@ -75,15 +77,17 @@ h1 {
   text-align: center;
   color: var(--white);
   z-index: 1;
+  --s: #611956;
   filter:
-    drop-shadow(3px 0 0 var(--pink))
-    drop-shadow(0 3px 0 var(--pink))
-    drop-shadow(-3px 0 0 var(--pink))
-    drop-shadow(0 -3px 0 var(--pink));
+    drop-shadow(0.07em 0 0 var(--s))
+    drop-shadow(0 0.07em 0 var(--s))
+    drop-shadow(-0.07em 0 0 var(--s))
+    drop-shadow(0 -0.07em 0 var(--s));
 }
 
 h1 span {
   z-index: 1;
+  font-weight: normal;
   position: relative;
 }
 
@@ -208,6 +212,7 @@ section {
   min-width: 0;
   display: flex;
   padding: 0.5rem;
+  margin-top: 3rem;
 }
 
 section:not(.show) {
@@ -297,12 +302,7 @@ section:not(.show) {
 	align-items: center;
 	border-radius: 99px;
 	font-weight: bold;
-	border: 2px solid var(--violet3);
-}
-
-.peach {
-  --bgc: var(--pink2);
-  --bgi: var(--b-peach)
+  border: 2px solid var(--magenta3);
 }
 
 .orange {
@@ -331,8 +331,13 @@ section:not(.show) {
 }
 
 .grape {
-  --bgc: var(--green2);
+  --bgc: var(--magenta2);
   --bgi: var(--b-grape)
+}
+
+.kiwi {
+  --bgc: var(--green2);
+  --bgi: var(--b-kiwi)
 }
 
 .hedge {
@@ -439,20 +444,20 @@ section:not(.show) {
 }
 
 #menu button {
-	background: var(--violet);
-	color: var(--violet3);
-	border: 0.5rem solid var(--violet3);
+  background: var(--magenta);
+  color: var(--magenta3);
+  border: 0.5rem solid var(--magenta2);
 	width: 15rem;
   max-width: 100%;
 	height: 5rem;
 	font-size: 2rem;
 	font-weight: bold;
 	border-radius: 1rem;
-	box-shadow: 0.5rem 0.5rem 0 0rem var(--violet3);
+  box-shadow: 0.5rem 0.5rem 0 0rem var(--magenta2);
   transition: all 100ms;
 }
 
 #menu button:active {
-	box-shadow: 0.1rem 0.1rem 0 0rem var(--violet3);
+  box-shadow: 0.1rem 0.1rem 0 0rem var(--magenta3);
   transform: translate(0.4rem, 0.4rem);
 }

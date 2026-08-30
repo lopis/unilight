@@ -37,7 +37,6 @@ export type RainbowItem =
 	| 'strawberry'
 	| 'orange'
 	| 'banana'
-	| 'peach'
 	| 'water'
 	| 'blueberry'
 	| 'grape';

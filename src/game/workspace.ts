@@ -5,12 +5,12 @@ import { addToInventory, removeFromInventory } from "./game-data";
 
 const fruitSpaceColors: Record<GameItem, string> = {
   strawberry: 'var(--red)',
-  peach: 'var(--pink)',
   orange: 'var(--yellow2)',
   banana: 'var(--yellow)',
+  kiwi: 'var(--green2)',
   water: 'var(--cyan)',
   blueberry: 'var(--blue)',
-  grape: 'var(--green)',
+  grape: 'var(--magenta)',
   hedge: 'var(--green)',
   hand: 'var(--white)',
 };

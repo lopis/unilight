@@ -2,9 +2,9 @@ import { vec2, Vec2 } from "@/core/util/vec2";
 
 export type GameItem =
   | 'strawberry'
-  | 'peach'
   | 'orange'
   | 'banana'
+  | 'kiwi'
   | 'water'
   | 'blueberry'
   | 'grape'
@@ -14,9 +14,9 @@ export type GameItem =
 
 export const fruits: GameItem[] = [
   'strawberry',
-  'peach',
   'orange',
   'banana',
+  'kiwi',
   'water',
   'blueberry',
   'grape',
