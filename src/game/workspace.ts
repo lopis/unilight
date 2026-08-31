@@ -61,6 +61,7 @@ export class Workspace {
 
       $i.className = `${fruit} ${el.className}`.trim();
       el.style.background = fruitSpaceColors[fruit];
+      el.dataset.f = fruit;
 
       for (const item of inventory.querySelectorAll('.selected')) {
         item.classList.remove('selected');

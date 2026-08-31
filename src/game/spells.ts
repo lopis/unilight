@@ -1,3 +1,6 @@
+import { on } from "@/core/event";
+import { GameEvent } from "./event-manifest";
+
 export type RainbowItem =
   | 'red'
   | 'orange'
@@ -49,13 +52,13 @@ const addLUT: Array<Array<number>> = [
 ];
 
 const subLUT: Array<Array<number>> = [
-  [7, 7, 1, 0, 6, 0, 5],
-  [2, 7, 0, 0, 0, 1, 5],
-  [7, 2, 7, 3, 2, 2, 2],
-  [3, 7, 5, 7, 3, 3, 3],
+  [7, 0, 0, 0, 0, 0, 0],
+  [2, 7, 0, 1, 1, 1, 1],
+  [2, 2, 7, 2, 2, 2, 2],
+  [3, 3, 4, 7, 2, 3, 3],
   [4, 4, 4, 4, 7, 4, 4],
-  [5, 5, 5, 7, 5, 7, 5],
-  [5, 5, 0, 5, 5, 0, 7],
+  [5, 5, 5, 5, 6, 7, 4],
+  [4, 6, 6, 6, 0, 6, 7],
 ];
 
 export const lookupAdd = (
@@ -93,8 +96,30 @@ export const lookupSpell = (
   }
 };
 
+const spellAdd = () => {
+  const left = space1.dataset.f;
+  const right = space2.dataset.f;
+
+  if (!left || !right) return undefined;
+  const result = lookupAdd(left, right);
+  setSpace3Background(result);
+  console.log(left, right, result);
+  return result;
+}
+
+const spellSub = () => {
+
+}
+
+const spellCom = () => {
+
+}
+
+
 export const initSpellListener = (): void => {
-  // intentionally empty; listener registration belongs elsewhere
+  on(GameEvent.SPELL_ADD, spellAdd);
+  on(GameEvent.SPELL_SUB, spellSub);
+  on(GameEvent.SPELL_COM, spellCom);
 };
 
 

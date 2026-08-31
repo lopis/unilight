@@ -3,6 +3,7 @@ import { clearEvents } from '@/core/event';
 import { State } from '@/core/state';
 import { initGameData, GameData } from '@/game/game-data';
 import { GameGrid } from '@/game/game-grid';
+import { initSpellListener } from '@/game/spells';
 import { Workspace } from '@/game/workspace';
 
 class GameState implements State {
@@ -15,6 +16,7 @@ class GameState implements State {
     this.workplace = new Workspace();
     drawEngine.resizeCanvas();
     initGameData();
+    initSpellListener();
   }
 
   onLeave() {
