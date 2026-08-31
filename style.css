@@ -3,7 +3,7 @@
   --red2: hsl(0, 95%, 37%);
   --yellow: hsl(46, 85%, 58%);
   --yellow2: hsl(36, 80%, 57%);
-  --yellow3: hsl(31, 82%, 47%);
+  --yellow3: hsl(27, 87%, 42%);
   --green: hsl(103, 43%, 54%);
   --green2: hsl(103, 43%, 34%);
   --cyan: hsl(154, 72%, 74%);
@@ -25,24 +25,6 @@ svg {
   width: 0;
   height: 0;
   pointer-events: none;
-}
-
-canvas {
-  height: 100%;
-  width: 100%;
-  position: absolute;
-  image-rendering: pixelated;
-  object-fit: contain;
-  pointer-events: none;
-  background: var(--magenta);
-  border: 2rem solid var(--magenta);
-  margin: -2rem;
-  z-index: 0;
-  border-radius: 2rem;
-  box-shadow: 0 0 0 0.3rem var(--black);
-  /* Color is magenta3 with low alpha */
-  background-image: radial-gradient(#a42d9226 50%, transparent 50%);
-  background-size: 10% 10%;
 }
 
 html, body, main {
@@ -204,6 +186,7 @@ section {
 #game {
   gap: 0.5rem;
   min-height: 0;
+  align-items: center;
 }
 
 .grid-wrapper {
@@ -211,8 +194,24 @@ section {
   min-height: 0;
   min-width: 0;
   display: flex;
-  padding: 0.5rem;
-  margin-top: 3rem;
+  background: var(--magenta);
+  border: 2rem solid var(--magenta);
+  box-shadow: 0 0 0 0.3rem var(--black);
+  z-index: 0;
+  border-radius: 2rem;
+  /* Color is magenta3 with low alpha */
+  background-image: radial-gradient(#a42d9226 50%, transparent 50%);
+  background-size: 10% 10%;
+}
+
+canvas {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  image-rendering: pixelated;
+  object-fit: contain;
+  pointer-events: none;
+  z-index: 1;
 }
 
 section:not(.show) {
@@ -257,9 +256,8 @@ section:not(.show) {
   display: flex;
   flex-wrap: wrap;
   gap: 0.8rem;
-  margin: 2rem 2.5rem 0.7rem;
+  margin: 0.3rem 1.5rem 0;
   font-size: 1.8rem;
-  height: 1rem;
   flex: 0 0 auto;
 }
 
@@ -280,7 +278,7 @@ section:not(.show) {
 }
 
 #inventory i.hide {
-  display: none;
+  visibility: hidden;
 }
 
 #inventory i.selected {
@@ -306,7 +304,7 @@ section:not(.show) {
 }
 
 .orange {
-  --bgc: var(--yellow2);
+  --bgc: var(--yellow3);
   --bgi: var(--b-orange)
 }
 
