@@ -10,7 +10,7 @@ const generateAsset = (draw: (ctx: CanvasRenderingContext2D) => void): HTMLCanva
 };
 
 const rainbowSprite = (ctx: CanvasRenderingContext2D) => {
-  const rainbow = [colors.yellow, colors.green, colors.cyan, colors.magenta];
+  const rainbow = [colors.yellow, colors.green, colors.cyan, colors.magenta2];
   const r = 22;
   const overlap = 14;
   const step = r * 2 - overlap;
