@@ -35,6 +35,11 @@
 
 ## JS13k specific Instructions
 
-- Code size matters, so it's ok to forgo certain code best practices
-- Public properties are preferred to getters and setters whenever possible
+- Code size matters more than abstraction depth; prefer the smallest representation that survives Terser/RoadRoller well.
+- Prefer flat tuples, bitmasks, packed arrays, and short constant tables over object graphs when data is static or hot-path.
+- Keep identifiers minifier-friendly; avoid property names that are likely to stay reserved unless the browser API requires them.
+- Embed small assets and generated data at build time or in source; avoid runtime fetching, parsing, or loader code when the same result can be compiled in.
+- Keep rendering and UI styling split the normal way: logic in TS, presentation in CSS, and only bridge them where the browser API forces it.
+- Measure size on meaningful changes. Re-check `pnpm build-with-best-roadroller` after larger refactors instead of assuming a refactor is smaller.
+- Public properties are preferred to getters and setters.
 - Don't over complicate things. Don't do things I didn't ask.
