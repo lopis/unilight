@@ -1,5 +1,6 @@
 import { colors } from "./colors";
 import { GameItem } from "./game-item";
+import { drawSketchStroke, samplePathData, SamplePoint } from "./sketch-path";
 
 export type SpriteLayer = {
   fill: string;
@@ -81,13 +82,6 @@ export const sprites: SpriteRegistry = [
   ['GW', ...gemSprite(gemFill[8])],
 ];
 
-export type SamplePoint = {
-  x: number;
-  y: number;
-  tx: number;
-  ty: number;
-};
-
 export type BuiltSpriteLayer = {
   fill: string;
   path: Path2D;
@@ -124,34 +118,6 @@ const SPRITE_FRAME_COUNT = 5;
 const SHADE_TOP_ALPHA = 0;
 const SHADE_BOTTOM_ALPHA = 0.0;
 
-const hash = (i: number, pass: number, frame: number): number => {
-  const n = Math.sin(i * 127.1 + pass * 311.7 + frame * 74.7) * 43758.5453;
-  return (n - Math.floor(n)) * 2 - 1;
-};
-
-const pathNoise = (i: number, pass: number, frame: number): number => {
-  const r1 = hash(i, pass, frame);
-  const r2 = hash(i + 29, pass + 7, frame + 1);
-  return r1 * 0.7 + r2 * 0.3;
-};
-
-const samplePathData = (d: string, count: number): SamplePoint[] => {
-  const out: SamplePoint[] = [];
-  mp.setAttribute("d", d);
-  const len = mp.getTotalLength();
-  const delta = len / count;
-
-  for (let i = 0; i < count; i++) {
-    const at = i * delta;
-    const p = mp.getPointAtLength(at);
-    const prev = mp.getPointAtLength((at - 1 + len) % len);
-    const next = mp.getPointAtLength((at + 1) % len);
-    out.push({ x: p.x, y: p.y, tx: next.x - prev.x, ty: next.y - prev.y });
-  }
-
-  return out;
-};
-
 const getSpriteSize = (name: SpriteName): number => (name === 'UN' ? UNICORN_SPRITE_SIZE : SPRITE_SIZE);
 const getSpriteScale = (name: SpriteName): number => (name === 'UN' ? UNICORN_SPRITE_SIZE / SPRITE_SIZE : 1);
 
@@ -175,52 +141,6 @@ export const buildSprite = (name: SpriteName, sampleCount: number = 100): BuiltS
     scale: getSpriteScale(name),
     layers,
   };
-};
-
-const drawSketchStroke = (
-  targetCtx: CanvasRenderingContext2D,
-  samples: SamplePoint[],
-  frame: number,
-  pass: number,
-  color: string,
-  width: number,
-  amp: number,
-): void => {
-  const points: Array<{ x: number; y: number }> = [];
-
-  for (let i = 0; i < samples.length; i++) {
-    const s = samples[i];
-    const len = Math.hypot(s.tx, s.ty) || 1;
-    const nx = -s.ty / len;
-    const ny = s.tx / len;
-    const n = (
-      pathNoise(i - 2, pass, frame) +
-      pathNoise(i - 1, pass, frame) * 2 +
-      pathNoise(i, pass, frame) * 3 +
-      pathNoise(i + 1, pass, frame) * 2 +
-      pathNoise(i + 2, pass, frame)
-    ) / 9;
-
-    points.push({ x: s.x + nx * n * amp, y: s.y + ny * n * amp });
-  }
-
-  targetCtx.beginPath();
-  targetCtx.moveTo(points[0].x, points[0].y);
-
-  for (let i = 0; i < points.length; i++) {
-    const a = points[i];
-    const b = points[(i + 1) % points.length];
-    const mx = (a.x + b.x) * 0.5;
-    const my = (a.y + b.y) * 0.5;
-    targetCtx.quadraticCurveTo(a.x, a.y, mx, my);
-  }
-
-  targetCtx.closePath();
-  targetCtx.lineJoin = "round";
-  targetCtx.lineCap = "round";
-  targetCtx.strokeStyle = color;
-  targetCtx.lineWidth = width;
-  targetCtx.stroke();
 };
 
 const drawSpriteToContext = (

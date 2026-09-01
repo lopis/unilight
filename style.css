@@ -88,6 +88,24 @@ h1.big {
   font-size: 4rem;
 }
 
+.skf {
+  display: inline-flex;
+  align-items: flex-end;
+  line-height: 1;
+  vertical-align: middle;
+  font-size: 32px;
+}
+
+.skf-g {
+  display: inline-block;
+  flex: 0 0 auto;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 500% 100%;
+  image-rendering: pixelated;
+  animation: spriteCycle 1s steps(4) infinite;
+}
+
 i {
   position: relative;
   font-size: 3rem;
