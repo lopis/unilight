@@ -1,7 +1,6 @@
 import { State } from '@/core/state';
-import { drawEngine } from '@/core/draw-engine';
 import { gameStateMachine } from '@/game-state-machine';
-import { gameState } from './game.state';
+import { GameState } from './game.state';
 
 
 class MenuState implements State {
@@ -20,7 +19,7 @@ class MenuState implements State {
   }
 
   startGame () {
-    gameStateMachine.setState(gameState);
+    gameStateMachine.setState(new GameState(0));
   }
 
   toggleFullscreen() {

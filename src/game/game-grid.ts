@@ -1,7 +1,8 @@
 import { gameItem, GameItem, GridItem } from "./game-item";
+import { addDash } from "./game-data";
 import { player } from "./unicorn";
 import { vec2, Vec2, bresenham } from "@/core/util/vec2";
-import { collectCaughtItem } from "./game-data";
+import { collectCaughtItem } from "./inventory";
 import { Trail } from "./trail";
 import { spawnHighlight } from "./highlight";
 import { on } from "@/core/event";
@@ -74,6 +75,8 @@ export class GameGrid {
     const path = bresenham(this.gridPos.x, this.gridPos.y, clampedX, clampedY);
     // skip first cell (already standing there)
     const newCells = path.slice(1);
+    if (newCells.length === 0) return;
+    addDash();
 
     for (const cell of newCells) {
       spawnHighlight(cell);

@@ -1,20 +1,25 @@
 import { drawEngine } from '@/core/draw-engine';
 import { clearEvents } from '@/core/event';
 import { State } from '@/core/state';
-import { initGameData, GameData } from '@/game/game-data';
+import { initGameData } from '@/game/game-data';
 import { GameGrid } from '@/game/game-grid';
+import { initInventoryView, renderInventory } from '@/game/inventory';
 import { decodeLevel } from '@/game/level-data';
 import { initSpellListener } from '@/game/spells';
 import { Workspace } from '@/game/workspace';
 
-class GameState implements State {
+export class GameState implements State {
   grid!: GameGrid;
   workplace!: Workspace;
 
+  constructor(private readonly level: number) {}
+
   onEnter() {
     game.classList.toggle('show', true);
-    const level = decodeLevel(0);
-    initGameData(level.initialInventory);
+    const level = decodeLevel(this.level);
+    initGameData(this.level, level.initialInventory);
+    initInventoryView();
+    renderInventory();
     this.grid = new GameGrid(level);
     this.workplace = new Workspace();
     drawEngine.resizeCanvas();
@@ -30,5 +35,3 @@ class GameState implements State {
     this.grid.update(timeElapsed);
   }
 }
-
-export const gameState = new GameState();

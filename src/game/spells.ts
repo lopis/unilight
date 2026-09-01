@@ -1,7 +1,8 @@
 import { on } from "@/core/event";
 import { addTimeEvent } from "@/core/timer";
 import { GameEvent } from "./event-manifest";
-import { addToInventory } from "./game-data";
+import { addToInventory } from "./inventory";
+import { addSpell } from "./game-data";
 import { isInteractionLocked, lockInteractions, unlockInteractions } from "./interaction-lock";
 import {
   CB,
@@ -197,6 +198,7 @@ const runSpell = (lookup: (left: ColorId, right: ColorId) => SpellResult | undef
   const result = lookup(leftId, rightId);
   if (result === undefined) return undefined;
   const resultGem = gemForColor(result);
+  addSpell();
 
   spellPending = true;
   lockInteractions();

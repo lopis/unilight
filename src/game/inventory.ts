@@ -1,0 +1,99 @@
+import { CountSet } from "@/core/util/count-set";
+import { gameData } from "./game-data";
+import { fruits, FruitItem, GameItem, inventoryItems, isFruitItem, isGemItem } from "./game-item";
+
+const inventoryItemsMap = new Map<GameItem, HTMLElement>();
+
+export const initInventoryView = () => {
+  inventoryItemsMap.clear();
+
+  for (const item of inventoryItems) {
+    const el = inventory.querySelector(`.${CSS.escape(item)}`) as HTMLElement | null;
+    if (!el) {
+      continue;
+    }
+
+    inventoryItemsMap.set(item, el);
+  }
+};
+
+export const renderInventory = () => {
+  const stagedList: FruitItem[] = [];
+
+  for (const item of inventoryItems) {
+    const el = inventoryItemsMap.get(item);
+    if (!el) {
+      continue;
+    }
+
+    const total = gameData.inventory.count(item);
+    if (total > 0) {
+      el.classList.remove('hide');
+      if (total > 1) {
+        el.dataset.count = String(total);
+      } else {
+        delete el.dataset.count;
+      }
+    } else {
+      el.classList.add('hide');
+      el.classList.remove('selected');
+      delete el.dataset.count;
+    }
+  }
+
+  for (const fruit of fruits) {
+    const stagedCount = gameData.stagedFruits.count(fruit);
+    for (let i = 0; i < stagedCount; i++) {
+      stagedList.push(fruit);
+    }
+  }
+
+  if (unicorn) {
+    const stagedCount = stagedList.length;
+    const orbitHtml = stagedList
+      .map((item, index) => `
+        <span class="u2" style="--index:${index};--count:${stagedCount};">
+          <i class="${item} u3"></i>
+        </span>
+      `)
+      .join('');
+
+    unicorn.querySelector('.u1')!.innerHTML = orbitHtml;
+  }
+};
+
+export const addToInventory = (item: GameItem) => {
+  gameData.inventory.add(item);
+  renderInventory();
+};
+
+export const removeFromInventory = (item: GameItem) => {
+  const removed = gameData.inventory.remove(item);
+  if (removed) {
+    renderInventory();
+  }
+  return removed;
+};
+
+export const collectCaughtItem = (item: GameItem) => {
+  if (isGemItem(item)) {
+    addToInventory(item);
+    return;
+  }
+
+  if (!isFruitItem(item)) {
+    return;
+  }
+
+  const staged = gameData.stagedFruits;
+  staged.add(item);
+
+  if (staged.count(item) >= 3) {
+    staged.remove(item);
+    staged.remove(item);
+    staged.remove(item);
+    gameData.inventory.add(item);
+  }
+
+  renderInventory();
+};

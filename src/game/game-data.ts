@@ -1,133 +1,50 @@
 import { CountSet } from "@/core/util/count-set";
 import { resetInteractionLock } from "./interaction-lock";
-import { fruits, FruitItem, GameItem, GemItem, inventoryItems, isFruitItem, isGemItem } from "./game-item";
+import { FruitItem, GameItem, GemItem } from "./game-item";
 
 export interface GameData {
-  inventory: Inventory
-  stagedFruits: StagedFruits
-}
-
-interface Inventory {
-  items: CountSet<GameItem>
-}
-
-interface StagedFruits {
-  items: CountSet<FruitItem>
+  inventory: CountSet<GameItem>
+  stagedFruits: CountSet<FruitItem>
+  level: number
+  dash: number
+  spells: number
 }
 
 export let gameData!: GameData
 
-const inventoryItemsMap = new Map<GameItem, HTMLElement>();
+let dashEl: HTMLElement | null = null;
+let spellEl: HTMLElement | null = null;
 
-export const initGameData = (initialInventory: GemItem[] = []) => {
+const renderStats = () => {
+  dashEl ??= document.getElementById('d');
+  spellEl ??= document.getElementById('s');
+  if (dashEl) dashEl.textContent = String(gameData.dash);
+  if (spellEl) spellEl.textContent = String(gameData.spells);
+};
+
+export const initGameData = (level: number, initialInventory: GemItem[] = []) => {
   resetInteractionLock();
   gameData = {
-    inventory: {
-      items: new CountSet<GameItem>(),
-    },
-    stagedFruits: {
-      items: new CountSet<FruitItem>(),
-    }
+    inventory: new CountSet<GameItem>(),
+    stagedFruits: new CountSet<FruitItem>(),
+    level,
+    dash: 0,
+    spells: 0,
   };
 
   for (const gem of initialInventory) {
-    gameData.inventory.items.add(gem);
+    gameData.inventory.add(gem);
   }
 
-  initInventoryView();
-  renderInventory();
+  renderStats();
 }
 
-export const addToInventory = (item: GameItem) => {
-  gameData.inventory.items.add(item);
-  renderInventory();
-}
+export const addDash = () => {
+  gameData.dash++;
+  renderStats();
+};
 
-export const removeFromInventory = (item: GameItem) => {
-  const removed = gameData.inventory.items.remove(item);
-  if (removed) {
-    renderInventory();
-  }
-  return removed;
-}
-
-export const collectCaughtItem = (item: GameItem) => {
-  if (isGemItem(item)) {
-    addToInventory(item);
-    return;
-  }
-
-  if (!isFruitItem(item)) {
-    return;
-  }
-
-  const staged = gameData.stagedFruits.items;
-  staged.add(item);
-
-  if (staged.count(item) >= 3) {
-    staged.remove(item);
-    staged.remove(item);
-    staged.remove(item);
-    gameData.inventory.items.add(item);
-  }
-
-  renderInventory();
-}
-
-const renderInventory = () => {
-  const stagedList: FruitItem[] = [];
-
-  for (const item of inventoryItems) {
-    const el = inventoryItemsMap.get(item);
-    if (!el) {
-      continue;
-    }
-
-    const total = gameData.inventory.items.count(item);
-    if (total > 0) {
-      el.classList.remove('hide');
-      if (total > 1) {
-        el.dataset.count = String(total);
-      } else {
-        delete el.dataset.count;
-      }
-    } else {
-      el.classList.add('hide');
-      el.classList.remove('selected');
-      delete el.dataset.count;
-    }
-  }
-
-  for (const fruit of fruits) {
-    const stagedCount = gameData.stagedFruits.items.count(fruit);
-    for (let i = 0; i < stagedCount; i++) {
-      stagedList.push(fruit);
-    }
-  }
-
-  if (unicorn) {
-    const stagedCount = stagedList.length;
-    const orbitHtml = stagedList
-      .map((item, index) => `
-        <span class="u2" style="--index:${index};--count:${stagedCount};">
-          <i class="${item} u3"></i>
-        </span>
-      `)
-      .join('');
-
-    unicorn.querySelector('.u1')!.innerHTML = orbitHtml;
-  }
-}
-
-const initInventoryView = () => {
-  inventoryItemsMap.clear();
-
-  for (const item of inventoryItems) {
-    const el = inventory.querySelector(`.${CSS.escape(item)}`) as HTMLElement | null;
-    if (!el) {
-      continue;
-    }
-
-    inventoryItemsMap.set(item, el);
-  }
-}
+export const addSpell = () => {
+  gameData.spells++;
+  renderStats();
+};
