@@ -1,6 +1,7 @@
 import { on } from "@/core/event";
 import { GameEvent } from "./event-manifest";
 import { colorBgVar, colorOfItem, GameItem, isGameItem } from "./game-item";
+import { isInteractionLocked } from "./interaction-lock";
 import { addToInventory, removeFromInventory } from "./game-data";
 
 export class Workspace {
@@ -8,6 +9,10 @@ export class Workspace {
 
   constructor() {
     on(GameEvent.INVENTORY_CLICK, ({ item, el }: { item: GameItem, el: HTMLElement }) => {
+      if (isInteractionLocked()) {
+        return;
+      }
+
       const isSelected = el.classList.contains('selected');
 
       for (const item of inventory.querySelectorAll('.selected')) {
@@ -24,6 +29,10 @@ export class Workspace {
     });
 
     on(GameEvent.WORKSPACE_SPACE_CLICK, ({ el }: { el: HTMLElement }) => {
+      if (isInteractionLocked()) {
+        return;
+      }
+
       if (!this.selectedItem) {
         return;
       }

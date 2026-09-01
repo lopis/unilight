@@ -1,11 +1,51 @@
 import { on } from "@/core/event";
+import { addTimeEvent } from "@/core/timer";
 import { GameEvent } from "./event-manifest";
-import { colorBgVar, CK, ColorId, CV, CW, parseColorId } from "./game-item";
+import { addToInventory } from "./game-data";
+import { isInteractionLocked, lockInteractions, unlockInteractions } from "./interaction-lock";
+import {
+  CB,
+  CC,
+  CG,
+  CK,
+  CO,
+  CR,
+  CV,
+  CW,
+  CY,
+  colorBgVar,
+  ColorId,
+  GemItem,
+  GameItem,
+  isGameItem,
+  parseColorId,
+} from "./game-item";
 
 export type SpellKind = 'add' | 'sub' | 'com';
 export type SpellResult = ColorId;
 
+const SPELL_PHASE_MS = 1000;
+const EMPTY_SPACE_BG = '#00000055';
+const EMPTY_OVERLAY_BG = 'transparent';
+
+let spellPending = false;
+
 const colorOf = (id: number): ColorId => id as ColorId;
+
+const complementOf = (color: ColorId): ColorId => {
+  switch (color) {
+    case CR: return CG;
+    case CG: return CR;
+    case CO: return CB;
+    case CB: return CO;
+    case CY: return CV;
+    case CV: return CY;
+    case CC: return CO;
+    case CK: return CW;
+    case CW: return CK;
+    default: return color;
+  }
+};
 
 const addLUT: Array<Array<number>> = [
   [0, 1, 1, 2, 6, 6, 6],
@@ -34,11 +74,11 @@ export const lookupAdd = (
   const a = left;
   const b = right;
 
-  if (a > CV || b > CV) {
-    if (a === CW || b === CW) return CW;
-    if (a === CK || b === CK) return CK;
-    return left;
-  }
+  // Black + any = black
+  if (a === CK || b === CK) return CK;
+  // White + any = the other color
+  if (a === CW) return b;
+  if (b === CW) return a;
 
   return colorOf(addLUT[a][b]);
 };
@@ -50,14 +90,24 @@ export const lookupSub = (
   const a = left;
   const b = right;
 
-  if (a > CV || b > CV) {
-    if (a === b) return CK;
-    if (a === CW || b === CW) return left;
-    if (a === CK || b === CK) return right;
-    return left;
-  }
+  // Black - any = complement
+  if (a === CK) return complementOf(b);
+  // White - any = white
+  if (a === CW) return CW;
+  // Any - white = any
+  if (b === CW) return a;
+  // Any - black = any
+  if (b === CK) return a;
 
   return colorOf(subLUT[a][b]);
+};
+
+export const lookupCom = (
+  left: ColorId,
+  right: ColorId,
+): SpellResult | undefined => {
+  if (left !== right) return undefined;
+  return complementOf(left);
 };
 
 export const lookupSpell = (
@@ -71,17 +121,69 @@ export const lookupSpell = (
     case 'sub':
       return lookupSub(left, right);
     case 'com':
-      return lookupAdd(left, right);
+      return lookupCom(left, right);
     default:
       return undefined;
   }
 };
 
-const setSpace3Background = (color: ColorId): void => {
-  space3.style.background = colorBgVar[color];
+const gemForColor = (color: ColorId): GemItem => {
+  switch (color) {
+    case CR: return 'GR';
+    case CO: return 'GO';
+    case CY: return 'GY';
+    case CG: return 'GG';
+    case CC: return 'GC';
+    case CB: return 'GB';
+    case CV: return 'GV';
+    case CK: return 'GK';
+    default: return 'GW';
+  }
 };
 
-const runSpell = (lookup: (left: ColorId, right: ColorId) => SpellResult): SpellResult | undefined => {
+const getSpaceItem = (space: HTMLElement): GameItem | undefined => {
+  const token = space.dataset.i;
+  if (!token || !isGameItem(token)) return undefined;
+  return token;
+};
+
+const clearSpace = (space: HTMLElement): void => {
+  const icon = space.querySelector('i') as HTMLElement | null;
+  if (icon) {
+    icon.className = '';
+    delete icon.dataset.i;
+  }
+
+  delete space.dataset.i;
+  delete space.dataset.c;
+
+  if (space === space3) {
+    space.style.background = EMPTY_OVERLAY_BG;
+    space.style.zIndex = '0';
+    return;
+  }
+
+  space.style.background = EMPTY_SPACE_BG;
+};
+
+const setSpaceItem = (space: HTMLElement, item: GameItem, color: ColorId): void => {
+  const icon = space.querySelector('i') as HTMLElement | null;
+  if (!icon) return;
+
+  icon.className = item;
+  icon.dataset.i = item;
+  space.dataset.i = item;
+  space.dataset.c = String(color);
+  space.style.background = colorBgVar[color];
+
+  if (space === space3) {
+    space.style.zIndex = '2';
+  }
+};
+
+const runSpell = (lookup: (left: ColorId, right: ColorId) => SpellResult | undefined): SpellResult | undefined => {
+  if (spellPending || isInteractionLocked()) return undefined;
+
   const left = space1.dataset.c;
   const right = space2.dataset.c;
 
@@ -90,9 +192,35 @@ const runSpell = (lookup: (left: ColorId, right: ColorId) => SpellResult): Spell
   const rightId = parseColorId(right);
   if (leftId === undefined || rightId === undefined) return undefined;
 
+  if (!getSpaceItem(space1) || !getSpaceItem(space2)) return undefined;
+
   const result = lookup(leftId, rightId);
-  setSpace3Background(result);
-  console.log(leftId, rightId, result);
+  if (result === undefined) return undefined;
+  const resultGem = gemForColor(result);
+
+  spellPending = true;
+  lockInteractions();
+  space1.classList.add('animate');
+  space2.classList.add('animate');
+
+  addTimeEvent(() => {
+    clearSpace(space1);
+    clearSpace(space2);
+    space1.classList.remove('animate');
+    space2.classList.remove('animate');
+
+    setSpaceItem(space3, resultGem, result);
+    space3.classList.add('animate');
+
+    addTimeEvent(() => {
+      addToInventory(resultGem);
+      clearSpace(space3);
+      space3.classList.remove('animate');
+      spellPending = false;
+      unlockInteractions();
+    }, SPELL_PHASE_MS);
+  }, SPELL_PHASE_MS);
+
   return result;
 }
 
@@ -100,9 +228,7 @@ const spellAdd = () => runSpell(lookupAdd);
 
 const spellSub = () => runSpell(lookupSub);
 
-const spellCom = () => {
-
-}
+const spellCom = () => runSpell(lookupCom);
 
 
 export const initSpellListener = (): void => {

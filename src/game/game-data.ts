@@ -1,13 +1,18 @@
-import { GameItem } from "./game-item"
 import { CountSet } from "@/core/util/count-set";
-import { inventoryItems } from "./game-item";
+import { resetInteractionLock } from "./interaction-lock";
+import { fruits, FruitItem, GameItem, inventoryItems, isFruitItem, isGemItem } from "./game-item";
 
 export interface GameData {
   inventory: Inventory
+  stagedFruits: StagedFruits
 }
 
 interface Inventory {
   items: CountSet<GameItem>
+}
+
+interface StagedFruits {
+  items: CountSet<FruitItem>
 }
 
 export let gameData!: GameData
@@ -15,9 +20,13 @@ export let gameData!: GameData
 const inventoryItemsMap = new Map<GameItem, HTMLElement>();
 
 export const initGameData = () => {
+  resetInteractionLock();
   gameData = {
     inventory: {
       items: new CountSet<GameItem>(),
+    },
+    stagedFruits: {
+      items: new CountSet<FruitItem>(),
     }
   }
   initInventoryView();
@@ -37,8 +46,31 @@ export const removeFromInventory = (item: GameItem) => {
   return removed;
 }
 
+export const collectCaughtItem = (item: GameItem) => {
+  if (isGemItem(item)) {
+    addToInventory(item);
+    return;
+  }
+
+  if (!isFruitItem(item)) {
+    return;
+  }
+
+  const staged = gameData.stagedFruits.items;
+  staged.add(item);
+
+  if (staged.count(item) >= 3) {
+    staged.remove(item);
+    staged.remove(item);
+    staged.remove(item);
+    gameData.inventory.items.add(item);
+  }
+
+  renderInventory();
+}
+
 const renderInventory = () => {
-  const remainderList: GameItem[] = [];
+  const stagedList: FruitItem[] = [];
 
   for (const item of inventoryItems) {
     const el = inventoryItemsMap.get(item);
@@ -47,13 +79,10 @@ const renderInventory = () => {
     }
 
     const total = gameData.inventory.items.count(item);
-    const groups = Math.floor(total / 3);
-    const remainder = total % 3;
-
-    if (groups > 0) {
+    if (total > 0) {
       el.classList.remove('hide');
-      if (groups > 1) {
-        el.dataset.count = String(groups);
+      if (total > 1) {
+        el.dataset.count = String(total);
       } else {
         delete el.dataset.count;
       }
@@ -62,20 +91,21 @@ const renderInventory = () => {
       el.classList.remove('selected');
       delete el.dataset.count;
     }
+  }
 
-    if (remainder > 0) {
-      for (let i = 0; i < remainder; i++) {
-        remainderList.push(item);
-      }
+  for (const fruit of fruits) {
+    const stagedCount = gameData.stagedFruits.items.count(fruit);
+    for (let i = 0; i < stagedCount; i++) {
+      stagedList.push(fruit);
     }
   }
 
   const unicornElement = document.getElementById('unicorn');
   if (unicornElement) {
-    const remainderCount = remainderList.length;
-    const orbitHtml = remainderList
+    const stagedCount = stagedList.length;
+    const orbitHtml = stagedList
       .map((item, index) => `
-        <span class="unicorn-orbiter" style="--index:${index};--count:${remainderCount};">
+        <span class="unicorn-orbiter" style="--index:${index};--count:${stagedCount};">
           <i class="${item} unicorn-orbiter-glyph"></i>
         </span>
       `)

@@ -1,11 +1,12 @@
 import { gameItem, GridItem, spawnItems } from "./game-item";
 import { unicorn } from "./unicorn";
 import { vec2, Vec2, bresenham } from "@/core/util/vec2";
-import { addToInventory } from "./game-data";
+import { collectCaughtItem } from "./game-data";
 import { Trail } from "./trail";
 import { spawnHighlight } from "./highlight";
 import { on } from "@/core/event";
 import { GameEvent } from "./event-manifest";
+import { isInteractionLocked } from "./interaction-lock";
 
 const gridCols = 10;
 const gridRows = 10;
@@ -68,6 +69,10 @@ export class GameGrid {
   }
 
   moveUnicorn(pos: {x: number, y: number}) {
+    if (isInteractionLocked()) {
+      return;
+    }
+
     const rect = gameGrid.getBoundingClientRect();
     if (rect.width === 0 || rect.height === 0) return;
 
@@ -89,7 +94,7 @@ export class GameGrid {
       const item = this.grid[cell.y]?.[cell.x];
       if (item && !item.taken) {
         item.taken = true;
-        addToInventory(item.s);
+        collectCaughtItem(item.s);
         const $item = document.getElementById(item.id);
         if ($item) {
           $item.textContent = '';

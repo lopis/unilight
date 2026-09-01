@@ -60,6 +60,8 @@ const gameItems: GameItem[] = [...inventoryItems, 'HD', 'HN'];
 const gameItemSet = new Set<GameItem>(gameItems);
 
 export const isGameItem = (value: string): value is GameItem => gameItemSet.has(value as GameItem);
+export const isFruitItem = (value: GameItem): value is FruitItem => value[0] === 'F';
+export const isGemItem = (value: GameItem): value is GemItem => value[0] === 'G';
 export const isColorId = (value: number): value is ColorId => Number.isInteger(value) && value >= CR && value <= CW;
 export const parseColorId = (value: string): ColorId | undefined => {
   const n = Number(value);

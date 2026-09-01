@@ -490,6 +490,23 @@ display: grid;
 	border: 0.3rem solid var(--black);
 }
 
+#space1.animate,
+#space2.animate,
+#space3.animate {
+  animation: spell-pulse 250ms ease-in-out infinite alternate;
+}
+
+@keyframes spell-pulse {
+  from {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  to {
+    transform: scale(1.03);
+    filter: brightness(1.1);
+  }
+}
+
 #workarea i {
   height: 4rem;
   aspect-ratio: 1;
