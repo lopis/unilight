@@ -9,6 +9,7 @@ let localStorage;
 let c;
 
 // Scenes
+let loading: HTMLElement
 let menu: HTMLElement
 let game: HTMLElement
 let gameGrid: HTMLElement

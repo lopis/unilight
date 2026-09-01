@@ -1,14 +1,9 @@
 import { createGameStateMachine, gameStateMachine } from './game-state-machine';
 import { drawEngine } from './core/draw-engine';
 import { updateTimeEvents } from './core/timer';
-import { menuState } from './game-states/menu.state';
 import { emit } from './core/event';
 import { GameEvent } from './game/event-manifest';
-import { applySpellIcons, init as initAssets } from './game/image-generator';
-import { initMouse } from './game/mouse';
-import { initSpellListener } from './game/spells';
-import { initSprites } from './game/sprites';
-import { applySketchTextFromDataAttr, initSketchFont } from './game/sketch-font';
+import { loadingState } from './game-states/loading.state';
 
 // @ts-ignore -- is not undefined for sure
 document.querySelector('link[type="image/x-icon"]').href = 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'%3E%3Ctext y=\'.9em\' font-size=\'85\'%3E💠%3C/text%3E%3C/svg%3E';
@@ -51,12 +46,6 @@ function update(currentTime: number) {
 };
 
 
-createGameStateMachine(menuState);
-initAssets();
-initSprites();
-initMouse();
-initSpellListener();
-initSketchFont();
-applySketchTextFromDataAttr();
-applySpellIcons();
+createGameStateMachine(loadingState);
+
 setInterval(update, 16);

@@ -57,11 +57,12 @@ main {
 
 h1 {
   position: relative;
+  font-size: 3em;
   margin: 0rem 0 2rem;
   text-align: center;
-  color: var(--white);
+  color: var(--black);
   z-index: 1;
-  --s: #611956;
+  --s: var(--magenta);
   filter:
     drop-shadow(0.07em 0 0 var(--s))
     drop-shadow(0 0.07em 0 var(--s))
@@ -69,23 +70,11 @@ h1 {
     drop-shadow(0 -0.07em 0 var(--s));
 }
 
-h1 span {
-  z-index: 1;
-  font-weight: normal;
-  position: relative;
-}
-
-h1 em {
-  display: inline-block;
-  transform: scaleX(1.5);
-  color: var(--red2);
-  z-index: 0;
-  position: relative;
-  margin-left: 0.5rem;
-}
-
-h1.big {
-  font-size: 4rem;
+#stats {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  width: 100%;
+  gap: 1em;
 }
 
 .skf {
@@ -518,7 +507,6 @@ display: grid;
 	align-items: center;
 	justify-content: center;
 	font-size: clamp(2rem, 8vw, 3.2rem);
-	cursor: pointer;
 	z-index: 1;
 	border: 0.3rem solid var(--black);
 }

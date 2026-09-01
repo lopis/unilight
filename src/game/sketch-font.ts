@@ -58,6 +58,16 @@ const glyphEntries: readonly GlyphEntry[] = [
   ["!", "m8.5 2.3v9s-2.5 1.2-2.5 2.2 1.3 2.2 2.5 2.2 2.5-1.2 2.5-2.2-2.5-2.2-2.5-2.2"],
   ["?", "m3.6 4.5c0-4.5 9.8-4.5 9.8 0 0 2.2-4.9 4.5-4.9 6.7 0 0-2.5 1.2-2.5 2.2s1.3 2.2 2.5 2.2c1.2 0 2.5-1.2 2.5-2.2s-2.5-2.2-2.5-2.2"],
   [".", "m8.5 11c-1.2 0-2.5 1.2-2.5 2.2s1.3 2.2 2.5 2.2c1.2 0 2.5-1.2 2.5-2.2s-1.3-2.2-2.5-2.2z"],
+  ["1", "m6.3 6.4 4.2-4.2v13"],
+  ["2", "m4.8 6.4c-2.1-6.3 19-6.3 0 8.4h8.4"],
+  ["3", "m4.2 2.2c11 0 11 6.3 2.1 6.3 8.4 0 8.4 6.3-2.1 6.3"],
+  ["4", "m8.6 2.2-4.2 8.4c8.4 0 8.4 4 8.4-4.2v8.4"],
+  ["5", "m13 2.2h-8.4v4.2c11-2.1 11 11 0 8.4"],
+  ["6", "m11 2.2c-6.3 0-6.3 4.2-6.3 8.4 0 6.3 8.4 6.3 8.4 0 0-4.2-8.4-4.2-8.4 0"],
+  ["7", "m4.1 2.2h8.4l-8.4 13"],
+  ["8", "m8.5 2.2c15 0-15 13 0 13 15 8e-6 -15-13 0-13z"],
+  ["9", "m6.4 15c6.3 0 6.3-4.2 6.3-8.4 0-6.3-8.4-6.3-8.4 0 0 4.2 8.4 4.2 8.4 0"],
+  ["0", "m8.5 2.2c-4.2 0-8.4 13 0 13 8.4 8e-6 4.2-13 0-13z"],
 ];
 
 const glyphs = new Map<string, Glyph>();
@@ -191,9 +201,9 @@ export const applySketchTextFromDataAttr = (root: ParentNode = document): void =
     initSketchFont();
   }
 
-  const nodes = root.querySelectorAll<HTMLElement>("[data-sketch-text]");
+  const nodes = root.querySelectorAll<HTMLElement>("[sketch]");
   for (const node of nodes) {
-    const text = node.dataset.sketchText ?? node.textContent ?? "";
+    const text = node.innerText ?? node.textContent ?? "";
     setSketchText(node, text);
   }
 };
