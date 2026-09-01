@@ -6,20 +6,21 @@
   <title>Unilight DASH - Map Maker</title>
   <style>
     :root {
-      --pink: hsl(336, 64%, 68%);
-      --pink2: hsl(336, 64%, 48%);
-      --red: hsl(7, 64%, 52%);
-      --red2: hsl(7, 95%, 37%);
-      --yellow: #f6f13a;
-      --yellow2: #f99628;
-      --green: #58bd5b;
-      --green2: hsl(122, 43%, 34%);
-      --cyan: #5dbfe8;
-      --cyan2: hsl(198, 75%, 44%);
-      --blue: #3c76b6;
-      --blue2: hsl(211, 50%, 27%);
-      --violet: #c9b1ff;
-      --violet2: hsl(258, 50%, 45%);
+      --red: #e33f3f;
+      --red2: #b80505;
+      --yellow: #fad354;
+      --yellow2: #e9a33a;
+      --orange: #df6807;
+      --orange2: #a13c05;
+      --green: #74bc57;
+      --green2: #477c31;
+      --cyan: #64c1dd;
+      --cyan2: #35b7de;
+      --blue: #2f52c6;
+      --blue2: #1a2e70;
+      --magenta: #f39be6;
+      --magenta2: #da5dc7;
+      --magenta3: #a42d92;
       --black: #131217;
       --white: #f9f9f9;
 
@@ -43,7 +44,7 @@
       min-height: 100%;
       color: var(--ink);
       font-family: "Trebuchet MS", "Gill Sans", "Verdana", sans-serif;
-      background: var(--green);
+      background: var(--magenta3);
     }
 
     body {
@@ -93,7 +94,7 @@
       margin: 0 0 1rem;
       font-size: 0.92rem;
       opacity: 0.92;
-      color: #e5f8e0;
+      color: #f8e8ff;
       text-align: center;
     }
 
@@ -106,12 +107,12 @@
       border: 2px solid var(--line);
       border-radius: 10px;
       overflow: clip;
-      background: var(--green2);
+      background: var(--magenta2);
       margin: 0 auto;
     }
 
     .cell {
-      border: 1px solid rgb(149 105 54 / 0.22);
+      border: 1px solid #0000002b;
       padding: 0;
       min-width: 0;
       min-height: 0;
@@ -148,7 +149,7 @@
 
     .palette {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(5, minmax(0, 1fr));
       gap: 0.45rem;
     }
 
@@ -158,10 +159,10 @@
       width: 100%;
       aspect-ratio: 1 / 1;
       padding: 0;
-      background: var(--cyan);
-      box-shadow: 0 0.26rem 0 0 var(--cyan2);
-      color: #000000;
-      font-size: 2rem;
+      background: white;
+      box-shadow: 0 0.26rem 0 0 #ccc;
+      color: #000000d0;
+      font-size: 1.45rem;
       font-weight: 700;
       line-height: 1;
       display: grid;
@@ -174,6 +175,14 @@
       box-shadow: 0 0.12rem 0 0 var(--cyan2);
       transform: translateY(0.14rem);
       outline: 2px solid var(--selected);
+    }
+
+    .tool .token {
+      font-size: 0.52rem;
+      letter-spacing: 0.03em;
+      font-weight: 800;
+      text-shadow: 0 1px 0 #ffffff80;
+      margin-top: -0.2rem;
     }
 
     .row {
@@ -199,13 +208,13 @@
     }
 
     button.alt {
-      background: var(--yellow);
+      background: var(--orange);
       color: #00000099;
-      box-shadow: 0 0.25rem 0 0 var(--yellow2);
+      box-shadow: 0 0.25rem 0 0 var(--orange2);
     }
 
     button.alt:active {
-      box-shadow: 0 0.08rem 0 0 var(--yellow2);
+      box-shadow: 0 0.08rem 0 0 var(--orange2);
       transform: translateY(0.17rem);
     }
 
@@ -225,6 +234,39 @@
     .note {
       font-size: 0.82rem;
       opacity: 0.9;
+    }
+
+    .inventory-bits {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 0.35rem;
+    }
+
+    .gem-bit {
+      border: none;
+      border-radius: 10px;
+      background: var(--white);
+      color: var(--black);
+      padding: 0.25rem 0.2rem;
+      display: grid;
+      place-items: center;
+      gap: 0.1rem;
+      cursor: pointer;
+      box-shadow: 0 0.2rem 0 0 #00000022;
+      font-size: 0.95rem;
+      line-height: 1;
+    }
+
+    .gem-bit.selected {
+      background: var(--yellow);
+      box-shadow: 0 0.1rem 0 0 var(--orange2);
+      transform: translateY(0.1rem);
+    }
+
+    .gem-bit-token {
+      font-size: 0.56rem;
+      font-weight: 800;
+      opacity: 0.85;
     }
 
     .error {
@@ -253,7 +295,6 @@
   <main>
     <section class="panel board-wrap">
       <h1>Unilight Map Maker</h1>
-      <p class="sub">10x10 editor. Click or drag on cells to paint.</p>
       <div id="grid" role="grid" aria-label="10 by 10 map grid"></div>
     </section>
 
@@ -269,6 +310,11 @@
           <button id="clearBtn" class="action alt" type="button">Clear Map</button>
           <button id="fillBtn" class="action alt" type="button">Fill Empty</button>
         </div>
+      </div>
+
+      <div>
+        <div class="label">Initial Inventory</div>
+        <div id="initialInventory" class="inventory-bits"></div>
       </div>
 
       <div>
@@ -289,17 +335,55 @@
     const WIDTH = 10;
     const HEIGHT = 10;
     const CELL_COUNT = WIDTH * HEIGHT;
+    const MAP_VERSION_BITS_PER_CELL = 5;
+    const LEGACY_BITS_PER_CELL = 4;
 
-    const ITEMS = ["🍓", "🍑", "🍌", "🥝", "💧", "🫐", "🍇", "🌊", "🌳", "👈"];
-    const UNICORN = "🦄";
+    const ITEMS = [
+      ["FR", "🍓"],
+      ["FO", "🍊"],
+      ["FY", "🍌"],
+      ["FG", "🥝"],
+      ["FC", "💧"],
+      ["FB", "🫐"],
+      ["FV", "🍇"],
+      ["GR", "❤️"],
+      ["GO", "🧡"],
+      ["GY", "💛"],
+      ["GG", "💚"],
+      ["GC", "🩵"],
+      ["GB", "💙"],
+      ["GV", "💜"],
+      ["GK", "🖤"],
+      ["GW", "🤍"],
+      ["HD", "🌿"],
+      ["HN", "👉"],
+    ];
+    const UNICORN = ["UN", "🦄"];
     const ELEMENTS = [UNICORN, ...ITEMS];
+    const BITS_PER_CELL = Math.max(4, Math.ceil(Math.log2(ELEMENTS.length + 1)));
+    const RAINBOW_GEMS = [
+      ["GR", "❤️"],
+      ["GO", "🧡"],
+      ["GY", "💛"],
+      ["GG", "💚"],
+      ["GC", "🩵"],
+      ["GB", "💙"],
+      ["GV", "💜"],
+    ];
 
-    const TOOL_EMPTY = { kind: "empty", label: "Empty", emoji: "·" };
-    const TOOL_ITEMS = ELEMENTS.map((emoji, i) => ({ kind: "item", itemCode: i + 1, emoji, label: emoji }));
+    const TOOL_EMPTY = { kind: "empty", label: "Empty", emoji: "·", token: "--" };
+    const TOOL_ITEMS = ELEMENTS.map(([token, emoji], i) => ({
+      kind: "item",
+      itemCode: i + 1,
+      emoji,
+      token,
+      label: `${token} ${emoji}`,
+    }));
     const TOOLS = [TOOL_EMPTY, ...TOOL_ITEMS];
 
     const gridEl = document.getElementById("grid");
     const paletteEl = document.getElementById("palette");
+    const initialInventoryEl = document.getElementById("initialInventory");
     const encodedEl = document.getElementById("encoded");
     const errorEl = document.getElementById("error");
 
@@ -310,9 +394,37 @@
     const fillBtn = document.getElementById("fillBtn");
 
     const itemGrid = new Uint8Array(CELL_COUNT);
+    const initialInventoryBits = new Uint8Array(RAINBOW_GEMS.length);
     let selectedTool = TOOL_ITEMS[0];
     let isMouseDown = false;
     let activeMouseButton = -1;
+
+    function getInitialInventoryMask() {
+      let mask = 0;
+      for (let i = 0; i < initialInventoryBits.length; i += 1) {
+        if (initialInventoryBits[i]) {
+          mask |= 1 << i;
+        }
+      }
+      return mask;
+    }
+
+    function setInitialInventoryFromMask(mask) {
+      for (let i = 0; i < initialInventoryBits.length; i += 1) {
+        initialInventoryBits[i] = (mask >> i) & 1;
+      }
+      renderInitialInventoryBits();
+    }
+
+    function renderInitialInventoryBits() {
+      if (!initialInventoryEl) {
+        return;
+      }
+
+      [...initialInventoryEl.children].forEach((button, index) => {
+        button.classList.toggle("selected", initialInventoryBits[index] === 1);
+      });
+    }
 
     function cellIndex(x, y) {
       return y * WIDTH + x;
@@ -324,7 +436,11 @@
 
     function currentCellGlyph(index) {
       const code = itemGrid[index];
-      return code === 0 ? "" : ELEMENTS[code - 1];
+      if (code === 0) {
+        return "";
+      }
+      const entry = ELEMENTS[code - 1];
+      return entry ? entry[1] : "";
     }
 
     function renderCell(index) {
@@ -426,11 +542,33 @@
         btn.className = "tool";
         btn.dataset.toolKey = toolKey(tool);
         btn.title = tool.label;
-        btn.textContent = tool.emoji;
+        btn.innerHTML = `<span>${tool.emoji}</span><small class="token">${tool.token}</small>`;
         btn.addEventListener("click", () => setTool(tool));
         paletteEl.appendChild(btn);
       });
       setTool(TOOL_ITEMS[0]);
+    }
+
+    function createInitialInventorySelector() {
+      if (!initialInventoryEl) {
+        return;
+      }
+
+      RAINBOW_GEMS.forEach(([token, emoji], index) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "gem-bit";
+        btn.title = token;
+        btn.innerHTML = `<span>${emoji}</span><small class="gem-bit-token">${token}</small>`;
+        btn.addEventListener("click", () => {
+          initialInventoryBits[index] = initialInventoryBits[index] ? 0 : 1;
+          renderInitialInventoryBits();
+          clearError();
+        });
+        initialInventoryEl.appendChild(btn);
+      });
+
+      renderInitialInventoryBits();
     }
 
     document.addEventListener("mouseup", () => {
@@ -500,23 +638,72 @@
     function encodeMap() {
       const bits = [];
       for (let i = 0; i < CELL_COUNT; i += 1) {
-        pushBits(bits, itemGrid[i], 4);
+        pushBits(bits, itemGrid[i], BITS_PER_CELL);
       }
 
-      const bytes = bitsToBytes(bits);
+      const mapBytes = bitsToBytes(bits);
+      const bytes = new Uint8Array(mapBytes.length + 1);
+      bytes[0] = getInitialInventoryMask();
+      bytes.set(mapBytes, 1);
       return toBase64Url(bytes);
     }
 
-    function decodeMap(serialized) {
+    function parseMap(serialized, bitsPerCell, hasInventoryHeader) {
       const bytes = fromBase64Url(serialized.trim());
-      const bits = bytesToBits(bytes);
-      const cursor = { pos: 0 };
-
-      for (let i = 0; i < CELL_COUNT; i += 1) {
-        itemGrid[i] = readBits(bits, cursor, 4);
+      const headerBytes = hasInventoryHeader ? 1 : 0;
+      if (bytes.length <= headerBytes) {
+        return null;
       }
 
-      renderAllCells();
+      const payload = hasInventoryHeader ? bytes.subarray(1) : bytes;
+      if (payload.length * 8 < CELL_COUNT * bitsPerCell) {
+        return null;
+      }
+
+      const bits = bytesToBits(payload);
+      const cursor = { pos: 0 };
+      const decodedGrid = new Uint8Array(CELL_COUNT);
+
+      for (let i = 0; i < CELL_COUNT; i += 1) {
+        const value = readBits(bits, cursor, bitsPerCell);
+        if (value > ELEMENTS.length) {
+          return null;
+        }
+        decodedGrid[i] = value;
+      }
+
+      return {
+        inventoryMask: hasInventoryHeader ? bytes[0] : 0,
+        grid: decodedGrid,
+      };
+    }
+
+    function decodeMap(serialized) {
+      const v2 = parseMap(serialized, MAP_VERSION_BITS_PER_CELL, true);
+      if (v2) {
+        itemGrid.set(v2.grid);
+        setInitialInventoryFromMask(v2.inventoryMask);
+        renderAllCells();
+        return;
+      }
+
+      const noHeaderCurrent = parseMap(serialized, BITS_PER_CELL, false);
+      if (noHeaderCurrent) {
+        itemGrid.set(noHeaderCurrent.grid);
+        setInitialInventoryFromMask(0);
+        renderAllCells();
+        return;
+      }
+
+      const noHeaderLegacy = parseMap(serialized, LEGACY_BITS_PER_CELL, false);
+      if (noHeaderLegacy) {
+        itemGrid.set(noHeaderLegacy.grid);
+        setInitialInventoryFromMask(0);
+        renderAllCells();
+        return;
+      }
+
+      throw new Error("Decode failed: unsupported map format");
     }
 
     encodeBtn.addEventListener("click", () => {
@@ -536,6 +723,7 @@
 
     clearBtn.addEventListener("click", () => {
       itemGrid.fill(0);
+      setInitialInventoryFromMask(0);
       renderAllCells();
       clearError();
     });
@@ -571,6 +759,7 @@
 
     createGrid();
     createPalette();
+    createInitialInventorySelector();
     encodedEl.value = encodeMap();
   </script>
 </body>
