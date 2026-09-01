@@ -88,11 +88,17 @@ h1 {
 .skf-g {
   display: inline-block;
   flex: 0 0 auto;
-  background-repeat: no-repeat;
   background-position: center;
+}
+
+/* Shared sprite-strip rendering */
+.skf-g,
+i,
+#unicorn .u0 {
+  background-repeat: no-repeat;
   background-size: 500% 100%;
   image-rendering: pixelated;
-  animation: spriteCycle 1s steps(4) infinite;
+  animation: sC 1s steps(4) infinite;
 }
 
 i {
@@ -105,14 +111,11 @@ i {
   min-height: 0;
 
   background-image: var(--bgi);
-  background-repeat: no-repeat;
   background-position: center;
-  background-size: 500% 100%;
-  image-rendering: pixelated;
-  animation: spriteCycle 1s steps(4) infinite;
 }
 
-@keyframes spriteCycle {
+/* Sprite cycle animation */
+@keyframes sC {
   from {
     background-position: 0% 0;
   }
@@ -141,11 +144,7 @@ i {
   width: 5rem;
   height: 5rem;
   background-image: var(--b-UN);
-  background-repeat: no-repeat;
   background-position: 0 0;
-  background-size: 500% 100%;
-  image-rendering: pixelated;
-  animation: spriteCycle 1s steps(4) infinite;
   z-index: 1;
 }
 
@@ -173,27 +172,18 @@ i {
 #unicorn .u3 {
   display: inline-block;
   font-size: 0.45em;
-  animation: uc 3s linear infinite;
+  animation: uo 3s linear infinite reverse;
   height: 2rem;
   aspect-ratio: 1;
 }
 
-/* Unicorn orbit animations: uo main spin, uc counter spin */
+/* Unicorn orbit animation: reverse direction is used for glyph counter spin */
 @keyframes uo {
   from {
     transform: rotate(0deg);
   }
   to {
     transform: rotate(360deg);
-  }
-}
-
-@keyframes uc {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(-360deg);
   }
 }
 
@@ -222,7 +212,6 @@ section {
   box-shadow: 0 0 0 0.3rem var(--black);
   z-index: 0;
   border-radius: 2rem;
-  background-size: 10% 10%;
 }
 
 canvas {
@@ -430,7 +419,7 @@ display: grid;
   top: 30%;
   left: 30%;
   filter: drop-shadow(0px 14px 0px #00000055);
-  animation: spriteCycle 1s steps(4) infinite,
+  animation: sC 1s steps(4) infinite,
     tap 500ms alternate infinite ease-in-out;
   z-index: 2;
 }
@@ -449,7 +438,6 @@ display: grid;
 
 #spells {
 	display: flex;
-	flex-direction: row;
 	width: 170px;
 	flex-wrap: wrap;
 	justify-content: center;
@@ -467,7 +455,6 @@ display: grid;
 	aspect-ratio: 1;
 	border-radius: 50px;
 	box-shadow: 0.3rem 0.3rem 0 0 var(--black);
-	border: none;
   background: var(--white);
   background-repeat: no-repeat;
   background-position: center -36px;
@@ -480,9 +467,6 @@ display: grid;
 }
 
 
-#spells input {
-  display: none;
-}
 #tools {
   display: flex;
   flex: 0 0 auto;
@@ -542,13 +526,6 @@ display: grid;
 	border: none;
   z-index: 0;
 }
-
-@media (max-width: 600px) {
-  #spells {
-    flex-direction: row;
-  }
-}
-
 
 /* MENU */
 
