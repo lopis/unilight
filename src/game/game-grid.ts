@@ -42,7 +42,7 @@ export class GameGrid {
     }
 
     this.$unicorn = unicornElement;
-    this.placeAtGridCell(this.$unicorn, unicorn.pos.x, unicorn.pos.y);
+    this.placeUnicorn(unicorn.pos.x, unicorn.pos.y);
 
     on(GameEvent.GRID_CLICK, (pos) => this.moveUnicorn(pos))
   }
@@ -59,6 +59,11 @@ export class GameGrid {
   private placeAtGridCell(element: HTMLElement, x: number, y: number) {
     element.style.gridColumn = `${Math.round(x) + 1}`;
     element.style.gridRow = `${Math.round(y) + 1}`;
+  }
+
+  private placeUnicorn(x: number, y: number) {
+    this.$unicorn.style.left = `${((x + 0.5) / gridCols) * 100}%`;
+    this.$unicorn.style.top = `${((y + 0.5) / gridRows) * 100}%`;
   }
 
   moveUnicorn(pos: {x: number, y: number}) {
@@ -101,7 +106,7 @@ export class GameGrid {
     const cellSize = gameGrid.clientWidth / gridCols;
 
     unicorn.update(delta);
-    this.placeAtGridCell(this.$unicorn, unicorn.pos.x, unicorn.pos.y);
+    this.placeUnicorn(unicorn.pos.x, unicorn.pos.y);
 
     this.trail.draw(cellSize);
   }

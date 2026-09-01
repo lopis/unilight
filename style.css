@@ -114,7 +114,8 @@ i {
 }
 
 #unicorn {
-  transition: all 50ms ease-out;
+  position: absolute;
+  transform: translate(-50%, -50%);
   display: grid;
   place-items: center;
   place-content: center;
