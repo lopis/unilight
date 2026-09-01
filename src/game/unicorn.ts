@@ -11,6 +11,7 @@ export class Unicorn {
   t = 0;
   moving = false
   angle = 0
+  facingRight = false
 
   constructor() {
     this.pos = vec2(0, 0);
@@ -18,7 +19,23 @@ export class Unicorn {
     this.targetPos = vec2(0, 0);
   }
 
+  snapTo(x: number, y: number) {
+    const p = vec2(x, y);
+    this.pos = p;
+    this.startPos = p;
+    this.targetPos = p;
+    this.moveTime = this.moveDuration;
+    this.moving = false;
+  }
+
   moveTo(x: number, y: number) {
+    const dx = x - this.pos.x;
+    if (dx > 0.001) {
+      this.facingRight = true;
+    } else if (dx < -0.001) {
+      this.facingRight = false;
+    }
+
     this.angle = Math.atan2(y - this.pos.y, x - this.pos.x);
     this.startPos = { ...this.pos };
     this.targetPos = vec2(x, y);

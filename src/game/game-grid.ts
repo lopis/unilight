@@ -21,7 +21,7 @@ export class GameGrid {
     this.grid = Array.from({ length: gridRows }, () => Array(gridCols).fill(null));
     this.fillGridWithRandomFruit();
 
-    unicorn.moveTo(6, 6);
+    unicorn.snapTo(6, 6);
 
     this.grid.forEach((row, y) => {
       row.forEach((gridItem, x) => {
@@ -64,6 +64,7 @@ export class GameGrid {
   private placeUnicorn(x: number, y: number) {
     this.$unicorn.style.left = `${((x + 0.5) / gridCols) * 100}%`;
     this.$unicorn.style.top = `${((y + 0.5) / gridRows) * 100}%`;
+    this.$unicorn.style.setProperty('--ux', unicorn.facingRight ? '-1' : '1');
   }
 
   moveUnicorn(pos: {x: number, y: number}) {
@@ -100,13 +101,13 @@ export class GameGrid {
 
     this.gridPos = vec2(clampedX, clampedY);
     unicorn.moveTo(clampedX, clampedY);
+    this.placeUnicorn(clampedX, clampedY);
   }
 
   update(delta: number) {
     const cellSize = gameGrid.clientWidth / gridCols;
 
     unicorn.update(delta);
-    this.placeUnicorn(unicorn.pos.x, unicorn.pos.y);
 
     this.trail.draw(cellSize);
   }

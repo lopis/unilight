@@ -115,7 +115,8 @@ i {
 
 #unicorn {
   position: absolute;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) scaleX(var(--ux, 1));
+  transition: left 200ms ease-out, top 200ms ease-out;
   display: grid;
   place-items: center;
   place-content: center;
