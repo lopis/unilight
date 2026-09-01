@@ -177,11 +177,7 @@ export const buildSpriteSheet = (sprite: BuiltSprite, settings: SketchSettings):
   const sheet = document.createElement("canvas");
   sheet.width = tile * SPRITE_FRAME_COUNT;
   sheet.height = tile;
-  const sheetCtx = sheet.getContext("2d");
-
-  if (!sheetCtx) {
-    throw new Error("Canvas 2D context unavailable");
-  }
+  const sheetCtx = sheet.getContext("2d") as CanvasRenderingContext2D;
 
   for (let frame = 0; frame < SPRITE_FRAME_COUNT; frame++) {
     drawSpriteToContext(sheetCtx, sprite, frame, settings, frame * tile);

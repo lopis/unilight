@@ -170,14 +170,12 @@ export const setSketchText = (el: HTMLElement, text: string): void => {
     initSketchFont();
   }
 
-  const normalized = text.toUpperCase();
   el.textContent = "";
-  el.setAttribute("aria-label", normalized);
 
   const row = document.createElement("span");
   row.className = HTML_FONT_CLASS;
 
-  for (const ch of normalized) {
+  for (const ch of text) {
     if (ch === " ") {
       appendSpacer(row, HTML_SPACE_EM);
       continue;
@@ -227,7 +225,7 @@ export const drawSketchText = (
   targetCtx.translate(0, y);
   targetCtx.scale(scale, scale);
 
-  for (const ch of text.toUpperCase()) {
+  for (const ch of text) {
     if (ch === " ") {
       cursorX += size * 0.45;
       continue;
