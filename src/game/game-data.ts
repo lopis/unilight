@@ -105,8 +105,7 @@ const renderInventory = () => {
     }
   }
 
-  const unicornElement = document.getElementById('unicorn');
-  if (unicornElement) {
+  if (unicorn) {
     const stagedCount = stagedList.length;
     const orbitHtml = stagedList
       .map((item, index) => `
@@ -116,7 +115,7 @@ const renderInventory = () => {
       `)
       .join('');
 
-    unicornElement.innerHTML = `<span class="unicorn-core"></span><span class="unicorn-orbit">${orbitHtml}</span>`;
+    unicorn.querySelector('.unicorn-orbit')!.innerHTML = orbitHtml;
   }
 }
 

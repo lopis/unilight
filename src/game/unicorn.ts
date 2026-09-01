@@ -60,4 +60,4 @@ export class Unicorn {
   }
 }
 
-export const unicorn = new Unicorn();
+export const player = new Unicorn();

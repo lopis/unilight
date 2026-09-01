@@ -1,7 +1,7 @@
 import { drawEngine } from '@/core/draw-engine';
 import { Vec2 } from '@/core/util/vec2';
 import { assets } from './image-generator';
-import { unicorn } from './unicorn';
+import { player } from './unicorn';
 
 const TRAIL_DURATION = 200;
 const TRAIL_SPACING = 0.04;
@@ -19,13 +19,13 @@ export class Trail {
 
   draw(cellSize: number) {
     if (!this.prevPos) {
-      this.prevPos = { ...unicorn.pos };
+      this.prevPos = { ...player.pos };
     }
 
     // Generate sprites
-    if (unicorn.moving) {
-      const dx = unicorn.pos.x - this.prevPos.x;
-      const dy = unicorn.pos.y - this.prevPos.y;
+    if (player.moving) {
+      const dx = player.pos.x - this.prevPos.x;
+      const dy = player.pos.y - this.prevPos.y;
       const segmentLength = Math.hypot(dx, dy);
 
       if (segmentLength > 0) {
@@ -41,7 +41,7 @@ export class Trail {
               x: this.prevPos.x + dx * alpha,
               y: this.prevPos.y + dy * alpha,
             },
-            angle: unicorn.angle,
+            angle: player.angle,
             born: performance.now(),
           });
 
@@ -50,7 +50,7 @@ export class Trail {
       }
     }
 
-    this.prevPos = { ...unicorn.pos };
+    this.prevPos = { ...player.pos };
 
     // Draw Sprites
     const now = performance.now();

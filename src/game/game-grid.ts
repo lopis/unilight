@@ -1,5 +1,5 @@
 import { gameItem, GameItem, GridItem } from "./game-item";
-import { unicorn } from "./unicorn";
+import { player } from "./unicorn";
 import { vec2, Vec2, bresenham } from "@/core/util/vec2";
 import { collectCaughtItem } from "./game-data";
 import { Trail } from "./trail";
@@ -13,7 +13,6 @@ import { GRID_COLS, GRID_ROWS } from "./constants";
 export class GameGrid {
   // First coord is Y, second is X
   grid: Array<Array<GridItem | null>>
-  $unicorn: HTMLElement
   trail = new Trail()
   gridPos: Vec2 = vec2(6, 6)
 
@@ -25,7 +24,7 @@ export class GameGrid {
       }),
     );
 
-    unicorn.snapTo(level.unicornPos.x, level.unicornPos.y);
+    player.snapTo(level.unicornPos.x, level.unicornPos.y);
     this.gridPos = vec2(level.unicornPos.x, level.unicornPos.y);
 
     this.grid.forEach((row, y) => {
@@ -41,13 +40,7 @@ export class GameGrid {
       })
     });
 
-    const unicornElement = document.getElementById('unicorn');
-    if (!unicornElement) {
-      throw new Error('Missing #unicorn element');
-    }
-
-    this.$unicorn = unicornElement;
-    this.placeUnicorn(unicorn.pos.x, unicorn.pos.y);
+    this.placeUnicorn(player.pos.x, player.pos.y);
 
     on(GameEvent.GRID_CLICK, (pos) => this.moveUnicorn(pos))
   }
@@ -58,9 +51,9 @@ export class GameGrid {
   }
 
   private placeUnicorn(x: number, y: number) {
-    this.$unicorn.style.left = `${((x + 0.5) / GRID_COLS) * 100}%`;
-    this.$unicorn.style.top = `${((y + 0.5) / GRID_ROWS) * 100}%`;
-    this.$unicorn.style.setProperty('--ux', unicorn.facingRight ? '-1' : '1');
+    unicorn.style.left = `${((x + 0.5) / GRID_COLS) * 100}%`;
+    unicorn.style.top = `${((y + 0.5) / GRID_ROWS) * 100}%`;
+    unicorn.style.setProperty('--ux', player.facingRight ? '-1' : '1');
   }
 
   moveUnicorn(pos: {x: number, y: number}) {
@@ -100,14 +93,14 @@ export class GameGrid {
     }
 
     this.gridPos = vec2(clampedX, clampedY);
-    unicorn.moveTo(clampedX, clampedY);
+    player.moveTo(clampedX, clampedY);
     this.placeUnicorn(clampedX, clampedY);
   }
 
   update(delta: number) {
     const cellSize = gameGrid.clientWidth / GRID_COLS;
 
-    unicorn.update(delta);
+    player.update(delta);
 
     this.trail.draw(cellSize);
   }
