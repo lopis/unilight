@@ -1,36 +1,36 @@
 import { GameItem } from "./game-item"
 import { CountSet } from "@/core/util/count-set";
-import { fruits } from "./game-item";
+import { inventoryItems } from "./game-item";
 
 export interface GameData {
   inventory: Inventory
 }
 
 interface Inventory {
-  fruits: CountSet<GameItem>
+  items: CountSet<GameItem>
 }
 
 export let gameData!: GameData
 
-const inventoryItems = new Map<GameItem, HTMLElement>();
+const inventoryItemsMap = new Map<GameItem, HTMLElement>();
 
 export const initGameData = () => {
   gameData = {
     inventory: {
-      fruits: new CountSet<GameItem>(),
+      items: new CountSet<GameItem>(),
     }
   }
   initInventoryView();
   renderInventory();
 }
 
-export const addToInventory = (fruit: GameItem) => {
-  gameData.inventory.fruits.add(fruit);
+export const addToInventory = (item: GameItem) => {
+  gameData.inventory.items.add(item);
   renderInventory();
 }
 
-export const removeFromInventory = (fruit: GameItem) => {
-  const removed = gameData.inventory.fruits.remove(fruit);
+export const removeFromInventory = (item: GameItem) => {
+  const removed = gameData.inventory.items.remove(item);
   if (removed) {
     renderInventory();
   }
@@ -38,15 +38,15 @@ export const removeFromInventory = (fruit: GameItem) => {
 }
 
 const renderInventory = () => {
-  const remainderItems: GameItem[] = [];
+  const remainderList: GameItem[] = [];
 
-  for (const fruit of fruits) {
-    const el = inventoryItems.get(fruit);
+  for (const item of inventoryItems) {
+    const el = inventoryItemsMap.get(item);
     if (!el) {
       continue;
     }
 
-    const total = gameData.inventory.fruits.count(fruit);
+    const total = gameData.inventory.items.count(item);
     const groups = Math.floor(total / 3);
     const remainder = total % 3;
 
@@ -65,35 +65,35 @@ const renderInventory = () => {
 
     if (remainder > 0) {
       for (let i = 0; i < remainder; i++) {
-        remainderItems.push(fruit);
+        remainderList.push(item);
       }
     }
   }
 
   const unicornElement = document.getElementById('unicorn');
   if (unicornElement) {
-    const remainderCount = remainderItems.length;
-    const orbitHtml = remainderItems
-      .map((fruit, index) => `
+    const remainderCount = remainderList.length;
+    const orbitHtml = remainderList
+      .map((item, index) => `
         <span class="unicorn-orbiter" style="--index:${index};--count:${remainderCount};">
-          <i class="${fruit} unicorn-orbiter-glyph"></i>
+          <i class="${item} unicorn-orbiter-glyph"></i>
         </span>
       `)
       .join('');
 
-    unicornElement.innerHTML = `<span class="unicorn-core">🦄</span><span class="unicorn-orbit">${orbitHtml}</span>`;
+    unicornElement.innerHTML = `<span class="unicorn-core"></span><span class="unicorn-orbit">${orbitHtml}</span>`;
   }
 }
 
 const initInventoryView = () => {
-  inventoryItems.clear();
+  inventoryItemsMap.clear();
 
-  for (const fruit of fruits) {
-    const el = inventory.querySelector(`.${CSS.escape(fruit)}`) as HTMLElement | null;
+  for (const item of inventoryItems) {
+    const el = inventory.querySelector(`.${CSS.escape(item)}`) as HTMLElement | null;
     if (!el) {
       continue;
     }
 
-    inventoryItems.set(fruit, el);
+    inventoryItemsMap.set(item, el);
   }
 }

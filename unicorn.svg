@@ -1,0 +1,7 @@
+<svg width="64mm" height="64mm" version="1.1" viewBox="0 0 64 64" xml:space="preserve" xmlns="http://www.w3.org/2000/svg">
+<path d="m10 13c-3 3-9 10-6 13 5 5 13-1 13-1l2 19v19h5v-17h2v15h5v-15l6 0.02v17h5v-17l2-0.03v15h5v-20c-0.6-11 3-11-16-10l-13-19 1-6-4 4-2 0.3 0.1-4-4 4c0.5-0.03-8-8-8-8z" fill="#e9afaf" stroke-width="26" style="paint-order:markers stroke fill"/>
+<g fill="#a02c2c">
+<path d="m19 11c3-3 7 2 20 1l-4 6h6c-2 5-5 9-8 13z" stroke-width="27" style="paint-order:markers stroke fill"/>
+<path d="m17 10c0.8 5-11 6-11 4-0.3-2 10-7 11-4z" stroke-width="27" style="paint-order:markers stroke fill"/>
+<path d="m51 28c8-1 4 8 10 18-10-0.5-18-17-10-18z" stroke-width="27" style="paint-order:markers stroke fill"/>
+</g></svg>

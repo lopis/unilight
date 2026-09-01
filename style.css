@@ -1,18 +1,19 @@
 :root {
-  --red: hsl(0, 64%, 52%);
-  --red2: hsl(0, 95%, 37%);
-  --yellow: hsl(46, 85%, 58%);
-  --yellow2: hsl(36, 80%, 57%);
-  --yellow3: hsl(27, 87%, 42%);
-  --green: hsl(103, 43%, 54%);
-  --green2: hsl(103, 43%, 34%);
-  --cyan: hsl(154, 72%, 74%);
-  --cyan2: hsl(154, 72%, 54%);
-  --blue: hsl(206, 72%, 48%);
-  --blue2: hsl(206, 72%, 27%);
-  --magenta: hsl(309, 79%, 78%);
-  --magenta2: hsl(309, 63%, 61%);
-  --magenta3: hsl(309, 57%, 41%);
+  --red: #e33f3f;
+  --red2: #b80505;
+  --yellow: #fad354;
+  --yellow2: #e9a33a;
+  --orange: #df6807;
+  --orange2: #a13c05;
+  --green: #74bc57;
+  --green2: #477c31;
+  --cyan: #64c1dd;
+  --cyan2: #35b7de;
+  --blue: #2f52c6;
+  --blue2: #1a2e70;
+  --magenta: #f39be6;
+  --magenta2: #da5dc7;
+  --magenta3: #a42d92;
   --black: #131217;
   --white: #f9f9f9;
 }
@@ -126,6 +127,15 @@ i {
 
 #unicorn .unicorn-core {
   display: block;
+  width: 5rem;
+  height: 5rem;
+  background-image: var(--b-UN);
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  background-size: 500% 100%;
+  image-rendering: pixelated;
+  animation: spriteCycle 1s steps(4) infinite;
+  z-index: 1;
 }
 
 #unicorn .unicorn-orbit {
@@ -254,8 +264,8 @@ section:not(.show) {
 }
 
 #inventory {
-  display: flex;
-  flex-wrap: wrap;
+display: grid;
+  grid-template-columns: repeat(7, 1fr);
   gap: 0.8rem;
   margin: 0.3rem 1.5rem 0;
   font-size: 1.8rem;
@@ -263,35 +273,39 @@ section:not(.show) {
 }
 
 #inventory i {
-  pointer-events: all;
+	pointer-events: all;
 	border-radius: 0.3rem;
 	padding: 0.3rem;
 	position: relative;
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	height: 1rem;
+	height: 2rem;
 	aspect-ratio: 1;
 	background-color: var(--bgc);
-	border: 4px solid var(--bgc);
-  box-shadow: 0 0 0 5px var(--black);
-  transition: all 100ms ease-in-out;
+	border: 0.3rem solid var(--bgc);
+	box-shadow: 0 0 0 5px var(--black);
+	transition: all 100ms ease-in-out;
+	box-sizing: border-box;
 }
 
 #inventory i.hide {
-  visibility: hidden;
+	opacity: 0.5;
+	background-image: none;
 }
 
-#inventory i.selected {
+#inventory i.selected:not(.hide) {
 	box-shadow: 0 0 0 5px var(--white);
-	transform: translateY(-0.8rem);
+	transform: scale(1.1);
+	border: 0.1rem solid var(--bgc);
+	padding: 0.4rem;
 }
 
 #inventory i[data-count]::after {
 	content: attr(data-count);
 	position: absolute;
-	top: 1rem;
-	right: -0.7rem;
+  bottom: -0.4rem;
+  right: -0.5rem;
 	font-size: 1.1rem;
 	background: var(--bgc);
 	display: inline-flex;
@@ -301,52 +315,107 @@ section:not(.show) {
 	align-items: center;
 	border-radius: 99px;
 	font-weight: bold;
-  border: 2px solid var(--magenta3);
+  border: 2px solid var(--black);
 }
 
-.orange {
-  --bgc: var(--yellow3);
-  --bgi: var(--b-orange)
+#inventory i[data-count].selected::after {
+  border-color: var(--white);
 }
 
-.strawberry {
+/*
+  Item tokens:
+  FR strawberry, FO orange, FY banana, FG kiwi, FC water, FB blueberry, FV grape
+  GR/GO/GY/GG/GC/GB/GV/GK/GW gems (R/O/Y/G/C/B/V/K/W)
+  HD hedge, HN hand
+*/
+.FO {
+  --bgc: var(--orange);
+  --bgi: var(--b-FO)
+}
+
+.FR {
   --bgc: var(--red2);
-  --bgi: var(--b-strawberry)
+  --bgi: var(--b-FR)
 }
 
-.banana {
+.FY {
   --bgc: var(--yellow2);
-  --bgi: var(--b-banana)
+  --bgi: var(--b-FY)
 }
 
-.water {
+.FC {
   --bgc: var(--cyan2);
-  --bgi: var(--b-water)
+  --bgi: var(--b-FC)
 }
 
-.blueberry {
+.FB {
   --bgc: var(--blue2);
-  --bgi: var(--b-blueberry)
+  --bgi: var(--b-FB)
 }
 
-.grape {
+.FV {
   --bgc: var(--magenta2);
-  --bgi: var(--b-grape)
+  --bgi: var(--b-FV)
 }
 
-.kiwi {
+.FG {
   --bgc: var(--green2);
-  --bgi: var(--b-kiwi)
+  --bgi: var(--b-FG)
 }
 
-.hedge {
-  --bgc: var(--green);
-  --bgi: var(--b-hedge)
+.GR {
+  --bgc: var(--red2);
+  --bgi: var(--b-GR)
 }
 
-.gem {
+.GO {
+  --bgc: var(--orange);
+  --bgi: var(--b-GO)
+}
+
+.GY {
+  --bgc: var(--yellow2);
+  --bgi: var(--b-GY)
+}
+
+.GG {
+  --bgc: var(--green2);
+  --bgi: var(--b-GG)
+}
+
+.GC {
+  --bgc: var(--cyan2);
+  --bgi: var(--b-GC)
+}
+
+.GB {
+  --bgc: var(--blue2);
+  --bgi: var(--b-GB)
+}
+
+.GV {
+  --bgc: var(--magenta2);
+  --bgi: var(--b-GV)
+}
+
+.GK {
+  --bgc: var(--black);
+  --bgi: var(--b-GK)
+}
+
+.GW {
   --bgc: var(--white);
-  --bgi: var(--b-gem)
+  --bgi: var(--b-GW)
+}
+
+.HD {
+  --bgc: var(--green);
+  --bgi: var(--b-HD)
+}
+
+.HN {
+  --bgc: var(--white);
+  --bgi: var(--b-HN)
 }
 
 
@@ -373,7 +442,6 @@ section:not(.show) {
 	border-radius: 50px;
 	box-shadow: 0.3rem 0.3rem 0 0 var(--black);
 	border: none;
-  color: #000000AA;
   background: var(--white);
   background-repeat: no-repeat;
   background-position: center -36px;
@@ -381,7 +449,7 @@ section:not(.show) {
 }
 
 #spells button:active {
-	box-shadow: 0.1rem 0.1rem 0 0 var(--bg2);
+	box-shadow: 0.1rem 0.1rem 0 0 var(--black);
   transform: translate(0.2rem, 0.2rem);
 }
 

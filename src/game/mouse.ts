@@ -1,7 +1,6 @@
 import { emit } from "@/core/event"
 import { GameEvent } from "./event-manifest"
-import { fruits } from "./game-item";
-import { SpellKind } from "./spells";
+import { isGameItem } from "./game-item";
 
 export const initMouse = () => {
   gameGrid.addEventListener('click', (event) => emit(
@@ -22,11 +21,12 @@ export const initMouse = () => {
 
   inventory.addEventListener('click', (event) => {
     const target = event.target as HTMLElement;
-    const fruit = Array.from(target.classList).find((name) => fruits.includes(name as (typeof fruits)[number])) as (typeof fruits)[number] | undefined;
+    const token = target.dataset.i;
+    const item = token && isGameItem(token) ? token : undefined;
 
-    if (fruit) {
+    if (item) {
       emit(
-        GameEvent.INVENTORY_CLICK, { fruit, el: target }
+        GameEvent.INVENTORY_CLICK, { item, el: target }
       )
     }
   })

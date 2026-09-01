@@ -1,4 +1,4 @@
-import { fruits, gameItem, GridItem } from "./game-item";
+import { gameItem, GridItem, spawnItems } from "./game-item";
 import { unicorn } from "./unicorn";
 import { vec2, Vec2, bresenham } from "@/core/util/vec2";
 import { addToInventory } from "./game-data";
@@ -30,16 +30,19 @@ export class GameGrid {
         this.placeAtGridCell($item, x, y);
         if (gridItem) {
           $item.classList.add(gridItem.s);
+          $item.dataset.i = gridItem.s;
         }
         gameGrid.appendChild($item)
       })
     });
 
-    this.$unicorn = document.createElement('i');
-    this.$unicorn.id = 'unicorn';
-    this.$unicorn.innerText = '🦄';
+    const unicornElement = document.getElementById('unicorn');
+    if (!unicornElement) {
+      throw new Error('Missing #unicorn element');
+    }
+
+    this.$unicorn = unicornElement;
     this.placeAtGridCell(this.$unicorn, unicorn.pos.x, unicorn.pos.y);
-    gameGrid.appendChild(this.$unicorn);
 
     on(GameEvent.GRID_CLICK, (pos) => this.moveUnicorn(pos))
   }
@@ -47,8 +50,8 @@ export class GameGrid {
   private fillGridWithRandomFruit() {
     for (let y = 0; y < gridRows; y++) {
       for (let x = 0; x < gridCols; x++) {
-        const fruit = fruits[Math.floor(Math.random() * fruits.length)];
-        this.grid[y][x] = gameItem(x, y, fruit);
+        const item = spawnItems[Math.floor(Math.random() * spawnItems.length)];
+        this.grid[y][x] = gameItem(x, y, item);
       }
     }
   }
@@ -85,6 +88,7 @@ export class GameGrid {
         if ($item) {
           $item.textContent = '';
           $item.classList.remove(item.s);
+          delete $item.dataset.i;
         }
       }
     }

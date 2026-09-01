@@ -1,28 +1,70 @@
 import { vec2, Vec2 } from "@/core/util/vec2";
 
-export type GameItem =
-  | 'strawberry'
-  | 'orange'
-  | 'banana'
-  | 'kiwi'
-  | 'water'
-  | 'blueberry'
-  | 'grape'
-  | 'gem'
-  | 'hand'
-  | 'hedge'
-;
+// R O Y G C B V K W
+export const CR = 0 as const;
+export const CO = 1 as const;
+export const CY = 2 as const;
+export const CG = 3 as const;
+export const CC = 4 as const;
+export const CB = 5 as const;
+export const CV = 6 as const;
+export const CK = 7 as const;
+export const CW = 8 as const;
 
-export const fruits: GameItem[] = [
-  'strawberry',
-  'orange',
-  'banana',
-  'kiwi',
-  'water',
-  'blueberry',
-  'grape',
-  'gem',
-];
+export const colorIds = [CR, CO, CY, CG, CC, CB, CV, CK, CW] as const;
+export type ColorId = (typeof colorIds)[number];
+
+export const colorBgVar = [
+  'var(--red)',
+  'var(--orange)',
+  'var(--yellow)',
+  'var(--green2)',
+  'var(--cyan)',
+  'var(--blue)',
+  'var(--magenta)',
+  'var(--black)',
+  'var(--white)',
+] as const;
+
+export type FruitItem = 'FR' | 'FO' | 'FY' | 'FG' | 'FC' | 'FB' | 'FV';
+export type GemItem = 'GR' | 'GO' | 'GY' | 'GG' | 'GC' | 'GB' | 'GV' | 'GK' | 'GW';
+export type SpecialItem = 'HD' | 'HN';
+export type GameItem = FruitItem | GemItem | SpecialItem;
+
+export const fruits: FruitItem[] = ['FR', 'FO', 'FY', 'FG', 'FC', 'FB', 'FV'];
+export const gems: GemItem[] = ['GR', 'GO', 'GY', 'GG', 'GC', 'GB', 'GV', 'GK', 'GW'];
+export const inventoryItems: GameItem[] = [...fruits, ...gems];
+export const spawnItems: GameItem[] = [...fruits, ...gems];
+
+const colorFromInitial = (id: string): ColorId => {
+  switch (id) {
+    case 'R': return CR;
+    case 'O': return CO;
+    case 'Y': return CY;
+    case 'G': return CG;
+    case 'C': return CC;
+    case 'B': return CB;
+    case 'V': return CV;
+    case 'K': return CK;
+    default: return CW;
+  }
+};
+
+export const colorOfItem = (item: GameItem): ColorId => {
+  if (item === 'HD') return CG;
+  if (item === 'HN') return CW;
+  return colorFromInitial(item[1]);
+};
+
+const gameItems: GameItem[] = [...inventoryItems, 'HD', 'HN'];
+const gameItemSet = new Set<GameItem>(gameItems);
+
+export const isGameItem = (value: string): value is GameItem => gameItemSet.has(value as GameItem);
+export const isColorId = (value: number): value is ColorId => Number.isInteger(value) && value >= CR && value <= CW;
+export const parseColorId = (value: string): ColorId | undefined => {
+  const n = Number(value);
+  return isColorId(n) ? n : undefined;
+};
 
 export interface GridItem {
   s: GameItem;

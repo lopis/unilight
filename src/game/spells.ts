@@ -1,45 +1,11 @@
 import { on } from "@/core/event";
 import { GameEvent } from "./event-manifest";
-
-export type RainbowItem =
-  | 'red'
-  | 'orange'
-  | 'yellow'
-  | 'green'
-  | 'cyan'
-  | 'blue'
-  | 'violet'
-  | 'black'
-  | 'white';
+import { colorBgVar, CK, ColorId, CV, CW, parseColorId } from "./game-item";
 
 export type SpellKind = 'add' | 'sub' | 'com';
-export type SpellResult = RainbowItem;
+export type SpellResult = ColorId;
 
-export const rainbowColors = [
-  'red',
-  'orange',
-  'yellow',
-  'green',
-  'cyan',
-  'blue',
-  'violet',
-  'black',
-  'white',
-] as const;
-
-export const rainbowIndex: Record<RainbowItem, number> = {
-  red: 0,
-  orange: 1,
-  yellow: 2,
-  green: 3,
-  cyan: 4,
-  blue: 5,
-  violet: 6,
-  black: 7,
-  white: 8,
-};
-
-const colorOf = (id: number): RainbowItem => rainbowColors[id];
+const colorOf = (id: number): ColorId => id as ColorId;
 
 const addLUT: Array<Array<number>> = [
   [0, 1, 1, 2, 6, 6, 6],
@@ -62,27 +28,42 @@ const subLUT: Array<Array<number>> = [
 ];
 
 export const lookupAdd = (
-  left: RainbowItem,
-  right: RainbowItem,
+  left: ColorId,
+  right: ColorId,
 ): SpellResult => {
-  const a = rainbowIndex[left];
-  const b = rainbowIndex[right];
+  const a = left;
+  const b = right;
+
+  if (a > CV || b > CV) {
+    if (a === CW || b === CW) return CW;
+    if (a === CK || b === CK) return CK;
+    return left;
+  }
+
   return colorOf(addLUT[a][b]);
 };
 
 export const lookupSub = (
-  left: RainbowItem,
-  right: RainbowItem,
+  left: ColorId,
+  right: ColorId,
 ): SpellResult => {
-  const a = rainbowIndex[left];
-  const b = rainbowIndex[right];
+  const a = left;
+  const b = right;
+
+  if (a > CV || b > CV) {
+    if (a === b) return CK;
+    if (a === CW || b === CW) return left;
+    if (a === CK || b === CK) return right;
+    return left;
+  }
+
   return colorOf(subLUT[a][b]);
 };
 
 export const lookupSpell = (
   kind: SpellKind,
-  left: RainbowItem,
-  right: RainbowItem,
+  left: ColorId,
+  right: ColorId,
 ): SpellResult | undefined => {
   switch (kind) {
     case 'add':
@@ -96,20 +77,28 @@ export const lookupSpell = (
   }
 };
 
-const spellAdd = () => {
-  const left = space1.dataset.f;
-  const right = space2.dataset.f;
+const setSpace3Background = (color: ColorId): void => {
+  space3.style.background = colorBgVar[color];
+};
+
+const runSpell = (lookup: (left: ColorId, right: ColorId) => SpellResult): SpellResult | undefined => {
+  const left = space1.dataset.c;
+  const right = space2.dataset.c;
 
   if (!left || !right) return undefined;
-  const result = lookupAdd(left, right);
+  const leftId = parseColorId(left);
+  const rightId = parseColorId(right);
+  if (leftId === undefined || rightId === undefined) return undefined;
+
+  const result = lookup(leftId, rightId);
   setSpace3Background(result);
-  console.log(left, right, result);
+  console.log(leftId, rightId, result);
   return result;
 }
 
-const spellSub = () => {
+const spellAdd = () => runSpell(lookupAdd);
 
-}
+const spellSub = () => runSpell(lookupSub);
 
 const spellCom = () => {
 

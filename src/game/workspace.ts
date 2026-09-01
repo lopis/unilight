@@ -1,27 +1,13 @@
 import { on } from "@/core/event";
 import { GameEvent } from "./event-manifest";
-import { GameItem, fruits } from "./game-item";
+import { colorBgVar, colorOfItem, GameItem, isGameItem } from "./game-item";
 import { addToInventory, removeFromInventory } from "./game-data";
 
-const fruitSpaceColors: Record<GameItem, string> = {
-  strawberry: 'var(--red)',
-  orange: 'var(--yellow2)',
-  banana: 'var(--yellow)',
-  kiwi: 'var(--green2)',
-  water: 'var(--cyan)',
-  blueberry: 'var(--blue)',
-  grape: 'var(--magenta)',
-  gem: 'var(--white)',
-
-  hedge: 'var(--green)',
-  hand: 'var(--white)',
-};
-
 export class Workspace {
-  selectedFruit: GameItem | null = null;
+  selectedItem: GameItem | null = null;
 
   constructor() {
-    on(GameEvent.INVENTORY_CLICK, ({ fruit, el }: { fruit: GameItem, el: HTMLElement }) => {
+    on(GameEvent.INVENTORY_CLICK, ({ item, el }: { item: GameItem, el: HTMLElement }) => {
       const isSelected = el.classList.contains('selected');
 
       for (const item of inventory.querySelectorAll('.selected')) {
@@ -30,27 +16,28 @@ export class Workspace {
 
       if (!isSelected) {
         el.classList.add('selected');
-        this.selectedFruit = fruit;
+        this.selectedItem = item;
         return;
       }
 
-      this.selectedFruit = null;
+      this.selectedItem = null;
     });
 
     on(GameEvent.WORKSPACE_SPACE_CLICK, ({ el }: { el: HTMLElement }) => {
-      if (!this.selectedFruit) {
+      if (!this.selectedItem) {
         return;
       }
 
-      const fruit = this.selectedFruit;
+      const item = this.selectedItem;
       const $i: HTMLElement | null = el.querySelector('i');
       if (!$i) {
         return;
       }
 
-      const previous = Array.from($i.classList).find((name) => fruits.includes(name as GameItem)) as GameItem | undefined;
+      const prevToken = $i.dataset.i;
+      const previous = prevToken && isGameItem(prevToken) ? prevToken : undefined;
 
-      const removed = removeFromInventory(fruit);
+      const removed = removeFromInventory(item);
       if (!removed) {
         return;
       }
@@ -59,15 +46,18 @@ export class Workspace {
         addToInventory(previous);
       }
 
-      $i.className = `${fruit} ${el.className}`.trim();
-      el.style.background = fruitSpaceColors[fruit];
-      el.dataset.f = fruit;
+      $i.className = item;
+      $i.dataset.i = item;
+      const color = colorOfItem(item);
+      el.style.background = colorBgVar[color];
+      el.dataset.i = item;
+      el.dataset.c = String(color);
 
       for (const item of inventory.querySelectorAll('.selected')) {
         item.classList.remove('selected');
       }
 
-      this.selectedFruit = null;
+      this.selectedItem = null;
     })
   }
 }
