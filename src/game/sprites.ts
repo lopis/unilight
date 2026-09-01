@@ -66,8 +66,8 @@ export const sprites: SpriteRegistry = [
     colors.white, 'm35 21-12 5-2 13 12-5z'
   ],
   ['HD',
-    colors.green, 'm0 45v19h64v-19z',
-    colors.green2, 'm0 0v45h64v-45z'
+    colors.green2, 'm0 45v19h64v-19z',
+    colors.green, 'm0 0v45h64v-45z'
   ],
   ['FC'],
   ['GR', ...gemSprite(gemFill[0])],

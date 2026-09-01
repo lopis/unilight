@@ -33,6 +33,9 @@ export type GameItem = FruitItem | GemItem | SpecialItem;
 
 export const fruits: FruitItem[] = ['FR', 'FO', 'FY', 'FG', 'FC', 'FB', 'FV'];
 export const gems: GemItem[] = ['GR', 'GO', 'GY', 'GG', 'GC', 'GB', 'GV', 'GK', 'GW'];
+export const rainbowGems: GemItem[] = ['GR', 'GO', 'GY', 'GG', 'GC', 'GB', 'GV'];
+export const specialItems: SpecialItem[] = ['HD', 'HN'];
+export const levelTokens: Array<'UN' | GameItem> = ['UN', ...fruits, ...gems, ...specialItems];
 export const inventoryItems: GameItem[] = [...fruits, ...gems];
 export const spawnItems: GameItem[] = [...fruits, ...gems];
 
@@ -56,7 +59,7 @@ export const colorOfItem = (item: GameItem): ColorId => {
   return colorFromInitial(item[1]);
 };
 
-const gameItems: GameItem[] = [...inventoryItems, 'HD', 'HN'];
+const gameItems: GameItem[] = [...inventoryItems, ...specialItems];
 const gameItemSet = new Set<GameItem>(gameItems);
 
 export const isGameItem = (value: string): value is GameItem => gameItemSet.has(value as GameItem);

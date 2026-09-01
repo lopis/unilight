@@ -5,8 +5,9 @@
   --yellow2: #e9a33a;
   --orange: #df6807;
   --orange2: #a13c05;
-  --green: #74bc57;
-  --green2: #477c31;
+  --green0:hsl(100, 43%, 69%);
+  --green: hsl(100, 43%, 54%);
+  --green2: hsl(100, 43%, 34%);
   --cyan: #64c1dd;
   --cyan2: #35b7de;
   --blue: #2f52c6;
@@ -207,13 +208,11 @@ section {
   min-height: 0;
   min-width: 0;
   display: flex;
-  background: var(--magenta);
-  border: 2rem solid var(--magenta);
+  background: var(--green0);
+  border: 2rem solid var(--green0);
   box-shadow: 0 0 0 0.3rem var(--black);
   z-index: 0;
   border-radius: 2rem;
-  /* Color is magenta3 with low alpha */
-  background-image: radial-gradient(#a42d9226 50%, transparent 50%);
   background-size: 10% 10%;
 }
 
@@ -415,9 +414,25 @@ display: grid;
   --bgi: var(--b-HD)
 }
 
+/* HAND */
 .HN {
   --bgc: var(--white);
-  --bgi: var(--b-HN)
+  --bgi: var(--b-HN);
+  top: 30%;
+  left: 30%;
+  filter: drop-shadow(0px 14px 0px #00000055);
+  animation: spriteCycle 1s steps(4) infinite,
+    tap 500ms alternate infinite ease-in-out;
+  z-index: 2;
+}
+
+@keyframes tap {
+  from {
+    transform: translate(0, 0) rotate(-5deg);
+  }
+  to {
+    transform: translate(5%, 20%) rotate(0deg);
+  }
 }
 
 

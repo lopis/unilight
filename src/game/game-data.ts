@@ -1,6 +1,6 @@
 import { CountSet } from "@/core/util/count-set";
 import { resetInteractionLock } from "./interaction-lock";
-import { fruits, FruitItem, GameItem, inventoryItems, isFruitItem, isGemItem } from "./game-item";
+import { fruits, FruitItem, GameItem, GemItem, inventoryItems, isFruitItem, isGemItem } from "./game-item";
 
 export interface GameData {
   inventory: Inventory
@@ -19,7 +19,7 @@ export let gameData!: GameData
 
 const inventoryItemsMap = new Map<GameItem, HTMLElement>();
 
-export const initGameData = () => {
+export const initGameData = (initialInventory: GemItem[] = []) => {
   resetInteractionLock();
   gameData = {
     inventory: {
@@ -28,7 +28,12 @@ export const initGameData = () => {
     stagedFruits: {
       items: new CountSet<FruitItem>(),
     }
+  };
+
+  for (const gem of initialInventory) {
+    gameData.inventory.items.add(gem);
   }
+
   initInventoryView();
   renderInventory();
 }

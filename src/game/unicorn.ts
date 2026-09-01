@@ -24,6 +24,7 @@ export class Unicorn {
     this.pos = p;
     this.startPos = p;
     this.targetPos = p;
+    this.facingRight = x <= 5;
     this.moveTime = this.moveDuration;
     this.moving = false;
   }
