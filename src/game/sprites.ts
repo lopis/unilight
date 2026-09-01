@@ -32,9 +32,8 @@ const gemSprite = (fill: string): string[] => [
 
 export const sprites: SpriteRegistry = [
   ['UN',
-    colors.white, 'm10 13c-3 3-9 10-6 13 5 5 13-1 13-1l2 19v19h5v-17h2v15h5v-15l6 0.02v17h5v-17l2-0.03v15h5v-20c-0.6-11 3-11-16-10l-13-19 1-6-4 4-2 0.3 0.1-4-4 4c0.5-0.03-8-8-8-8z',
-    colors.magenta3, 'm19 11c3-3 7 2 20 1l-4 6h6c-2 5-5 9-8 13z',
-    colors.magenta3, 'm17 10c0.8 5-11 6-11 4-0.3-2 10-7 11-4z',
+    colors.white, 'm4 0.3-2 1 7 11c-14 14-2 19 8 12 3 13 2 25 2 38h5v-17h2v14h5v-14l6 0.02v17h5v-17l2-0.03v14h5c-0.7-25 6-30-16-29l-13-19 2-5-3-0.7-3 6 1-6-3-0.5-1 4z',
+    colors.magenta3, 'm5 13 11-4 23 4-4 6h6l-8 13-13-18-13 3z',
     colors.magenta3, 'm51 28c8-1 4 8 10 18-10-0.5-18-17-10-18z'
   ],
   ['FR',
