@@ -5,11 +5,10 @@ import { emit } from './core/event';
 import { GameEvent } from './game/event-manifest';
 import { loadingState } from './game-states/loading.state';
 
-// @ts-ignore -- is not undefined for sure
-document.querySelector('link[type="image/x-icon"]').href = 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'%3E%3Ctext y=\'.9em\' font-size=\'85\'%3E🍓%3C/text%3E%3C/svg%3E';
+const favicon = document.querySelector('link[type="image/x-icon"]') as HTMLLinkElement | null;
+if (favicon) favicon.href = 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'%3E%3Ctext y=\'.9em\' font-size=\'85\'%3E🍓%3C/text%3E%3C/svg%3E';
 
 let previousTime = 0;
-// let fpsBacklog: number[] = [];
 let paused = false;
 
 window.addEventListener('blur', () => {
@@ -31,16 +30,9 @@ function update(currentTime: number) {
     return;
   }
 
-  // fpsBacklog.push(1000 / delta);
-  // if (fpsBacklog.length === 15) {
-  //   fps.innerHTML = `${Math.round(fpsBacklog.reduce((a, b) => a + b) / 15)} FPS`;
-  //   fpsBacklog = [];
-  // }
-
   drawEngine.clear();
 
   const state = gameStateMachine.getState();
-  // controls.queryController();
   state.onUpdate(delta);
   updateTimeEvents(delta);
 };

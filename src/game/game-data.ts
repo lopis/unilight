@@ -109,13 +109,13 @@ const renderInventory = () => {
     const stagedCount = stagedList.length;
     const orbitHtml = stagedList
       .map((item, index) => `
-        <span class="unicorn-orbiter" style="--index:${index};--count:${stagedCount};">
-          <i class="${item} unicorn-orbiter-glyph"></i>
+        <span class="u2" style="--index:${index};--count:${stagedCount};">
+          <i class="${item} u3"></i>
         </span>
       `)
       .join('');
 
-    unicorn.querySelector('.unicorn-orbit')!.innerHTML = orbitHtml;
+    unicorn.querySelector('.u1')!.innerHTML = orbitHtml;
   }
 }
 

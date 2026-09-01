@@ -135,7 +135,8 @@ i {
   z-index: 3;
 }
 
-#unicorn .unicorn-core {
+/* Unicorn orbit classes: u0 core sprite, u1 orbit anchor, u2 orbit item, u3 orbit glyph */
+#unicorn .u0 {
   display: block;
   width: 5rem;
   height: 5rem;
@@ -148,17 +149,17 @@ i {
   z-index: 1;
 }
 
-#unicorn .unicorn-orbit {
+#unicorn .u1 {
   position: absolute;
   left: 50%;
   top: 50%;
   width: 0;
   height: 0;
-  animation: unicorn-orbit-spin 3s linear infinite;
+  animation: uo 3s linear infinite;
   transform-origin: center;
 }
 
-#unicorn .unicorn-orbiter {
+#unicorn .u2 {
   display: inline-flex;
   position: absolute;
   transform:
@@ -169,15 +170,16 @@ i {
   transform-origin: center;
 }
 
-#unicorn .unicorn-orbiter-glyph {
+#unicorn .u3 {
   display: inline-block;
   font-size: 0.45em;
-  animation: unicorn-orbit-counter-spin 3s linear infinite;
+  animation: uc 3s linear infinite;
   height: 2rem;
   aspect-ratio: 1;
 }
 
-@keyframes unicorn-orbit-spin {
+/* Unicorn orbit animations: uo main spin, uc counter spin */
+@keyframes uo {
   from {
     transform: rotate(0deg);
   }
@@ -186,7 +188,7 @@ i {
   }
 }
 
-@keyframes unicorn-orbit-counter-spin {
+@keyframes uc {
   from {
     transform: rotate(0deg);
   }
