@@ -51,13 +51,27 @@ export const initMouse = () => {
       return;
     }
 
-    const target = event.target as HTMLElement;
-    const token = target.dataset.i;
+    // On mobile, taps can originate from nested/generated targets.
+    // Resolve to the actual inventory token element carrying data-i.
+    const eventTarget = event.target;
+    const target = eventTarget instanceof HTMLElement
+      ? eventTarget.closest('i[data-i]') as HTMLElement | null
+      : null;
+
+    // Some browsers/shadow scenarios require walking the composed path.
+    const fallbackFromPath = !target
+      ? event.composedPath().find((node): node is HTMLElement => {
+        return node instanceof HTMLElement && node.matches('i[data-i]');
+      })
+      : null;
+
+    const itemEl = target ?? fallbackFromPath;
+    const token = itemEl?.dataset.i;
     const item = token && isGameItem(token) ? token : undefined;
 
-    if (item) {
+    if (item && itemEl) {
       emit(
-        GameEvent.INVENTORY_CLICK, { item, el: target }
+        GameEvent.INVENTORY_CLICK, { item, el: itemEl }
       )
     }
   })
