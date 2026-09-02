@@ -93,6 +93,7 @@ h1 {
   display: inline-block;
   flex: 0 0 auto;
   background-position: center;
+  margin: 0 -2px;
 }
 
 /* Shared sprite-strip rendering */

@@ -18,15 +18,18 @@ type GlyphAsset = {
 const FONT_EM = 1.6;
 const SAMPLE_COUNT = 48;
 const STROKE_WIDTH = 3;
-const STROKE_AMP = 0.85;
+const STROKE_AMP = 0.95;
 const STROKE_PASSES = 2;
 const STROKE_FRAMES = 5;
 const HTML_FONT_CLASS = "skf";
 const HTML_GLYPH_CLASS = "skf-g";
 const HTML_SPACE_EM = 0.45;
 const HTML_TRACKING_UNITS = 0.12;
-const HTML_ASSET_HEIGHT = 32;
-const HTML_ASSET_PADDING = 3;
+const HTML_DISPLAY_HEIGHT = 32;
+const HTML_RENDER_SCALE = 4;
+const HTML_ASSET_HEIGHT = HTML_DISPLAY_HEIGHT * HTML_RENDER_SCALE;
+// Keep padding proportional when rendering at higher internal resolution.
+const HTML_ASSET_PADDING = 5 * HTML_RENDER_SCALE;
 
 const glyphEntries: readonly GlyphEntry[] = [
   ["A", "m1.1 15 7.4-13 7.4 13-2.5-4.5h-9.8"],

@@ -1,4 +1,4 @@
-# Gemweaver Dash
+# Gem Weaver Dash
 
 ## Game Rules
 
