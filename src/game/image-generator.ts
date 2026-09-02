@@ -3,6 +3,26 @@ import { Color, colors } from './colors';
 
 export const assets: Record<string, HTMLCanvasElement> = {};
 
+const BUSH_SMOKE = {
+  size: 96,
+  frames: 12,
+  fill: colors.white,
+  border: colors.magenta3,
+  borderPx: 4,
+  drawThreshold: 0.2,
+  center: { x: 0.5, y: 0.52 },
+  spread: { start: 2, end: 26, burstEndT: 0.58 },
+  outer: { startR: 6, peakR: 23, peakT: 0.55, endR: 0 },
+  centerPuff: { delayT: 0.25, peakR: 30, peakT: 0.72, endR: 0 },
+  jitterAmp: 1.5,
+  dirs: [
+    { x: -0.85, y: -0.4 },
+    { x: 0.88, y: -0.32 },
+    { x: -0.58, y: 0.78 },
+    { x: 0.62, y: 0.82 },
+  ] as const,
+} as const;
+
 const generateAsset = (draw: (ctx: CanvasRenderingContext2D) => void): HTMLCanvasElement => {
   const [canvas, ctx] = createCanvasWithCtx(128, 128);
   draw(ctx);
@@ -34,8 +54,116 @@ const rainbowSprite = (ctx: CanvasRenderingContext2D) => {
   ctx.restore();
 }
 
+const createBorderOffsets = (radius: number): Array<{ x: number; y: number }> => {
+  const offsets: Array<{ x: number; y: number }> = [];
+  for (let y = -radius; y <= radius; y++) {
+    for (let x = -radius; x <= radius; x++) {
+      if ((x !== 0 || y !== 0) && x * x + y * y <= radius * radius) {
+        offsets.push({ x, y });
+      }
+    }
+  }
+  return offsets;
+};
+
+const BUSH_SMOKE_BORDER_OFFSETS = createBorderOffsets(BUSH_SMOKE.borderPx);
+
+const drawSmokeBlob = (
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  radius: number,
+) => {
+  ctx.beginPath();
+  ctx.arc(x, y, radius, 0, Math.PI * 2);
+  ctx.fillStyle = BUSH_SMOKE.fill;
+  ctx.fill();
+};
+
+const createBushSmokeSpriteSheet = (): HTMLCanvasElement => {
+  const sheet = document.createElement('canvas');
+  sheet.width = BUSH_SMOKE.size * BUSH_SMOKE.frames;
+  sheet.height = BUSH_SMOKE.size;
+  const ctx = sheet.getContext('2d') as CanvasRenderingContext2D;
+
+  const blobCanvas = document.createElement('canvas');
+  blobCanvas.width = BUSH_SMOKE.size;
+  blobCanvas.height = BUSH_SMOKE.size;
+  const blobCtx = blobCanvas.getContext('2d') as CanvasRenderingContext2D;
+
+  const borderCanvas = document.createElement('canvas');
+  borderCanvas.width = BUSH_SMOKE.size;
+  borderCanvas.height = BUSH_SMOKE.size;
+  const borderCtx = borderCanvas.getContext('2d') as CanvasRenderingContext2D;
+
+  const centerX = BUSH_SMOKE.size * BUSH_SMOKE.center.x;
+  const centerY = BUSH_SMOKE.size * BUSH_SMOKE.center.y;
+
+  const mix = (a: number, b: number, t: number) => a + (b - a) * t;
+  const shape = (t: number, peakAt: number, from: number, peak: number, to: number) => {
+    if (t <= peakAt) {
+      return mix(from, peak, t / peakAt);
+    }
+    return mix(peak, to, (t - peakAt) / (1 - peakAt));
+  };
+
+  for (let frame = 0; frame < BUSH_SMOKE.frames; frame++) {
+    const p = frame / (BUSH_SMOKE.frames - 1);
+    const frameOffsetX = frame * BUSH_SMOKE.size;
+
+    // Ease-out burst: fast expansion at start, then slower toward the end.
+    const burstT = Math.min(1, p / BUSH_SMOKE.spread.burstEndT);
+    const spread = BUSH_SMOKE.spread.start
+      + (BUSH_SMOKE.spread.end - BUSH_SMOKE.spread.start) * (1 - (1 - burstT) * (1 - burstT));
+    const outerRadius = shape(
+      p,
+      BUSH_SMOKE.outer.peakT,
+      BUSH_SMOKE.outer.startR,
+      BUSH_SMOKE.outer.peakR,
+      BUSH_SMOKE.outer.endR,
+    );
+
+    // Delayed center puff (5th circle).
+    const q = Math.max(0, (p - BUSH_SMOKE.centerPuff.delayT) / (1 - BUSH_SMOKE.centerPuff.delayT));
+    const centerRadius = q > 0
+      ? shape(q, BUSH_SMOKE.centerPuff.peakT, 0, BUSH_SMOKE.centerPuff.peakR, BUSH_SMOKE.centerPuff.endR)
+      : 0;
+
+    blobCtx.clearRect(0, 0, BUSH_SMOKE.size, BUSH_SMOKE.size);
+    for (let i = 0; i < BUSH_SMOKE.dirs.length; i++) {
+      const d = BUSH_SMOKE.dirs[i];
+      const jitter = (i % 2 === 0 ? -1 : 1) * p * BUSH_SMOKE.jitterAmp;
+      drawSmokeBlob(blobCtx, centerX + d.x * spread + jitter, centerY + d.y * spread, outerRadius);
+    }
+    if (centerRadius > BUSH_SMOKE.drawThreshold) {
+      drawSmokeBlob(blobCtx, centerX, centerY, centerRadius);
+    }
+
+    // Build one outline around the combined white blob shape.
+    borderCtx.clearRect(0, 0, BUSH_SMOKE.size, BUSH_SMOKE.size);
+    for (let i = 0; i < BUSH_SMOKE_BORDER_OFFSETS.length; i++) {
+      const o = BUSH_SMOKE_BORDER_OFFSETS[i];
+      borderCtx.drawImage(blobCanvas, o.x, o.y);
+    }
+
+    borderCtx.globalCompositeOperation = 'destination-out';
+    borderCtx.drawImage(blobCanvas, 0, 0);
+    borderCtx.globalCompositeOperation = 'source-in';
+    borderCtx.fillStyle = BUSH_SMOKE.border;
+    borderCtx.fillRect(0, 0, BUSH_SMOKE.size, BUSH_SMOKE.size);
+    borderCtx.globalCompositeOperation = 'source-over';
+
+    ctx.drawImage(borderCanvas, frameOffsetX, 0);
+    ctx.drawImage(blobCanvas, frameOffsetX, 0);
+  }
+
+  return sheet;
+};
+
 export const init = (): void => {
   assets['rainbowSprite'] = generateAsset(rainbowSprite);
+  assets['bushSmokeSprite'] = createBushSmokeSpriteSheet();
+  document.body.style.setProperty('--fx-bush-smoke', `url(${assets['bushSmokeSprite'].toDataURL()})`);
 };
 
 const createSpellIcon = (colors1: Color[], colors2: GlobalCompositeOperation, size = 160) => {

@@ -140,6 +140,28 @@ i {
   z-index: 3;
 }
 
+#unicorn .u-death {
+  display: none;
+  position: absolute;
+  inset: -35%;
+  pointer-events: none;
+  z-index: 4;
+}
+
+#unicorn .u-death > span {
+  position: absolute;
+  inset: 0;
+}
+
+#unicorn.dead .u0,
+#unicorn.dead .u1 {
+  display: none;
+}
+
+#unicorn.dead.dead-bush .u-death-bush {
+  display: block;
+}
+
 /* Unicorn orbit classes: u0 core sprite, u1 orbit anchor, u2 orbit item, u3 orbit glyph */
 #unicorn .u0 {
   position: absolute;
@@ -242,6 +264,29 @@ section:not(.show) {
 
 #gameGrid i {
   pointer-events: none;
+}
+
+#unicorn .u-death-bush .smoke-sheet {
+  background-image: var(--fx-bush-smoke);
+  background-size: 1200% 100%;
+  background-position: 0 0;
+  image-rendering: pixelated;
+  animation: fx-smoke-sheet 900ms steps(11) forwards;
+}
+
+#gameGrid i.obstacle-hit-bush {
+  animation: obstacle-hit-bush 550ms ease-out;
+}
+
+@keyframes obstacle-hit-bush {
+  0% { transform: scale(1); filter: brightness(1); }
+  35% { transform: scale(1.12); filter: brightness(1.25); }
+  100% { transform: scale(1); filter: brightness(1); }
+}
+
+@keyframes fx-smoke-sheet {
+  from { background-position: 0 0; }
+  to { background-position: 100% 0; }
 }
 
 .highlight {

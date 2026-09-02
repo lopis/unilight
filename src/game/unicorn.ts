@@ -12,6 +12,7 @@ export class Unicorn {
   moving = false
   angle = 0
   facingRight = false
+  dead = false
 
   constructor() {
     this.pos = vec2(0, 0);
@@ -24,12 +25,19 @@ export class Unicorn {
     this.pos = p;
     this.startPos = p;
     this.targetPos = p;
+    this.dead = false;
     this.facingRight = x <= 5;
     this.moveTime = this.moveDuration;
     this.moving = false;
+    unicorn.classList.remove('dead-bush');
+    unicorn.classList.remove('dead');
   }
 
   moveTo(x: number, y: number) {
+    if (this.dead) {
+      return;
+    }
+
     const dx = x - this.pos.x;
     if (dx > 0.001) {
       this.facingRight = true;
@@ -43,7 +51,23 @@ export class Unicorn {
     this.moveTime = 0;
   }
 
+  die(x: number, y: number) {
+    const p = vec2(x, y);
+    this.pos = p;
+    this.startPos = p;
+    this.targetPos = p;
+    this.moveTime = this.moveDuration;
+    this.moving = false;
+    this.dead = true;
+    unicorn.classList.add('dead');
+  }
+
   update(delta: number) {
+    if (this.dead) {
+      this.moving = false;
+      return;
+    }
+
     if (this.moveTime < this.moveDuration) {
       this.moving = true;
       this.moveTime = Math.min(this.moveTime + delta, this.moveDuration);

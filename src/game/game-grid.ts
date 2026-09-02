@@ -1,10 +1,12 @@
-import { gameItem, GameItem, GridItem } from "./game-item";
+import { gameItem, GameItem, GridItem, isObstacleItem } from "./game-item";
 import { addDash } from "./game-data";
 import { player } from "./unicorn";
 import { vec2, Vec2, bresenham } from "@/core/util/vec2";
+import { addTimeEvent } from "@/core/timer";
 import { collectCaughtItem } from "./inventory";
 import { Trail } from "./trail";
 import { spawnHighlight } from "./highlight";
+import { spawnObstacleDeathFx } from "./death-effects";
 import { on } from "@/core/event";
 import { GameEvent } from "./event-manifest";
 import { isInteractionLocked } from "./interaction-lock";
@@ -16,6 +18,7 @@ export class GameGrid {
   grid: Array<Array<GridItem | null>>
   trail = new Trail()
   gridPos: Vec2 = vec2(6, 6)
+  deathPending = false
 
   constructor(level: DecodedLevel) {
     this.grid = Array.from({ length: GRID_ROWS }, (_, y) =>
@@ -58,7 +61,7 @@ export class GameGrid {
   }
 
   moveUnicorn(pos: {x: number, y: number}) {
-    if (isInteractionLocked()) {
+    if (isInteractionLocked() || player.dead || this.deathPending) {
       return;
     }
 
@@ -78,12 +81,22 @@ export class GameGrid {
     if (newCells.length === 0) return;
     addDash();
 
+    let stopAt: Vec2 | null = null;
+    let deathObstacle: 'HD' | 'HL' | null = null;
+
     for (const cell of newCells) {
       spawnHighlight(cell);
 
-      // fruit collection
       const item = this.grid[cell.y]?.[cell.x];
       if (item && !item.taken) {
+        if (isObstacleItem(item.s)) {
+          // Stop on obstacle cell, then apply delayed death.
+          stopAt = vec2(cell.x, cell.y);
+          deathObstacle = item.s;
+          break;
+        }
+
+        // Fruit and gem collection.
         item.taken = true;
         collectCaughtItem(item.s);
         const $item = document.getElementById(item.id);
@@ -95,9 +108,19 @@ export class GameGrid {
       }
     }
 
-    this.gridPos = vec2(clampedX, clampedY);
-    player.moveTo(clampedX, clampedY);
-    this.placeUnicorn(clampedX, clampedY);
+    const destination = stopAt ?? vec2(clampedX, clampedY);
+    this.gridPos = destination;
+    player.moveTo(destination.x, destination.y);
+    this.placeUnicorn(destination.x, destination.y);
+
+    if (deathObstacle) {
+      this.deathPending = true;
+      addTimeEvent(() => {
+        this.deathPending = false;
+        player.die(destination.x, destination.y);
+        spawnObstacleDeathFx(destination, deathObstacle);
+      }, 0, 0, 100);
+    }
   }
 
   update(delta: number) {

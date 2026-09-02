@@ -29,6 +29,7 @@ export const colorBgVar = [
 export type FruitItem = 'FR' | 'FO' | 'FY' | 'FG' | 'FC' | 'FB' | 'FV';
 export type GemItem = 'GR' | 'GO' | 'GY' | 'GG' | 'GC' | 'GB' | 'GV' | 'GK' | 'GW';
 export type SpecialItem = 'HD' | 'HN' | 'HL';
+export type ObstacleItem = 'HD' | 'HL';
 export type GameItem = FruitItem | GemItem | SpecialItem;
 
 export const fruits: FruitItem[] = ['FR', 'FO', 'FY', 'FG', 'FC', 'FB', 'FV'];
@@ -54,8 +55,6 @@ const colorFromInitial = (id: string): ColorId => {
 };
 
 export const colorOfItem = (item: GameItem): ColorId => {
-  if (item === 'HD') return CG;
-  if (item === 'HN') return CW;
   return colorFromInitial(item[1]);
 };
 
@@ -65,6 +64,7 @@ const gameItemSet = new Set<GameItem>(gameItems);
 export const isGameItem = (value: string): value is GameItem => gameItemSet.has(value as GameItem);
 export const isFruitItem = (value: GameItem): value is FruitItem => value[0] === 'F';
 export const isGemItem = (value: GameItem): value is GemItem => value[0] === 'G';
+export const isObstacleItem = (value: GameItem): value is ObstacleItem => value === 'HD' || value === 'HL';
 export const isColorId = (value: number): value is ColorId => Number.isInteger(value) && value >= CR && value <= CW;
 export const parseColorId = (value: string): ColorId | undefined => {
   const n = Number(value);
