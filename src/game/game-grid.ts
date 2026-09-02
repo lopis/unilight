@@ -35,7 +35,7 @@ export class GameGrid {
         this.placeAtGridCell($item, x, y);
         if (gridItem) {
           $item.classList.add(gridItem.s);
-          $item.dataset.i = gridItem.s;
+          $item.dataset['i'] = gridItem.s;
         }
         gameGrid.appendChild($item)
       })
@@ -90,7 +90,7 @@ export class GameGrid {
         if ($item) {
           $item.textContent = '';
           $item.classList.remove(item.s);
-          delete $item.dataset.i;
+          delete $item.dataset['i'];
         }
       }
     }

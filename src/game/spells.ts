@@ -143,7 +143,7 @@ const gemForColor = (color: ColorId): GemItem => {
 };
 
 const getSpaceItem = (space: HTMLElement): GameItem | undefined => {
-  const token = space.dataset.i;
+  const token = space.dataset['i'];
   if (!token || !isGameItem(token)) return undefined;
   return token;
 };
@@ -152,11 +152,11 @@ const clearSpace = (space: HTMLElement): void => {
   const icon = space.querySelector('i') as HTMLElement | null;
   if (icon) {
     icon.className = '';
-    delete icon.dataset.i;
+    delete icon.dataset['i'];
   }
 
-  delete space.dataset.i;
-  delete space.dataset.c;
+  delete space.dataset['i'];
+  delete space.dataset['c'];
 
   if (space === space3) {
     space.style.background = EMPTY_OVERLAY_BG;
@@ -172,9 +172,9 @@ const setSpaceItem = (space: HTMLElement, item: GameItem, color: ColorId): void 
   if (!icon) return;
 
   icon.className = item;
-  icon.dataset.i = item;
-  space.dataset.i = item;
-  space.dataset.c = String(color);
+  icon.dataset['i'] = item;
+  space.dataset['i'] = item;
+  space.dataset['c'] = String(color);
   space.style.background = colorBgVar[color];
 
   if (space === space3) {
@@ -185,8 +185,8 @@ const setSpaceItem = (space: HTMLElement, item: GameItem, color: ColorId): void 
 const runSpell = (lookup: (left: ColorId, right: ColorId) => SpellResult | undefined): SpellResult | undefined => {
   if (spellPending || isInteractionLocked()) return undefined;
 
-  const left = space1.dataset.c;
-  const right = space2.dataset.c;
+  const left = space1.dataset['c'];
+  const right = space2.dataset['c'];
 
   if (!left || !right) return undefined;
   const leftId = parseColorId(left);

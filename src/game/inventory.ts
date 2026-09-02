@@ -30,14 +30,14 @@ export const renderInventory = () => {
     if (total > 0) {
       el.classList.remove('hide');
       if (total > 1) {
-        el.dataset.count = String(total);
+        el.dataset['count'] = String(total);
       } else {
-        delete el.dataset.count;
+        delete el.dataset['count'];
       }
     } else {
       el.classList.add('hide');
       el.classList.remove('selected');
-      delete el.dataset.count;
+      delete el.dataset['count'];
     }
   }
 

@@ -43,3 +43,4 @@
 - Measure size on meaningful changes. Re-check `pnpm build-with-best-roadroller` after larger refactors instead of assuming a refactor is smaller.
 - Public properties are preferred to getters and setters.
 - Don't over complicate things. Don't do things I didn't ask.
+- Don't run the build after each command

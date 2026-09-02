@@ -43,7 +43,7 @@ export class Workspace {
         return;
       }
 
-      const prevToken = $i.dataset.i;
+      const prevToken = $i.dataset['i'];
       const previous = prevToken && isGameItem(prevToken) ? prevToken : undefined;
 
       const removed = removeFromInventory(item);
@@ -56,11 +56,11 @@ export class Workspace {
       }
 
       $i.className = item;
-      $i.dataset.i = item;
+      $i.dataset['i'] = item;
       const color = colorOfItem(item);
       el.style.background = colorBgVar[color];
-      el.dataset.i = item;
-      el.dataset.c = String(color);
+      el.dataset['i'] = item;
+      el.dataset['c'] = String(color);
 
       for (const item of inventory.querySelectorAll('.selected')) {
         item.classList.remove('selected');
