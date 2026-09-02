@@ -21,6 +21,8 @@ export class GameGrid {
   deathPending = false
 
   constructor(level: DecodedLevel) {
+    gameGrid.querySelectorAll('i[id^="i-"], .highlight').forEach((el) => el.remove());
+
     this.grid = Array.from({ length: GRID_ROWS }, (_, y) =>
       Array.from({ length: GRID_COLS }, (_, x) => {
         const item = level.map[y][x] as GameItem | null;
