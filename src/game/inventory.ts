@@ -1,8 +1,22 @@
 import { CountSet } from "@/core/util/count-set";
 import { gameData } from "./game-data";
-import { fruits, FruitItem, GameItem, inventoryItems, isFruitItem, isGemItem } from "./game-item";
+import { fruits, FruitItem, GameItem, inventoryItems, isFruitItem, isGemItem, rainbowGems } from "./game-item";
 
 const inventoryItemsMap = new Map<GameItem, HTMLElement>();
+
+const hasRainbowSet = () => rainbowGems.every((item) => gameData.inventory.count(item) > 0);
+
+const maybeTriggerVictory = () => {
+  if (gameData.victoryTriggered || !hasRainbowSet()) {
+    return;
+  }
+
+  gameData.victoryTriggered = true;
+  inventory.classList.add('animate');
+  win.classList.remove('hide');
+  win.classList.add('animate');
+  gameData.onVictory?.();
+};
 
 export const initInventoryView = () => {
   inventoryItemsMap.clear();
@@ -60,6 +74,8 @@ export const renderInventory = () => {
 
     unicorn.querySelector('.u1')!.innerHTML = orbitHtml;
   }
+
+  maybeTriggerVictory();
 };
 
 export const addToInventory = (item: GameItem) => {

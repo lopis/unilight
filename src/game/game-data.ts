@@ -9,6 +9,8 @@ export interface GameData {
   level: number
   dash: number
   spells: number
+  victoryTriggered: boolean
+  onVictory: (() => void) | null
 }
 
 export let gameData!: GameData
@@ -31,6 +33,8 @@ export const initGameData = (level: number, initialInventory: GemItem[] = []) =>
     level,
     dash: 0,
     spells: 0,
+    victoryTriggered: false,
+    onVictory: null,
   };
 
   for (const gem of initialInventory) {

@@ -221,6 +221,7 @@ section {
 }
 
 #game {
+  position: relative;
   gap: 0.5rem;
   min-height: 0;
   align-items: center;
@@ -308,10 +309,11 @@ section:not(.show) {
 }
 
 #inventory {
-display: grid;
+  position: relative;
+  display: grid;
   grid-template-columns: repeat(9, 1fr);
   gap: 0.8rem;
-  margin: 0.3rem 1.5rem 0;
+  padding: 0.3rem 1.5rem 0;
   font-size: 1.8rem;
   flex: 0 0 auto;
 }
@@ -472,6 +474,44 @@ display: grid;
   animation: sC 1s steps(4) infinite,
     tap 500ms alternate infinite ease-in-out;
   z-index: 2;
+}
+
+#win {
+	position: absolute;
+	inset: 30% 30%;
+	filter: drop-shadow(0px 0.2rem 0 white) drop-shadow(0px -0.2em 0 white) drop-shadow(0.2em 0 0 white) drop-shadow(-0.2em 0 0 white);
+}
+
+#win.hide {
+  display: none;
+}
+
+.r::before {
+  content: '';
+  display: inline-flex;
+  width: 100%;
+  height: 0vh;
+  position: absolute;
+  place-self: center;
+	background: linear-gradient(
+    90deg,
+    var(--red) 0 calc(1 * 14%),
+    var(--orange) 0 calc(2 * 14%),
+    var(--yellow) 0 calc(3 * 14%),
+    var(--green) 0 calc(4 * 14%),
+    var(--cyan) 0 calc(5 * 14%),
+    var(--blue) 0 calc(6 * 14%),
+    var(--magenta) 0 calc(7 * 14%),
+    transparent 0 calc(7 * 14%)
+  );
+  background-position: 1.25rem 1.5rem;
+  background-size: calc(70% + 0.3em);
+  background-repeat: no-repeat;
+  transition: height 500ms ease-in-out;
+}
+
+.r.animate::before {
+  height: 200vh;
 }
 
 @keyframes tap {
@@ -652,6 +692,10 @@ display: grid;
 
   #inventory {
     margin: 0;
+  }
+
+  .r::after {
+    background-size: calc(100% + 0.3em);
   }
 }
 
