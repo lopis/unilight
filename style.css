@@ -502,19 +502,43 @@ display: grid;
 }
 
 #space1.animate,
-#space2.animate,
-#space3.animate {
-  animation: spell-pulse 250ms ease-in-out infinite alternate;
+#space2.animate {
+  --x: 1;
+  animation: spell 2000ms ease-in-out infinite;
 }
 
-@keyframes spell-pulse {
-  from {
-    transform: scale(1);
+#space2.animate {
+  --x: -1;
+}
+
+#space3.animate {
+  animation: glow 2000ms ease-out infinite;
+}
+
+@keyframes spell {
+  0% {
+    transform: translateX(0);
     filter: brightness(1);
   }
+  40% {
+    transform: translateX(calc(-10% * var(--x)));
+    filter: brightness(0.8);
+  }
+  50% {
+    transform: translateX(calc(50% * var(--x)));
+    filter: brightness(1.2);
+  }
+  100% {
+    transform: translateX(calc(50% * var(--x)));
+  }
+}
+
+@keyframes glow {
+  from {
+    transform: scale(0.8);
+  }
   to {
-    transform: scale(1.03);
-    filter: brightness(1.1);
+    transform: scale(1.2);
   }
 }
 
