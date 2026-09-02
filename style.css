@@ -448,12 +448,6 @@ display: grid;
   gap: 0 0.4rem;
 }
 
-#spells #com {
-  background: radial-gradient(var(--blue) 49%, var(--yellow2) 50%);
-	background-size: 250% 250%;
-	background-position: center 3px;
-}
-
 #spells button {
 	width: 80px;
 	aspect-ratio: 1;

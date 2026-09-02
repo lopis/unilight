@@ -22,7 +22,7 @@ import {
   parseColorId,
 } from "./game-item";
 
-export type SpellKind = 'add' | 'sub' | 'com';
+export type SpellKind = 'add' | 'sub';
 export type SpellResult = ColorId;
 
 const SPELL_PHASE_MS = 1000;
@@ -103,14 +103,6 @@ export const lookupSub = (
   return colorOf(subLUT[a][b]);
 };
 
-export const lookupCom = (
-  left: ColorId,
-  right: ColorId,
-): SpellResult | undefined => {
-  if (left !== right) return undefined;
-  return complementOf(left);
-};
-
 export const lookupSpell = (
   kind: SpellKind,
   left: ColorId,
@@ -121,8 +113,6 @@ export const lookupSpell = (
       return lookupAdd(left, right);
     case 'sub':
       return lookupSub(left, right);
-    case 'com':
-      return lookupCom(left, right);
     default:
       return undefined;
   }
@@ -230,13 +220,10 @@ const spellAdd = () => runSpell(lookupAdd);
 
 const spellSub = () => runSpell(lookupSub);
 
-const spellCom = () => runSpell(lookupCom);
-
 
 export const initSpellListener = (): void => {
   on(GameEvent.SPELL_ADD, spellAdd);
   on(GameEvent.SPELL_SUB, spellSub);
-  on(GameEvent.SPELL_COM, spellCom);
 };
 
 

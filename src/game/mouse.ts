@@ -25,13 +25,6 @@ export const initMouse = () => {
     emit(GameEvent.SPELL_SUB);
   });
 
-  com.addEventListener('click', () => {
-    if (isInteractionLocked()) {
-      return;
-    }
-    emit(GameEvent.SPELL_COM);
-  });
-
   space1.addEventListener('click', () => {
     if (isInteractionLocked()) {
       return;

@@ -7,5 +7,4 @@ export const enum GameEvent {
   WORKSPACE_SPACE_CLICK,
   SPELL_ADD,
   SPELL_SUB,
-  SPELL_COM,
 }

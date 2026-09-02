@@ -15,10 +15,9 @@
 ### Spells
 
 * Fruits and Gems can be used in spells
-* There are 3 spells: ADD, SUB, COM
+* There are 2 spells: ADD, SUB
 * ADD adds colors together
 * SUB subtracts colors
-* COM is TBD
 * Placing an item into a spell space deducts it from inventory immediately
 * Replacing an item in a spell space returns the previous item to inventory
 * Pressing a spell button activates the spell

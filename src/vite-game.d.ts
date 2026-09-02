@@ -28,4 +28,3 @@ let mp: SVGPathElement
 let newGame: HTMLButtonElement
 let add: HTMLButtonElement
 let sub: HTMLButtonElement
-let com: HTMLButtonElement
