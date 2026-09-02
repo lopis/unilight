@@ -1,3 +1,4 @@
 # Project exclude paths
-/dist/
+/dist/*
+!/dist/index.html
 /node_modules/
