@@ -7,19 +7,35 @@ import { initSpellListener } from '@/game/spells';
 import { initSprites } from '@/game/sprites';
 import { menuState } from './menu.state';
 
+const nextFrame = () => new Promise<void>((resolve) => {
+  requestAnimationFrame(() => resolve());
+});
+
 class LoadingState implements State {
   onEnter() {
     loading.classList.toggle('show', true);
+    this.bootstrap();
+  }
 
-    initImages();
-    initSprites();
-    initMouse();
-    initSpellListener();
-    initSketchFont();
-    applySketchTextFromDataAttr();
-    applySpellIcons();
+  private async bootstrap() {
+    const tasks: Array<() => void> = [
+      initImages,
+      initSprites,
+      initMouse,
+      initSpellListener,
+      initSketchFont,
+      applySketchTextFromDataAttr,
+      applySpellIcons,
+      () => gameStateMachine.setState(menuState),
+    ];
 
-    queueMicrotask(() => gameStateMachine.setState(menuState));
+    // Let loading UI paint before and between expensive init work.
+    await nextFrame();
+
+    for (const task of tasks) {
+      task();
+      await nextFrame();
+    }
   }
 
   onLeave() {
