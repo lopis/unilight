@@ -12,9 +12,6 @@ const maybeTriggerVictory = () => {
   }
 
   gameData.victoryTriggered = true;
-  inventory.classList.add('animate');
-  win.classList.remove('hide');
-  win.classList.add('animate');
   gameData.onVictory?.();
 };
 

@@ -54,8 +54,14 @@ export class GameState implements State {
     lockInteractions();
 
     addTimeEvent(() => {
+      inventory.classList.add('animate');
+      win.classList.remove('hide');
+      win.classList.add('animate');
+    }, 0, 0, 1000);
+
+    addTimeEvent(() => {
       const nextLevel = (gameData.level + 1) % Levels.length;
       gameStateMachine.setState(new GameState(nextLevel));
-    }, 0, 0, 3000);
+    }, 0, 0, 4000);
   }
 }
