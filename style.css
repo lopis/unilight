@@ -108,7 +108,6 @@ i,
 i {
   position: relative;
   font-size: 3rem;
-  pointer-events: none;
   font-style: normal;
   z-index: 1;
   min-width: 0;
@@ -239,6 +238,10 @@ section:not(.show) {
   position: relative;
   box-sizing: border-box;
   margin: auto;
+}
+
+#gameGrid i {
+  pointer-events: none;
 }
 
 .highlight {

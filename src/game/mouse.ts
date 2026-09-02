@@ -46,33 +46,20 @@ export const initMouse = () => {
     emit(GameEvent.WORKSPACE_SPACE_CLICK, { el: space2 });
   });
 
-  inventory.addEventListener('click', (event) => {
-    if (isInteractionLocked()) {
-      return;
-    }
+  // Bind directly to each slot: smaller logic surface than delegated target walking.
+  for (const el of inventory.querySelectorAll('i') as NodeListOf<HTMLElement>) {
+    el.addEventListener('click', () => {
+      if (isInteractionLocked()) {
+        return;
+      }
 
-    // On mobile, taps can originate from nested/generated targets.
-    // Resolve to the actual inventory token element carrying data-i.
-    const eventTarget = event.target;
-    const target = eventTarget instanceof HTMLElement
-      ? eventTarget.closest('i[data-i]') as HTMLElement | null
-      : null;
+      const token = el.dataset.i;
+      const item = token && isGameItem(token) ? token : undefined;
+      if (!item) {
+        return;
+      }
 
-    // Some browsers/shadow scenarios require walking the composed path.
-    const fallbackFromPath = !target
-      ? event.composedPath().find((node): node is HTMLElement => {
-        return node instanceof HTMLElement && node.matches('i[data-i]');
-      })
-      : null;
-
-    const itemEl = target ?? fallbackFromPath;
-    const token = itemEl?.dataset.i;
-    const item = token && isGameItem(token) ? token : undefined;
-
-    if (item && itemEl) {
-      emit(
-        GameEvent.INVENTORY_CLICK, { item, el: itemEl }
-      )
-    }
-  })
+      emit(GameEvent.INVENTORY_CLICK, { item, el });
+    });
+  }
 }
