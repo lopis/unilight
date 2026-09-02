@@ -5,6 +5,7 @@ import { GameItem, GemItem, levelTokens, rainbowGems } from "./game-item";
 const BITS_PER_CELL = 5;
 
 export const Levels = [
+  'AAAAAAAAAAAAAAAAGAMCEIMUQykA4CA5KaUAACmlNJQCAJJarBkDAHAPRiklAAAAAACQAAAAAABAAgAAAAAAAA',
   'fVJKKaWUUkoAAAAASClBAGICAKQEAAAgAJBSSikBEEBKCQAAAAApASCEAACkBAAAAICUUkoppZRSSimllFJKCQ',
 ];
 

@@ -1,4 +1,4 @@
-# Unilight Dash
+# Gemweaver Dash
 
 ## Game Rules
 
@@ -33,3 +33,16 @@
 
 * Win by obtaining the 7 rainbow gems: R, O, Y, G, C, B, V
 * Black and white gems do not count toward winning
+
+## Achievements
+
+Possible ideas for achievements, if we get to that stage...
+
+* First Dash
+* Fruitful - Caught 4 fruits in a single dash
+* Cornucopia - Have one of each fruit in inventory
+* Ying - Get a black gem
+* Yang - Get a white gem
+* Ouch - Die in the spikes
+* Spash - Drown in the water
+* Hoarder - have 3 of a kind of gem

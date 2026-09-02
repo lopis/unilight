@@ -28,13 +28,13 @@ export const colorBgVar = [
 
 export type FruitItem = 'FR' | 'FO' | 'FY' | 'FG' | 'FC' | 'FB' | 'FV';
 export type GemItem = 'GR' | 'GO' | 'GY' | 'GG' | 'GC' | 'GB' | 'GV' | 'GK' | 'GW';
-export type SpecialItem = 'HD' | 'HN';
+export type SpecialItem = 'HD' | 'HN' | 'HL';
 export type GameItem = FruitItem | GemItem | SpecialItem;
 
 export const fruits: FruitItem[] = ['FR', 'FO', 'FY', 'FG', 'FC', 'FB', 'FV'];
 export const gems: GemItem[] = ['GR', 'GO', 'GY', 'GG', 'GC', 'GB', 'GV', 'GK', 'GW'];
 export const rainbowGems: GemItem[] = ['GR', 'GO', 'GY', 'GG', 'GC', 'GB', 'GV'];
-export const specialItems: SpecialItem[] = ['HD', 'HN'];
+export const specialItems: SpecialItem[] = ['HD', 'HN', 'HL'];
 export const levelTokens: Array<'UN' | GameItem> = ['UN', ...fruits, ...gems, ...specialItems];
 export const inventoryItems: GameItem[] = [...fruits, ...gems];
 export const spawnItems: GameItem[] = [...fruits, ...gems];

@@ -407,13 +407,18 @@ display: grid;
 }
 
 .HD {
-  --bgc: var(--green);
   --bgi: var(--b-HD)
+}
+
+.HL {
+	--bgi: var(--b-HL);
+	height: 112%;
+	width: 112%;
+	place-self: center;
 }
 
 /* HAND */
 .HN {
-  --bgc: var(--white);
   --bgi: var(--b-HN);
   top: 30%;
   left: 30%;

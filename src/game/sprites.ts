@@ -67,10 +67,18 @@ export const sprites: SpriteRegistry = [
     colors.white, 'm35 21-12 5-2 13 12-5z'
   ],
   ['HD',
-    colors.green2, 'm0 45v19h64v-19z',
-    colors.green, 'm0 0v45h64v-45z'
+    colors.green2, 'm9 25c-7.5 2.9-10 13-6.1 20 5.8 11 12 5.3 15 6.7 3.7 1.6 3.1 7.2 7 8.6 9 5.6 21 0.35 21-7.3 2-5.6 4.3 1.8 13-7.2 4.6-5.2 5.2-14 0.014-19-7.6-2.2-1.4-8.3-5.2-15-3.5-6.6-13-10-19-6.4-5.5 3-5 1.9-8.4-0.46-8.7-4.4-21 2.8-21 13-0.071 2.7 0.69 5.5 2.3 7.8z',
+    colors.red2, 'm12 19-5.7-16 14 9.2c-0.64 6.5-1.2 7-8.1 7.2z',
+    colors.red2, 'm40 18 18-10-10 19c-7.8 0.33-9.3-3.5-8.1-9.1z',
+    colors.red2, 'm23 36c7.5-1.6 12 0.24 11 9.2l-20 12z',
   ],
-  ['FC'],
+  ['FC',
+    colors.cyan, 'm35 8.8c-21-1.3-53 24-1.5 29 4.6 0.87-14 3-14 8.5s22 11 35 7.5c2.7-0.72 5.9-2.2 6.2-5.3-0.67-8.8-6.9-8.3-12-12-6.5-3.5 9.3-2.6 11-7 2-6.4-6.7-20-25-21z',
+  ],
+  [
+    'HL',
+    colors.cyan, 'm0 0h64v64h-64z',
+  ],
   ['GR', ...gemSprite(gemFill[0])],
   ['GO', ...gemSprite(gemFill[1])],
   ['GY', ...gemSprite(gemFill[2])],
@@ -157,13 +165,15 @@ const drawSpriteToContext = (
     const layer = sprite.layers[i];
     targetCtx.fillStyle = layer.fill;
     targetCtx.fill(layer.path);
+    const stroke = sprite.name === 'FC' ? colors.cyan2 :
+      sprite.name === 'HL' ? colors.cyan2 : STROKE_COLOR
 
     drawSketchStroke(
       targetCtx,
       layer.samples,
       frame,
       i,
-      STROKE_COLOR,
+      stroke,
       settings.strokeWidth / sprite.scale,
       settings.strokeAmp,
     );
