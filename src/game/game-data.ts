@@ -1,6 +1,7 @@
 import { CountSet } from "@/core/util/count-set";
 import { resetInteractionLock } from "./interaction-lock";
 import { FruitItem, GameItem, GemItem } from "./game-item";
+import { setSketchText } from "./sketch-font";
 
 export interface GameData {
   inventory: CountSet<GameItem>
@@ -18,8 +19,8 @@ let spellEl: HTMLElement | null = null;
 const renderStats = () => {
   dashEl ??= document.getElementById('d');
   spellEl ??= document.getElementById('s');
-  if (dashEl) dashEl.textContent = String(gameData.dash);
-  if (spellEl) spellEl.textContent = String(gameData.spells);
+  if (dashEl) setSketchText(dashEl, String(gameData.dash));
+  if (spellEl) setSketchText(spellEl, String(gameData.spells));
 };
 
 export const initGameData = (level: number, initialInventory: GemItem[] = []) => {

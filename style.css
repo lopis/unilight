@@ -272,7 +272,7 @@ section:not(.show) {
   background-size: 1200% 100%;
   background-position: 0 0;
   image-rendering: pixelated;
-  animation: fx-smoke-sheet 900ms steps(11) forwards;
+  animation: fx-smoke-sheet 500ms steps(11) forwards;
 }
 
 #gameGrid i.obstacle-hit-bush {
@@ -532,7 +532,7 @@ display: grid;
 	width: clamp(120px, 28vw, 180px);
 	border-radius: 200px;
 	background: #00000055;
-	margin: clamp(4px, 1vw, 8px);
+	margin: 0.3rem;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -544,7 +544,7 @@ display: grid;
 #space1.animate,
 #space2.animate {
   --x: 1;
-  animation: spell 2000ms ease-in-out infinite;
+  animation: spell 2000ms ease-in-out forwards;
 }
 
 #space2.animate {
@@ -552,7 +552,7 @@ display: grid;
 }
 
 #space3.animate {
-  animation: glow 2000ms ease-out infinite;
+  animation: glow 2000ms ease-out forwards;
 }
 
 @keyframes spell {
@@ -565,11 +565,11 @@ display: grid;
     filter: brightness(0.8);
   }
   50% {
-    transform: translateX(calc(50% * var(--x)));
+    transform: translateX(calc((50% + 0.3rem) * var(--x))) scale(0.5);
     filter: brightness(1.2);
   }
   100% {
-    transform: translateX(calc(50% * var(--x)));
+    transform: translateX(calc((50% + 0.3rem) * var(--x))) scale(0.5);
   }
 }
 

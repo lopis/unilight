@@ -198,8 +198,6 @@ const runSpell = (lookup: (left: ColorId, right: ColorId) => SpellResult | undef
   addTimeEvent(() => {
     clearSpace(space1);
     clearSpace(space2);
-    space1.classList.remove('animate');
-    space2.classList.remove('animate');
 
     setSpaceItem(space3, resultGem, result);
     space3.classList.add('animate');
@@ -208,6 +206,8 @@ const runSpell = (lookup: (left: ColorId, right: ColorId) => SpellResult | undef
       addToInventory(resultGem);
       clearSpace(space3);
       space3.classList.remove('animate');
+      space1.classList.remove('animate');
+      space2.classList.remove('animate');
       spellPending = false;
       unlockInteractions();
     }, SPELL_PHASE_MS);
