@@ -271,7 +271,7 @@ display: grid;
 }
 
 #inventory i {
-	pointer-events: all;
+  pointer-events: auto;
 	border-radius: 0.3rem;
 	padding: 0.3rem;
 	position: relative;
