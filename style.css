@@ -51,6 +51,10 @@ body {
   user-select: none;
 }
 
+.stop .skf-g, .stop i, .stop .u0 {
+  animation: none !important;
+}
+
 main {
   display: flex;
   justify-content: center;

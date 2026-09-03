@@ -43,6 +43,11 @@ export const initMouse = () => {
     emit(GameEvent.WORKSPACE_SPACE_CLICK, { el: space2 });
   });
 
+  document.body.classList.toggle('stop', toggleImageAnim.checked);
+  toggleImageAnim.addEventListener('input', () => {
+    document.body.classList.toggle('stop', toggleImageAnim.checked);
+  });
+
   // Bind directly to each slot: smaller logic surface than delegated target walking.
   for (const el of inventory.querySelectorAll('i') as NodeListOf<HTMLElement>) {
     el.addEventListener('click', () => {
