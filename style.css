@@ -75,9 +75,25 @@ h1 {
 
 #stats {
   display: grid;
-  grid-template-columns: auto 1fr auto auto;
+  grid-template-columns: auto auto 1fr auto auto;
   width: 90%;
   gap: 1rem;
+  align-items: center;
+  justify-items: center;
+  padding: 0.2rem;
+}
+
+nav > span {
+	background: var(--magenta);
+	border-radius: 0.5rem;
+	padding: 0.2rem;
+	display: inline-flex;
+	width: 2rem;
+	justify-content: center;
+}
+
+nav > span:active {
+  transform: translate(0, 0.2rem);
 }
 
 .skf {
@@ -85,7 +101,7 @@ h1 {
   align-items: flex-end;
   line-height: 1;
   vertical-align: middle;
-  font-size: 2rem;
+  font-size: 1.8rem;
 }
 
 .skf-g {
@@ -109,7 +125,7 @@ i {
   position: relative;
   font-size: 3rem;
   font-style: normal;
-  z-index: 1;
+  z-index: 2;
   min-width: 0;
   min-height: 0;
 
@@ -478,6 +494,7 @@ section:not(.show) {
 
 #win {
 	position: absolute;
+  z-index: 2;
 	inset: 30% 30%;
   filter: drop-shadow(0px 0.2rem 0 white) drop-shadow(0px -0.2rem 0 white) drop-shadow(0.2rem 0 0 white) drop-shadow(-0.2rem 0 0 white);
 }
@@ -491,6 +508,7 @@ section:not(.show) {
   display: inline-flex;
   width: calc(100% + 0.3rem);
   height: 0vh;
+  z-index: 2;
   position: absolute;
   place-self: center;
 	background: linear-gradient(
@@ -527,6 +545,7 @@ section:not(.show) {
 
 #spells {
 	display: flex;
+  position: relative;
 	width: 170px;
 	flex-wrap: wrap;
 	justify-content: center;
@@ -567,8 +586,8 @@ section:not(.show) {
 }
 
 #space1, #space2, #space3 {
-	height: clamp(120px, 28vw, 180px);
-	width: clamp(120px, 28vw, 180px);
+	height: clamp(1vh, 28vw, 15vh);
+	width: clamp(1vh, 28vw, 15vh);
 	border-radius: 200px;
 	background: #00000055;
 	margin: 0.3rem;
@@ -688,7 +707,7 @@ section:not(.show) {
   left: 0;
 }
 
-[help="5"], [help="6"] {
+[help="5"] {
 	position: absolute;
 	grid-column: 1 / 7 span;
   grid-row: 2;
@@ -700,7 +719,8 @@ section:not(.show) {
 }
 
 [help="6"] {
-  grid-column: 7 / 7 span;
+  position: absolute;
+	bottom: -2.5rem;
 }
 
 [help="7"] {
@@ -711,15 +731,15 @@ section:not(.show) {
 @media (max-width: 600px) {
   .grid-wrapper {
     border-radius: 0;
-    height: 100vw;
     width: 100vw;
     flex-grow: 0;
+    flex-shrink: 0;
     border-width: 0;
     margin: 1rem;
   }
 
   #gameGrid {
-    height: clamp(300px, 400px, 40vh);
+    height: clamp(0px, 400px, 40vh);
     width: auto;
     aspect-ratio: 1;
   }
@@ -734,6 +754,7 @@ section:not(.show) {
 
   #spells {
     width: 100%;
+    margin-bottom: 2rem;
   }
 
   #inventory {
@@ -742,6 +763,20 @@ section:not(.show) {
 
   .r::before {
     background-size: calc(100% + 0.3rem);
+  }
+}
+
+@media (max-width: 400px) and (max-height: 725px) {
+  #workarea {
+    margin-top: -2rem;
+  }
+
+  #game {
+    gap: 0.2rem;
+  }
+
+  #spells {
+    margin-bottom: 0;
   }
 }
 
