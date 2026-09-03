@@ -22,8 +22,10 @@ export const Levels = [
  *  show help 1 and 2
  * Level 1:
  *  show help 3;
- *  after catching 3 fruit, show help 4;
- *  after selecting a fruit from inventory, show help 5
+ *  after catching 6 fruit, show help 4;
+ *  after selecting a fruit from inventory, show help 5 and hide help 4;
+ *  after putting fruits in both spaces, hide help 5 and show help 6;
+ *  after doing the spell, hide help 6.
  */
 
 export interface DecodedLevel {

@@ -1,5 +1,5 @@
 import { drawEngine } from '@/core/draw-engine';
-import { clearEvents } from '@/core/event';
+import { clearEvents, on } from '@/core/event';
 import { addTimeEvent } from '@/core/timer';
 import { State } from '@/core/state';
 import { gameData, initGameData } from '@/game/game-data';
@@ -11,11 +11,15 @@ import { lockInteractions } from '@/game/interaction-lock';
 import { Workspace } from '@/game/workspace';
 import { Levels } from '@/game/level-data';
 import { gameStateMachine } from '@/game-state-machine';
+import { GameEvent } from '@/game/event-manifest';
 
 export class GameState implements State {
   grid!: GameGrid;
   workplace!: Workspace;
   private victoryStarted = false;
+  private help4Shown = false;
+  private help5Shown = false;
+  private help6Shown = false;
 
   constructor(private readonly level: number) {}
 
@@ -30,6 +34,19 @@ export class GameState implements State {
     this.workplace = new Workspace();
     drawEngine.resizeCanvas();
     initSpellListener();
+    this.initHelpTexts();
+
+    on(GameEvent.SPELL_ADD, () => {
+      if (this.level === 1 && this.help6Shown) {
+        this.setHelpVisible(6, false);
+      }
+    });
+
+    on(GameEvent.SPELL_SUB, () => {
+      if (this.level === 1 && this.help6Shown) {
+        this.setHelpVisible(6, false);
+      }
+    });
   }
 
   onLeave() {
@@ -43,6 +60,81 @@ export class GameState implements State {
 
   onUpdate(timeElapsed: number) {
     this.grid.update(timeElapsed);
+    this.updateHelpTexts();
+  }
+
+  private setHelpVisible(helpId: number, visible: boolean) {
+    const el = document.querySelector(`[help="${helpId}"]`) as HTMLElement | null;
+    if (!el) {
+      return;
+    }
+    el.style.setProperty('display', visible ? 'inline-block' : 'none', 'important');
+  }
+
+  private initHelpTexts() {
+    this.help4Shown = false;
+    this.help5Shown = false;
+    this.help6Shown = false;
+    for (let i = 1; i <= 7; i++) {
+      this.setHelpVisible(i, false);
+    }
+
+    if (this.level === 0) {
+      this.setHelpVisible(1, true);
+      this.setHelpVisible(2, true);
+      return;
+    }
+
+    if (this.level === 1) {
+      this.setHelpVisible(3, true);
+      return;
+    }
+
+    if (this.level === 3) {
+      this.setHelpVisible(7, true);
+    }
+  }
+
+  /**
+   * Info Text
+   *
+   * The info text area nudges that help the player in the first levels.
+   * They are HTML text elements with selector [help], e.g. [help=1].
+   *
+   * Level 0:
+   *  show help 1 and 2
+   * Level 1:
+   *  show help 3;
+   *  after catching 6 fruit, show help 4;
+   *  after selecting a fruit from inventory, show help 5 and hide help 4;
+   *  after putting fruits in both spaces, hide help 5 and show help 6;
+   *  after doing the spell, hide help 6.
+   * Level 2:
+   *  no help text
+   * Level 3:
+   *  show help 7.
+   */
+  private updateHelpTexts() {
+    if (this.level !== 1) {
+      return;
+    }
+
+    if (!this.help4Shown && gameData.caughtFruits >= 6) {
+      this.help4Shown = true;
+      this.setHelpVisible(4, true);
+    }
+
+    if (!this.help5Shown && inventory.querySelector('i.selected[data-i^="F"]')) {
+      this.help5Shown = true;
+      this.setHelpVisible(4, false);
+      this.setHelpVisible(5, true);
+    }
+
+    if (!this.help6Shown && space1.dataset['i']?.startsWith('F') && space2.dataset['i']?.startsWith('F')) {
+      this.help6Shown = true;
+      this.setHelpVisible(5, false);
+      this.setHelpVisible(6, true);
+    }
   }
 
   private startVictorySequence() {

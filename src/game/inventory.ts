@@ -98,6 +98,8 @@ export const collectCaughtItem = (item: GameItem) => {
     return;
   }
 
+  gameData.caughtFruits++;
+
   const staged = gameData.stagedFruits;
   staged.add(item);
 

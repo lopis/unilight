@@ -689,7 +689,7 @@ section:not(.show) {
   left: 0;
 }
 
-[help="5"] {
+[help="5"], [help="6"] {
 	position: absolute;
 	grid-column: 1 / 7 span;
   grid-row: 2;
@@ -698,6 +698,15 @@ section:not(.show) {
   z-index: 6;
   mix-blend-mode: normal;
 	filter: drop-shadow(2px 2px #FFFFFF) invert(1);
+}
+
+[help="6"] {
+  grid-column: 7 / 7 span;
+}
+
+[help="7"] {
+	grid-column: 2 / 3 span;
+	grid-row: 2;
 }
 
 @media (max-width: 600px) {

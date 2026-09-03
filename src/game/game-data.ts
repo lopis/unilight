@@ -6,6 +6,7 @@ import { setSketchText } from "./sketch-font";
 export interface GameData {
   inventory: CountSet<GameItem>
   stagedFruits: CountSet<FruitItem>
+  caughtFruits: number
   level: number
   dash: number
   spells: number
@@ -30,6 +31,7 @@ export const initGameData = (level: number, initialInventory: GemItem[] = []) =>
   gameData = {
     inventory: new CountSet<GameItem>(),
     stagedFruits: new CountSet<FruitItem>(),
+    caughtFruits: 0,
     level,
     dash: 0,
     spells: 0,
