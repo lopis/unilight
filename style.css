@@ -313,14 +313,14 @@ section:not(.show) {
   display: grid;
   grid-template-columns: repeat(9, 1fr);
   gap: 0.8rem;
-  padding: 0.3rem 1.5rem 0;
+  margin: 0.3rem 1.5rem 0;
   font-size: 1.8rem;
   flex: 0 0 auto;
 }
 
 #inventory i {
   pointer-events: auto;
-	border-radius: 0.3rem;
+	border-radius: 0.4rem;
 	padding: 0.3rem;
 	position: relative;
 	display: flex;
@@ -330,14 +330,15 @@ section:not(.show) {
 	aspect-ratio: 1;
 	background-color: var(--bgc);
 	border: 0.3rem solid var(--bgc);
-	box-shadow: 0 0 0 5px var(--black);
+	box-shadow: 5px 5px 0 0 var(--black), 0 0 0 2px var(--black);
 	transition: all 100ms ease-in-out;
 	box-sizing: border-box;
 }
 
 #inventory i.hide {
-	opacity: 0.5;
-	background-image: none;
+  border-color: transparent;
+  box-shadow: 0 0 0 2px var(--bgc), 5px 5px 0 0 var(--black);
+	background: none;
 }
 
 #inventory i.selected:not(.hide) {
@@ -694,7 +695,7 @@ section:not(.show) {
     margin: 0;
   }
 
-  .r::after {
+  .r::before {
     background-size: calc(100% + 0.3em);
   }
 }

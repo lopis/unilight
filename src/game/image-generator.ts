@@ -166,7 +166,12 @@ export const init = (): void => {
   document.body.style.setProperty('--fx-bush-smoke', `url(${assets['bushSmokeSprite'].toDataURL()})`);
 };
 
-const createSpellIcon = (colors1: Color[], colors2: GlobalCompositeOperation, size = 160) => {
+const createSpellIcon = (
+  colors1: Color[],
+  colors2: GlobalCompositeOperation,
+  symbol: 'plus' | 'minus',
+  size = 160,
+) => {
   const canvas = document.createElement('canvas');
   canvas.width = size;
   canvas.height = size;
@@ -188,12 +193,53 @@ const createSpellIcon = (colors1: Color[], colors2: GlobalCompositeOperation, si
     ctx.fill();
   });
 
+  ctx.globalCompositeOperation = 'source-over';
+  const pos = Math.round(size * 0.5);
+  const length = Math.round(size * 0.25);
+  const offsetH = Math.round(size * 0.05);
+  const thickness = Math.round(size * 0.08);
+  const border = Math.max(2, Math.round(size * 0.02));
+  const inset = border * 2;
+
+  const hx = Math.round(pos - length / 2);
+  const hy = Math.round(pos - thickness / 2);
+
+
+  if (symbol === 'plus') {
+    ctx.fillStyle = '#1b211f';
+    ctx.beginPath();
+    ctx.roundRect(hx, hy - offsetH, length, thickness, 4);
+    ctx.fill();
+    const vx = Math.round(pos - thickness / 2);
+    const vy = Math.round(pos - length / 2);
+    ctx.beginPath();
+    ctx.roundRect(vx, vy - offsetH, thickness, length, 4);
+    ctx.fill();
+
+    ctx.fillStyle = '#ffafa6';
+    ctx.beginPath();
+    ctx.roundRect(hx + border, hy + border - offsetH, length - inset, thickness - inset, 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.roundRect(vx + border, vy + border - offsetH, thickness - inset, length - inset, 2);
+    ctx.fill();
+  } else {
+    ctx.fillStyle = '#1b211f';
+    ctx.beginPath();
+    ctx.roundRect(hx, hy - offsetH, length, thickness, 4);
+    ctx.fill();
+    ctx.fillStyle = '#ffafa6';
+    ctx.beginPath();
+    ctx.roundRect(hx + border, hy + border - offsetH, length - inset, thickness - inset, 2);
+    ctx.fill();
+  }
+
   return canvas.toDataURL();
 };
 
 export const applySpellIcons = () => {
-  const additiveIcon = createSpellIcon([colors.red2, colors.green2, colors.blue2], 'lighter');
-  const subtractiveIcon = createSpellIcon([colors.cyan2, colors.magenta2, colors.yellow2], 'multiply');
+  const additiveIcon = createSpellIcon([colors.red2, colors.green2, colors.blue2], 'lighter', 'plus');
+  const subtractiveIcon = createSpellIcon([colors.cyan2, colors.magenta2, colors.yellow2], 'multiply', 'minus');
 
   add.style.backgroundImage = `url(${additiveIcon})`;
   sub.style.backgroundImage = `url(${subtractiveIcon})`;
