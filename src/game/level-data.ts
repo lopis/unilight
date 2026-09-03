@@ -6,9 +6,25 @@ const BITS_PER_CELL = 5;
 
 export const Levels = [
   'AAAAAAAAAICQ1GIATAAAAAAAAAAAAAApAQAAACClBA0AAKSUADgAgJQSAPAAAFICAAAAAAAAAAATAAAAAAAAAA',
-  'fVJKKaWUUkoAAAAASClBAGICAKQEAAAgAJBSSikBEEBKCQAAAAApASCEAACkBAAAAICUUkoppZRSSimllFJKCQ',
+  'fVJKKaWUUkoAAAAASClBAGICAKQEAAAgAJBSSikBEEBKCQAAAAApASCEAACkBAAAAICUUkoppZRSSgAAAAAACQ',
   'eAAAAAAAAIAgpZSSCAAkkFJKQQCQEgAAiABASgAAEAQAKQEAgAgApAQAAEEAIIIIIgAAQBBBBAEAAAAAAAAAAA',
+  'AAAAAAAAAAAAAADgFAAScxKAIAAAiTkAAAAAyMScBAAAAEBiDgBgAAAyMQcABQAAkJgDlBoAAAAAUEoBAAAAAA',
+  'AAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAGEopNQBIQymllBopgaGUUgOkBAAAAACQUgIAAABSSiklAFJKCQ',
 ];
+
+/**
+ * Info Text
+ *
+ * The info text area nudges that help the player in the first levels.
+ * They are HTML text elements with selector [help], e.g. [help=1].
+ *
+ * Level 0:
+ *  show help 1 and 2
+ * Level 1:
+ *  show help 3;
+ *  after catching 3 fruit, show help 4;
+ *  after selecting a fruit from inventory, show help 5
+ */
 
 export interface DecodedLevel {
   map: Array<Array<GameItem | null>>;

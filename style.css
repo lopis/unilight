@@ -490,7 +490,7 @@ section:not(.show) {
 .r::before {
   content: '';
   display: inline-flex;
-  width: 100%;
+  width: calc(100% + 0.3em);
   height: 0vh;
   position: absolute;
   place-self: center;
@@ -505,8 +505,7 @@ section:not(.show) {
     var(--magenta) 0 calc(7 * 14%),
     transparent 0 calc(7 * 14%)
   );
-  background-position: 1.25rem 1.5rem;
-  background-size: calc(70% + 0.3em);
+  background-size: calc(78% + 0.3em);
   background-repeat: no-repeat;
   transition: height 500ms ease-in-out;
 }
@@ -593,7 +592,7 @@ section:not(.show) {
 }
 
 #space3.animate {
-  animation: glow 2000ms ease-out forwards;
+  animation: glow 1000ms cubic-bezier(.19,1,.22,1) forwards;
 }
 
 @keyframes spell {
@@ -603,20 +602,21 @@ section:not(.show) {
   }
   40% {
     transform: translateX(calc(-10% * var(--x)));
-    filter: brightness(0.8);
-  }
-  50% {
-    transform: translateX(calc((50% + 0.3rem) * var(--x))) scale(0.5);
     filter: brightness(1.2);
   }
+  50% {
+    transform: translateX(calc((50% + 0.3rem) * var(--x))) scale(0.8);
+    filter: brightness(2);
+  }
   100% {
-    transform: translateX(calc((50% + 0.3rem) * var(--x))) scale(0.5);
+    transform: translateX(calc((50% + 0.3rem) * var(--x))) scale(0.8);
+    opacity: 0;
   }
 }
 
 @keyframes glow {
   from {
-    transform: scale(0.8);
+    transform: scale(0);
   }
   to {
     transform: scale(1.2);
@@ -660,6 +660,44 @@ section:not(.show) {
 #menu button:active {
   box-shadow: 0.1rem 0.1rem 0 0rem var(--magenta3);
   transform: translate(0.4rem, 0.4rem);
+}
+
+[help] {
+	grid-column: 7 / 3 span;
+	grid-row: 1;
+	place-self: center;
+	mix-blend-mode: overlay;
+	filter: drop-shadow(3px 3px #FFFFFF55);
+  display: inline-block !important;
+  transform: scale(0.8);
+}
+
+[help="2"] {
+	grid-column: 3 / 3 span;
+	grid-row: 10;
+}
+
+[help="3"] {
+	grid-row: 2;
+	grid-column: 3 / 3 span;
+}
+
+[help="4"] {
+	position: absolute;
+	top: -4rem;
+	grid-column: 1 / 7 span;
+  left: 0;
+}
+
+[help="5"] {
+	position: absolute;
+	grid-column: 1 / 7 span;
+  grid-row: 2;
+	top: 80%;
+  left: 0;
+  z-index: 6;
+  mix-blend-mode: normal;
+	filter: drop-shadow(2px 2px #FFFFFF) invert(1);
 }
 
 @media (max-width: 600px) {

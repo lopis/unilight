@@ -203,36 +203,29 @@ const createSpellIcon = (
 
   const hx = Math.round(pos - length / 2);
   const hy = Math.round(pos - thickness / 2);
+  const ix = hx + border;
+  const iy = hy + border - offsetH;
+  const iw = length - inset;
+  const ih = thickness - inset;
+  const vx = Math.round(pos - thickness / 2);
+  const vy = Math.round(pos - length / 2);
+  const ivx = vx + border;
+  const ivy = vy + border - offsetH;
+  const ivw = thickness - inset;
+  const ivh = length - inset;
 
-
+  ctx.beginPath();
+  ctx.roundRect(ix, iy, iw, ih, 4);
   if (symbol === 'plus') {
-    ctx.fillStyle = '#1b211f';
-    ctx.beginPath();
-    ctx.roundRect(hx, hy - offsetH, length, thickness, 4);
-    ctx.fill();
-    const vx = Math.round(pos - thickness / 2);
-    const vy = Math.round(pos - length / 2);
-    ctx.beginPath();
-    ctx.roundRect(vx, vy - offsetH, thickness, length, 4);
-    ctx.fill();
-
-    ctx.fillStyle = '#ffafa6';
-    ctx.beginPath();
-    ctx.roundRect(hx + border, hy + border - offsetH, length - inset, thickness - inset, 2);
-    ctx.fill();
-    ctx.beginPath();
-    ctx.roundRect(vx + border, vy + border - offsetH, thickness - inset, length - inset, 2);
-    ctx.fill();
-  } else {
-    ctx.fillStyle = '#1b211f';
-    ctx.beginPath();
-    ctx.roundRect(hx, hy - offsetH, length, thickness, 4);
-    ctx.fill();
-    ctx.fillStyle = '#ffafa6';
-    ctx.beginPath();
-    ctx.roundRect(hx + border, hy + border - offsetH, length - inset, thickness - inset, 2);
-    ctx.fill();
+    ctx.roundRect(ivx, ivy, ivw, ivh, 4);
   }
+  ctx.strokeStyle = '#1b211f';
+  ctx.lineWidth = border * 2;
+  ctx.lineJoin = 'round';
+  ctx.lineCap = 'round';
+  ctx.stroke();
+  ctx.fillStyle = '#ffafa6';
+  ctx.fill();
 
   return canvas.toDataURL();
 };
