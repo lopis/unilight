@@ -9,7 +9,7 @@ import { spawnHighlight } from "./highlight";
 import { spawnObstacleDeathFx } from "./death-effects";
 import { on } from "@/core/event";
 import { GameEvent } from "./event-manifest";
-import { isInteractionLocked } from "./interaction-lock";
+import { isInteractionLocked, lockInteractions } from "./interaction-lock";
 import { DecodedLevel } from "./level-data";
 import { GRID_COLS, GRID_ROWS } from "./constants";
 
@@ -119,6 +119,7 @@ export class GameGrid {
       this.deathPending = true;
       addTimeEvent(() => {
         this.deathPending = false;
+        lockInteractions();
         player.die(destination.x, destination.y);
         spawnObstacleDeathFx(destination, deathObstacle);
       }, 0, 0, 100);
