@@ -719,8 +719,8 @@ section:not(.show) {
   }
 
   #gameGrid {
-    height: clamp(300px, 400px, 95vw);
-    width: clamp(300px, 400px, 95vw);
+    height: clamp(300px, 400px, 40vh);
+    width: auto;
     aspect-ratio: 1;
   }
 
