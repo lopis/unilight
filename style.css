@@ -61,24 +61,23 @@ main {
 
 h1 {
   position: relative;
-  font-size: 3em;
   margin: 0rem 0 2rem;
   text-align: center;
   color: var(--black);
   z-index: 1;
   --s: var(--magenta);
   filter:
-    drop-shadow(0.07em 0 0 var(--s))
-    drop-shadow(0 0.07em 0 var(--s))
-    drop-shadow(-0.07em 0 0 var(--s))
-    drop-shadow(0 -0.07em 0 var(--s));
+    drop-shadow(0.14rem 0 0 var(--s))
+    drop-shadow(0 0.14rem 0 var(--s))
+    drop-shadow(-0.14rem 0 0 var(--s))
+    drop-shadow(0 -0.14rem 0 var(--s));
 }
 
 #stats {
   display: grid;
   grid-template-columns: auto 1fr auto auto;
   width: 90%;
-  gap: 1em;
+  gap: 1rem;
 }
 
 .skf {
@@ -86,7 +85,7 @@ h1 {
   align-items: flex-end;
   line-height: 1;
   vertical-align: middle;
-  font-size: 32px;
+  font-size: 2rem;
 }
 
 .skf-g {
@@ -188,14 +187,14 @@ i {
   transform:
     translate(-50%, -50%)
     rotate(calc((360deg / var(--count)) * var(--index)))
-    translateY(-0.9em)
+    translateY(-2.7rem)
     rotate(calc((360deg / var(--count)) * var(--index) * -1));
   transform-origin: center;
 }
 
 #unicorn .u3 {
   display: inline-block;
-  font-size: 0.45em;
+  font-size: 0.45rem;
   animation: uo 3s linear infinite reverse;
   height: 2rem;
   aspect-ratio: 1;
@@ -480,7 +479,7 @@ section:not(.show) {
 #win {
 	position: absolute;
 	inset: 30% 30%;
-	filter: drop-shadow(0px 0.2rem 0 white) drop-shadow(0px -0.2em 0 white) drop-shadow(0.2em 0 0 white) drop-shadow(-0.2em 0 0 white);
+  filter: drop-shadow(0px 0.2rem 0 white) drop-shadow(0px -0.2rem 0 white) drop-shadow(0.2rem 0 0 white) drop-shadow(-0.2rem 0 0 white);
 }
 
 #win.hide {
@@ -490,7 +489,7 @@ section:not(.show) {
 .r::before {
   content: '';
   display: inline-flex;
-  width: calc(100% + 0.3em);
+  width: calc(100% + 0.3rem);
   height: 0vh;
   position: absolute;
   place-self: center;
@@ -505,7 +504,7 @@ section:not(.show) {
     var(--magenta) 0 calc(7 * 14%),
     transparent 0 calc(7 * 14%)
   );
-  background-size: calc(78% + 0.3em);
+  background-size: calc(78% + 0.3rem);
   background-repeat: no-repeat;
   transition: height 500ms ease-in-out;
 }
@@ -742,7 +741,7 @@ section:not(.show) {
   }
 
   .r::before {
-    background-size: calc(100% + 0.3em);
+    background-size: calc(100% + 0.3rem);
   }
 }
 
