@@ -69,12 +69,18 @@ h1 {
   text-align: center;
   color: var(--black);
   z-index: 1;
-  --s: var(--magenta);
+  --s: var(--white);
+  opacity: 0.8;
   filter:
     drop-shadow(0.14rem 0 0 var(--s))
     drop-shadow(0 0.14rem 0 var(--s))
     drop-shadow(-0.14rem 0 0 var(--s))
-    drop-shadow(0 -0.14rem 0 var(--s));
+    drop-shadow(0 -0.14rem 0 var(--s))
+    drop-shadow(0 0 1rem var(--red));
+}
+
+h1 .skf {
+  font-size: 2em;
 }
 
 #stats {
