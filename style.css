@@ -3,8 +3,8 @@
   --red2: #b80505;
   --yellow: #fad354;
   --yellow2: #e9a33a;
-  --orange: #df6807;
-  --orange2: #a13c05;
+  --orange: #f98f38;
+  --orange2: #df6807;
   --green0:hsl(100, 43%, 69%);
   --green: hsl(100, 43%, 54%);
   --green2: hsl(100, 43%, 34%);
@@ -376,7 +376,7 @@ section:not(.show) {
   HD hedge, HN hand
 */
 .FO {
-  --bgc: var(--orange);
+  --bgc: var(--orange2);
   --bgi: var(--b-FO)
 }
 
@@ -416,7 +416,7 @@ section:not(.show) {
 }
 
 .GO {
-  --bgc: var(--orange);
+  --bgc: var(--orange2);
   --bgi: var(--b-GO)
 }
 
@@ -592,7 +592,7 @@ section:not(.show) {
 }
 
 #space3.animate {
-  animation: glow 1000ms cubic-bezier(.19,1,.22,1) forwards;
+  animation: glow 3000ms cubic-bezier(0,1.08,0,.99) forwards;
 }
 
 @keyframes spell {
@@ -720,9 +720,8 @@ section:not(.show) {
   }
 
   #gameGrid {
-    height: 95vw;
-    width: 95vw;
-    max-height: 100%;
+    height: clamp(300px, 400px, 95vw);
+    width: clamp(300px, 400px, 95vw);
     aspect-ratio: 1;
   }
 
