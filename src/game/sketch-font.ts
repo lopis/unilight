@@ -169,9 +169,9 @@ export const initSketchFont = (): void => {
 };
 
 export const setSketchText = (el: HTMLElement, text: string): void => {
-  if (!loaded) {
-    initSketchFont();
-  }
+  // if (!loaded) {
+  //   initSketchFont();
+  // }
 
   el.textContent = "";
 
@@ -198,9 +198,9 @@ export const setSketchText = (el: HTMLElement, text: string): void => {
 };
 
 export const applySketchTextFromDataAttr = (root: ParentNode = document): void => {
-  if (!loaded) {
-    initSketchFont();
-  }
+  // if (!loaded) {
+  //   initSketchFont();
+  // }
 
   const nodes = root.querySelectorAll<HTMLElement>("[sketch]");
   for (const node of nodes) {
@@ -217,9 +217,9 @@ export const drawSketchText = (
   size: number,
   frame: number = 0,
 ): void => {
-  if (!loaded) {
-    initSketchFont();
-  }
+  // if (!loaded) {
+  //   initSketchFont();
+  // }
 
   const scale = size / FONT_EM;
   let cursorX = x;

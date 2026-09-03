@@ -19,11 +19,7 @@ export const initInventoryView = () => {
   inventoryItemsMap.clear();
 
   for (const item of inventoryItems) {
-    const el = inventory.querySelector(`.${CSS.escape(item)}`) as HTMLElement | null;
-    if (!el) {
-      continue;
-    }
-
+    const el = inventory.querySelector(`.${CSS.escape(item)}`) as HTMLElement;
     inventoryItemsMap.set(item, el);
   }
 };
@@ -32,10 +28,7 @@ export const renderInventory = () => {
   const stagedList: FruitItem[] = [];
 
   for (const item of inventoryItems) {
-    const el = inventoryItemsMap.get(item);
-    if (!el) {
-      continue;
-    }
+    const el = inventoryItemsMap.get(item) as HTMLElement;
 
     const total = gameData.inventory.count(item);
     if (total > 0) {
