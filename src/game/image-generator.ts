@@ -170,7 +170,7 @@ const createSpellIcon = (
   colors1: Color[],
   colors2: GlobalCompositeOperation,
   symbol: 'plus' | 'minus',
-  size = 160,
+  size = 130,
 ) => {
   const canvas = document.createElement('canvas');
   canvas.width = size;
