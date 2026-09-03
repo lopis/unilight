@@ -64,10 +64,7 @@ export class GameState implements State {
   }
 
   private setHelpVisible(helpId: number, visible: boolean) {
-    const el = document.querySelector(`[help="${helpId}"]`) as HTMLElement | null;
-    if (!el) {
-      return;
-    }
+    const el = document.querySelector(`[help="${helpId}"]`) as HTMLElement;
     el.style.setProperty('display', visible ? 'inline-block' : 'none', 'important');
   }
 
@@ -105,7 +102,7 @@ export class GameState implements State {
    *  show help 1 and 2
    * Level 1:
    *  show help 3;
-   *  after catching 6 fruit, show help 4;
+   *  after catching 6 fruit, show help 4 and hide help 3;
    *  after selecting a fruit from inventory, show help 5 and hide help 4;
    *  after putting fruits in both spaces, hide help 5 and show help 6;
    *  after doing the spell, hide help 6.
@@ -121,6 +118,7 @@ export class GameState implements State {
 
     if (!this.help4Shown && gameData.caughtFruits >= 6) {
       this.help4Shown = true;
+      this.setHelpVisible(3, false);
       this.setHelpVisible(4, true);
     }
 

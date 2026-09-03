@@ -5,6 +5,7 @@ declare const c4;
 let c4: HTMLCanvasElement;
 let localStorage;
 let c;
+let fav: HTMLLinkElement;
 
 // Scenes
 let loading: HTMLElement
