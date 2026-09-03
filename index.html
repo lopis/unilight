@@ -18,7 +18,7 @@
       </section>
       <section id="menu">
         <h1 sketch>GEM WEAVER DASH</h1>
-        <button id="newGame" sketch>NEW GAME</button>
+        <button id="newGame" class="btn" sketch>NEW GAME</button>
       </section>
       <section id="game">
         <div id="stats">
@@ -26,7 +26,7 @@
           <span id="d" sketch>0</span>
           <nav>
             <span id="redo" sketch>Q</span>
-            <span id="conf" sketch>?</span>
+            <button id="conf" type="button" sketch commandfor="confDialog" command="show-modal" aria-label="Open settings">?</button>
           </nav>
           <span sketch>SPELL</span>
           <span id="s" sketch>0</span>
@@ -84,6 +84,24 @@
         </div>
       </section>
     </main>
+
+    <dialog id="confDialog">
+      <h2>About</h2>
+      <p>
+        Dash, collect gems, and combine fruit colors into new gems.
+        Clear each level by collecting the full rainbow set.
+      </p>
+      <p>
+        <label>
+          <input id="toggleImageAnim" type="checkbox">
+          Disable image animations
+        </label>
+      </p>
+      <form method="dialog">
+        <button type="submit" class="btn" sketch>CLOSE</button>
+      </form>
+    </dialog>
+
     <script type="module" src="/src/index.ts"></script>
 </body>
 </html>

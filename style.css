@@ -83,16 +83,34 @@ h1 {
   padding: 0.2rem;
 }
 
-nav > span {
+#redo, #conf {
 	background: var(--magenta);
 	border-radius: 0.5rem;
 	padding: 0.2rem;
 	display: inline-flex;
-	width: 2rem;
+	width: 3rem;
 	justify-content: center;
+  border: none;
+  box-sizing: border-box;
 }
 
-nav > span:active {
+dialog {
+	background: var(--magenta);
+	border: none;
+	border-radius: 0.5rem;
+	padding: 3rem 1rem;
+  box-shadow: 0.5rem 0.5rem var(--black);
+  margin-top: 10%;
+  font-size: 1.5rem;
+  max-width: 600px;
+  text-align: center;
+}
+
+dialog::backdrop {
+  background: #00000055
+}
+
+#redo:active, #conf:active {
   transform: translate(0, 0.2rem);
 }
 
@@ -661,7 +679,7 @@ section:not(.show) {
   padding-bottom: 20rem;
 }
 
-#menu button {
+.btn {
   background: var(--magenta);
   color: var(--magenta3);
   border: 0.5rem solid var(--magenta2);
@@ -675,7 +693,7 @@ section:not(.show) {
   transition: all 100ms;
 }
 
-#menu button:active {
+.btn:active {
   box-shadow: 0.1rem 0.1rem 0 0rem var(--magenta3);
   transform: translate(0.4rem, 0.4rem);
 }
