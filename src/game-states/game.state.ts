@@ -1,6 +1,6 @@
 import { drawEngine } from '@/core/draw-engine';
 import { clearEvents, on } from '@/core/event';
-import { addTimeEvent } from '@/core/timer';
+import { addTimeEvent, clearTimers } from '@/core/timer';
 import { State } from '@/core/state';
 import { gameData, initGameData } from '@/game/game-data';
 import { GameGrid } from '@/game/game-grid';
@@ -47,9 +47,14 @@ export class GameState implements State {
         this.setHelpVisible(6, false);
       }
     });
+
+    on(GameEvent.REDO_LEVEL, () => {
+      gameStateMachine.setState(new GameState(this.level));
+    });
   }
 
   onLeave() {
+    clearTimers();
     game.classList.toggle('show', false);
     inventory.classList.remove('animate');
     win.classList.add('hide');

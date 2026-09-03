@@ -21,6 +21,8 @@ let space2: HTMLElement
 let space3: HTMLElement
 let unicorn: HTMLElement
 let win: HTMLElement
+let redo: HTMLElement
+let conf: HTMLElement
 
 // SVG
 let ms: SVGElement

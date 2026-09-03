@@ -25,6 +25,10 @@ export const initMouse = () => {
     emit(GameEvent.SPELL_SUB);
   });
 
+  redo.addEventListener('click', () => {
+    emit(GameEvent.REDO_LEVEL);
+  });
+
   space1.addEventListener('click', () => {
     if (isInteractionLocked()) {
       return;
