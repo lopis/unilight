@@ -762,12 +762,11 @@ section:not(.show) {
 
 @media (max-width: 600px) {
   .grid-wrapper {
-    border-radius: 0;
-    width: 100vw;
+    border-radius: 11px;
     flex-grow: 0;
     flex-shrink: 0;
-    border-width: 0;
-    margin: 1rem;
+    border-width: 0.5rem;
+    margin: 0.5rem;
   }
 
   #gameGrid {
@@ -795,6 +794,10 @@ section:not(.show) {
 
   .r::before {
     background-size: calc(100% + 0.3rem);
+  }
+
+  .skf {
+    font-size: 1.5rem;
   }
 }
 
