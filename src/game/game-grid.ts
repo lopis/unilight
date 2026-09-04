@@ -82,11 +82,13 @@ export class GameGrid {
     const newCells = path.slice(1);
     if (newCells.length === 0) return;
     addDash();
+    const dashStepDelay = Math.max(90, Math.floor(player.moveDuration / newCells.length));
 
     let stopAt: Vec2 | null = null;
     let deathObstacle: 'HD' | 'HL' | null = null;
 
-    for (const cell of newCells) {
+    for (let stepIndex = 0; stepIndex < newCells.length; stepIndex++) {
+      const cell = newCells[stepIndex]!;
       spawnHighlight(cell);
 
       const item = this.grid[cell.y]?.[cell.x];
@@ -104,13 +106,19 @@ export class GameGrid {
 
         // Fruit and gem collection.
         item.taken = true;
-        collectCaughtItem(item.s);
         const $item = document.getElementById(item.id);
-        if ($item) {
-          $item.textContent = '';
-          $item.classList.remove(item.s);
-          delete $item.dataset['i'];
-        }
+        const collectDelay = stepIndex * dashStepDelay;
+        addTimeEvent(() => {
+          collectCaughtItem(item.s);
+          if ($item) {
+            $item.classList.add('animate');
+            addTimeEvent(() => {
+              $item.textContent = '';
+              $item.classList.remove(item.s, 'animate');
+              delete $item.dataset['i'];
+            }, 0, 0, 500);
+          }
+        }, 0, 0, collectDelay);
       }
     }
 

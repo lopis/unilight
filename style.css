@@ -95,6 +95,11 @@ h1 .skf {
   padding: 0.2rem;
 }
 
+nav {
+	display: flex;
+	gap: 0.5rem;
+}
+
 #redo, #conf {
 	background: var(--magenta);
 	border-radius: 0.5rem;
@@ -177,7 +182,7 @@ i {
   --us: clamp(2.8rem, 15%, 5rem);
   position: absolute;
   transform: translate(-50%, -50%) scaleX(var(--ux, 1));
-  transition: left 200ms ease-out, top 200ms ease-out;
+  transition: all 200ms ease-out !important;
   display: block;
   width: var(--us);
   height: var(--us);
@@ -278,10 +283,10 @@ section {
   min-width: 0;
   display: flex;
   background: var(--green0);
-  border: 2rem solid var(--green0);
+  border: 0.3rem solid var(--green0);
   box-shadow: 0.3rem 0.3rem 0 0 var(--magenta5);
   z-index: 0;
-  border-radius: 2rem;
+  border-radius: 1rem;
 }
 
 canvas {
@@ -311,6 +316,12 @@ section:not(.show) {
 
 #gameGrid i {
   pointer-events: none;
+  transition: transform 500ms ease-out, opacity 200ms ease-out 300ms;
+}
+
+#gameGrid i.animate {
+  transform: translateY(-80%);
+  opacity: 0;
 }
 
 #unicorn .u-death-bush .smoke-sheet {
