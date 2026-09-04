@@ -10,14 +10,14 @@ fav.href = 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewB
 let previousTime = 0;
 let paused = false;
 
-window.addEventListener('blur', () => {
-  emit(GameEvent.PAUSE);
-  paused = true;
-});
-window.addEventListener('focus', () => {
-  emit(GameEvent.UNPAUSE);
-  paused = false;
-});
+// window.addEventListener('blur', () => {
+//   emit(GameEvent.PAUSE);
+//   paused = true;
+// });
+// window.addEventListener('focus', () => {
+//   emit(GameEvent.UNPAUSE);
+//   paused = false;
+// });
 
 function update(currentTime: number) {
   if (paused) return;

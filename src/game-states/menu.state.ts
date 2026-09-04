@@ -21,14 +21,6 @@ class MenuState implements State {
   startGame () {
     gameStateMachine.setState(new GameState(0));
   }
-
-  toggleFullscreen() {
-    if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen();
-    } else {
-      document.exitFullscreen();
-    }
-  }
 }
 
 export const menuState = new MenuState();

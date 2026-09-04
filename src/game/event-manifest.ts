@@ -1,6 +1,6 @@
 export const enum GameEvent {
-  PAUSE,
-  UNPAUSE,
+  // PAUSE,
+  // UNPAUSE,
 
   GRID_CLICK,
   INVENTORY_CLICK,
