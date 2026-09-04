@@ -27,13 +27,20 @@ export function updateTimeEvents(delta: number) {
     }
     timeEvent.timeLeft -= delta;
     if (timeEvent.timeLeft <= 0) {
+      const shouldRemove = timeEvent.repeat-- <= 0;
       timeEvent.callback();
 
-      if (timeEvent.repeat-- <= 0) {
-        timeEvents.splice(i, 1); // Remove the executed event
-      } else {
-        timeEvent.timeLeft = timeEvent.time;
+      const idx = timeEvents.indexOf(timeEvent);
+      if (idx === -1) {
+        continue;
       }
+
+      if (shouldRemove) {
+        timeEvents.splice(idx, 1);
+        continue;
+      }
+
+      timeEvent.timeLeft = timeEvent.time;
     }
   }
 }

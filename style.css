@@ -10,8 +10,8 @@
   --green2: hsl(100, 43%, 34%);
   --cyan: #64c1dd;
   --cyan2: #35b7de;
-  --blue: #2f52c6;
-  --blue2: #1a2e70;
+  --blue: #355cde;
+  --blue2: #233f9c;
   --magenta: #f39be6;
   --magenta2: #da5dc7;
   --magenta3: #a42d92;
@@ -386,14 +386,17 @@ section:not(.show) {
 	aspect-ratio: 1;
 	background-color: var(--bgc);
 	border: 0.3rem solid var(--bgc);
-	box-shadow: 5px 5px 0 0 var(--black), 0 0 0 2px var(--black);
+	box-shadow:
+    5px 5px 0 0 var(--black),
+    0 0 0 2px var(--black),
+    -1px -1px 0 0 var(--magenta2);
 	transition: all 100ms ease-in-out;
 	box-sizing: border-box;
 }
 
 #inventory i.hide {
   border-color: var(--magenta4);
-  box-shadow: 5px 5px 0 0 var(--magenta5);
+  box-shadow: 5px 5px 0 0 var(--magenta5), -1px -1px 0 0 var(--magenta2);
 	background-color: var(--magenta4);
   background-size: 0;
 }
@@ -733,6 +736,16 @@ section:not(.show) {
 	filter: drop-shadow(3px 3px #FFFFFF55);
   display: inline-block !important;
   transform: scale(0.8);
+  transition: all 200ms ease-in-out;
+  transform: scale(1);
+  opacity: 1;
+}
+
+[help].hide {
+  visibility: hidden !important;
+  transition: none;
+  transform: scale(2);
+  opacity: 0;
 }
 
 [help="2"] {

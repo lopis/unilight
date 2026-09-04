@@ -34,7 +34,11 @@ export class GameState implements State {
     this.workplace = new Workspace();
     drawEngine.resizeCanvas();
     initSpellListener();
-    this.initHelpTexts();
+    this.help4Shown = false;
+    this.help5Shown = false;
+    this.help6Shown = false;
+    this.hideAllHelpTexts();
+    addTimeEvent(() => this.initHelpTexts(), 0, 0, 500);
 
     on(GameEvent.SPELL_ADD, () => {
       if (this.level === 1 && this.help6Shown) {
@@ -55,6 +59,7 @@ export class GameState implements State {
 
   onLeave() {
     clearTimers();
+    this.hideAllHelpTexts();
     game.classList.toggle('show', false);
     inventory.classList.remove('animate');
     win.classList.add('hide');
@@ -70,17 +75,16 @@ export class GameState implements State {
 
   private setHelpVisible(helpId: number, visible: boolean) {
     const el = document.querySelector(`[help="${helpId}"]`) as HTMLElement;
-    el.style.setProperty('display', visible ? 'inline-block' : 'none', 'important');
+    el.classList.toggle('hide', !visible);
   }
 
-  private initHelpTexts() {
-    this.help4Shown = false;
-    this.help5Shown = false;
-    this.help6Shown = false;
+  private hideAllHelpTexts() {
     for (let i = 1; i <= 7; i++) {
       this.setHelpVisible(i, false);
     }
+  }
 
+  private initHelpTexts() {
     if (this.level === 0) {
       this.setHelpVisible(1, true);
       this.setHelpVisible(2, true);
