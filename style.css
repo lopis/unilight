@@ -502,6 +502,10 @@ section:not(.show) {
   --bgi: var(--b-HD)
 }
 
+.HG {
+  --bgi: var(--b-HG)
+}
+
 .HL {
 	--bgi: var(--b-HL);
 	height: 112%;

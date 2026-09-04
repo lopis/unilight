@@ -98,6 +98,10 @@ export class GameGrid {
           break;
         }
 
+        if (item.s === 'HG') {
+          continue;
+        }
+
         // Fruit and gem collection.
         item.taken = true;
         collectCaughtItem(item.s);
