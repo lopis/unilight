@@ -15,6 +15,8 @@
   --magenta: #f39be6;
   --magenta2: #da5dc7;
   --magenta3: #a42d92;
+  --magenta4: #6d1e61;
+  --magenta5: #47113f;
   --black: #131217;
   --white: #f9f9f9;
 }
@@ -379,9 +381,10 @@ section:not(.show) {
 }
 
 #inventory i.hide {
-  border-color: transparent;
-  box-shadow: 0 0 0 2px var(--bgc), 5px 5px 0 0 var(--black);
-	background: none;
+  border-color: var(--magenta4);
+  box-shadow: 5px 5px 0 0 var(--magenta5);
+	background-color: var(--magenta4);
+  background-size: 0;
 }
 
 #inventory i.selected:not(.hide) {
@@ -628,7 +631,6 @@ section:not(.show) {
 	justify-content: center;
 	font-size: clamp(2rem, 8vw, 3.2rem);
 	z-index: 1;
-	border: 0.3rem solid var(--black);
 }
 
 #space1.animate,
