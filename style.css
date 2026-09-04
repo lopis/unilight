@@ -279,7 +279,7 @@ section {
   display: flex;
   background: var(--green0);
   border: 2rem solid var(--green0);
-  box-shadow: 0 0 0 0.3rem var(--black);
+  box-shadow: 0.3rem 0.3rem 0 0 var(--magenta5);
   z-index: 0;
   border-radius: 2rem;
 }
