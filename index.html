@@ -9,6 +9,43 @@
 </head>
 <html lang="en">
 <body>
+    <div id="debug">
+      <!-- DEBUG. REMOVE BEFORE FINAL BUILD -->
+      <span id="kFps"></span>
+      <progress id="kpFps" value="0" min="0" max="100" style="vertical-align:middle"></progress>
+      <script>
+        // Source - https://stackoverflow.com/a/54747975
+        // Posted by NVRM, modified by community. See post 'Timeline' for change history
+        // Retrieved 2026-09-05, License - CC BY-SA 4.0
+
+        let be = Date.now(),fps=0,info='';
+        const fpsSamples = [];
+        requestAnimationFrame(
+            function loop(){
+                let now = Date.now()
+                fps = Math.round(1000 / (now - be))
+                be = now
+                requestAnimationFrame(loop)
+                fpsSamples.push([now, fps]);
+                while (fpsSamples.length && now - fpsSamples[0][0] > 1000) fpsSamples.shift();
+                const avgFps = Math.round(fpsSamples.reduce((acc, s) => acc + s[1], 0) / fpsSamples.length);
+
+                if (avgFps < 35){
+                  kFps.style.color = "red"
+                  kFps.textContent = avgFps + " FPS"
+                } if (avgFps >= 35 && avgFps <= 41) {
+                    kFps.style.color = "deepskyblue"
+                    kFps.textContent = avgFps + " FPS"
+                  } else {
+                    kFps.style.color = "black"
+                    kFps.textContent = avgFps + " FPS"
+                }
+                kpFps.value = avgFps;
+                info+=(''+new Date()+' '+avgFps+'\n');
+            }
+        )
+      </script>
+    </div>
     <svg id="ms" aria-hidden="true" focusable="false">
       <path id="mp" d=""></path>
     </svg>
