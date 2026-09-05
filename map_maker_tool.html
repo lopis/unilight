@@ -309,6 +309,7 @@
         <div class="row">
           <button id="clearBtn" class="action alt" type="button">Clear Map</button>
           <button id="fillBtn" class="action alt" type="button">Fill Empty</button>
+          <button id="generateBtn" class="action" type="button">Generate</button>
         </div>
       </div>
 
@@ -394,12 +395,61 @@
     const copyBtn = document.getElementById("copyBtn");
     const clearBtn = document.getElementById("clearBtn");
     const fillBtn = document.getElementById("fillBtn");
+    const generateBtn = document.getElementById("generateBtn");
 
     const itemGrid = new Uint8Array(CELL_COUNT);
     const initialInventoryBits = new Uint8Array(RAINBOW_GEMS.length);
     let selectedTool = TOOL_ITEMS[0];
     let isMouseDown = false;
     let activeMouseButton = -1;
+
+    const CR = 0;
+    const CO = 1;
+    const CY = 2;
+    const CG = 3;
+    const CC = 4;
+    const CB = 5;
+    const CV = 6;
+    const CK = 7;
+    const CW = 8;
+
+    const GEM_BY_COLOR = ["GR", "GO", "GY", "GG", "GC", "GB", "GV", "GK", "GW"];
+    const FRUIT_BY_COLOR = ["FR", "FO", "FY", "FG", "FC", "FB", "FV"];
+
+    const ADD_LUT = [
+      [0, 1, 1, 2, 6, 6, 6],
+      [1, 1, 1, 2, 3, 6, 8],
+      [1, 1, 2, 3, 3, 3, 8],
+      [2, 2, 3, 3, 4, 4, 4],
+      [6, 3, 3, 4, 4, 4, 5],
+      [6, 6, 3, 4, 4, 5, 6],
+      [6, 8, 8, 4, 5, 6, 6],
+    ];
+
+    const SUB_LUT = [
+      [7, 0, 0, 0, 0, 0, 0],
+      [2, 7, 0, 1, 1, 1, 1],
+      [2, 2, 7, 2, 2, 2, 2],
+      [3, 3, 4, 7, 2, 2, 3],
+      [4, 4, 4, 5, 7, 3, 4],
+      [5, 5, 5, 5, 6, 7, 4],
+      [4, 6, 6, 6, 0, 6, 7],
+    ];
+
+    const TOKEN_TO_CODE = new Map(ELEMENTS.map(([token], i) => [token, i + 1]));
+
+    const REVERSE_LUT = (() => {
+      const out = Array.from({ length: 9 }, () => []);
+      for (let left = 0; left <= 6; left += 1) {
+        for (let right = 0; right <= 6; right += 1) {
+          const addResult = ADD_LUT[left][right];
+          out[addResult].push([left, right]);
+          const subResult = SUB_LUT[left][right];
+          out[subResult].push([left, right]);
+        }
+      }
+      return out;
+    })();
 
     function getInitialInventoryMask() {
       let mask = 0;
@@ -434,6 +484,83 @@
 
     function cellAt(index) {
       return gridEl.children[index];
+    }
+
+    function randInt(min, max) {
+      return min + Math.floor(Math.random() * (max - min + 1));
+    }
+
+    function pickOne(list) {
+      return list[Math.floor(Math.random() * list.length)];
+    }
+
+    function shuffleInPlace(arr) {
+      for (let i = arr.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const tmp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = tmp;
+      }
+      return arr;
+    }
+
+    function generateMutationItems() {
+      const colors = [CR, CO, CY, CG, CC, CB, CV];
+      const expansionCount = randInt(3, 5);
+
+      for (let i = 0; i < expansionCount; i += 1) {
+        const pickIndex = Math.floor(Math.random() * colors.length);
+        const target = colors[pickIndex];
+        const reversePairs = REVERSE_LUT[target];
+        if (!reversePairs.length) {
+          continue;
+        }
+
+        const pair = pickOne(reversePairs);
+        colors.splice(pickIndex, 1, pair[0], pair[1]);
+      }
+
+      const selectedCount = randInt(1, colors.length);
+      const selectedIndexes = shuffleInPlace([...Array(colors.length).keys()]).slice(0, selectedCount);
+      const selectedSet = new Set(selectedIndexes);
+      const tokens = [];
+
+      for (let i = 0; i < colors.length; i += 1) {
+        const color = colors[i];
+        if (selectedSet.has(i) && color >= CR && color <= CV) {
+          const fruit = FRUIT_BY_COLOR[color];
+          tokens.push(fruit, fruit, fruit);
+        } else {
+          tokens.push(GEM_BY_COLOR[color]);
+        }
+      }
+
+      return tokens;
+    }
+
+    function placeGeneratedItemsRandom(tokens) {
+      const available = [];
+      for (let i = 0; i < CELL_COUNT; i += 1) {
+        if (itemGrid[i] === 0) {
+          available.push(i);
+        }
+      }
+
+      if (tokens.length > available.length) {
+        throw new Error(`Not enough empty cells (${tokens.length} items, ${available.length} empty).`);
+      }
+
+      shuffleInPlace(available);
+      for (let i = 0; i < tokens.length; i += 1) {
+        const token = tokens[i];
+        const code = TOKEN_TO_CODE.get(token);
+        if (!code) {
+          throw new Error(`Unknown token: ${token}`);
+        }
+        itemGrid[available[i]] = code;
+      }
+
+      renderAllCells();
     }
 
     function currentCellGlyph(index) {
@@ -746,6 +873,17 @@
       }
       renderAllCells();
       clearError();
+    });
+
+    generateBtn.addEventListener("click", () => {
+      try {
+        const generated = generateMutationItems();
+        itemGrid.fill(0);
+        placeGeneratedItemsRandom(generated);
+        clearError();
+      } catch (err) {
+        clearError(err instanceof Error ? err.message : "Generate failed");
+      }
     });
 
     copyBtn.addEventListener("click", async () => {
